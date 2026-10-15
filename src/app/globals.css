@@ -1,26 +1,92 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+/* ── Design tokens (read from the Figma file) ─────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #09090b;
+  --foreground: #ffffff;
+  --line: #27272a; /* every border / rail */
+  --muted: #9f9fa9; /* dates, locations, secondary labels */
+  --nav-muted: #9ca3af;
+  --nav-active: #f9fafb;
+  --chip: #1b1b1d; /* icon chips, icon boxes, social buttons */
+  --chip-line: #959ec0; /* dashed outline of chips and icon boxes */
+  --social-line: #636363;
+  --tag: #0c0c19; /* text-only skill tags */
+  --tag-line: #d1d5db;
+  --tag-line-first: #9f9fa9;
+  --tag-text: #d1d5db;
+  --tree: #3f3f46; /* timeline connector */
+  --line-strong: #52525b; /* short dividers inside meta rows */
+  --pixel: #d9d9d9; /* logo pixels */
+  --kbd: #616161;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-nav-muted: var(--nav-muted);
+  --color-nav-active: var(--nav-active);
+  --color-chip: var(--chip);
+  --color-chip-line: var(--chip-line);
+  --color-social-line: var(--social-line);
+  --color-tag: var(--tag);
+  --color-tag-line: var(--tag-line);
+  --color-tag-line-first: var(--tag-line-first);
+  --color-tag-text: var(--tag-text);
+  --color-tree: var(--tree);
+  --color-line-strong: var(--line-strong);
+  --color-pixel: var(--pixel);
+  --color-kbd: var(--kbd);
+
+  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, monospace;
+  --font-hand: "Caveat Variable", cursive;
+  --font-nav: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* 780px content column from the 1440px frame */
+  --container-column: 780px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #3b3f55;
+}
+
+/* Diagonal hatch used by the 40px section dividers */
+.hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0,
+    transparent 6.07px,
+    #4a4a50 6.07px,
+    #4a4a50 7.07px
+  );
+}
+
+/* Keyboard focus ring that matches the dashed language of the design */
+:focus-visible {
+  outline: 1px dashed var(--chip-line);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

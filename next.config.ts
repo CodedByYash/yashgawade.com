@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {
@@ -14,4 +14,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Blog posts are `.mdx` files imported from src/content/blogs.
+const withMDX = createMDX({});
+
+export default withMDX(nextConfig);
