@@ -1,0 +1,22 @@
+[
+  {
+    "name": "next",
+    "version": "16.4.0"
+  },
+  {
+    "name": "react",
+    "version": "19.3.0"
+  },
+  {
+    "name": "@base-ui/react",
+    "version": "1.8.0"
+  },
+  {
+    "name": "shadcn",
+    "version": "4.21.4"
+  },
+  {
+    "name": "tailwindcss",
+    "version": "4.3.3"
+  }
+]
