@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# yashgawade.com
 
-## Getting Started
+Personal portfolio of **Yash Gawade**, a frontend and full-stack developer based in Pune, India.
 
-First, run the development server:
+![Portfolio home page](docs/preview.png)
+
+The visual language (dashed rails, hatched dividers, a pixel-grid logo) is inspired by [Chanh Dai's portfolio](https://chanhdai.com). The design was made in Figma and built from it section by section.
+
+## What's inside
+
+- **Home page**: profile, stack, experience, education and projects.
+- **[/components](src/app/components)**: every small UI piece on the site with a live preview and its real source code.
+- **[/blocks](src/app/blocks)**: whole page sections, built from those components.
+- **[/blogs](src/app/blogs)**: posts written as plain MDX files.
+- **Greeting and clock** that follow the visitor's local time.
+- **Masked phone number**: the real number is never in the page HTML. It is fetched from an API route only when someone clicks copy.
+- **Responsive** down to 320px wide.
+
+## Tech stack
+
+| | |
+| --- | --- |
+| Framework | [Next.js](https://nextjs.org) 16 (App Router, Cache Components), React 19 |
+| Language | TypeScript |
+| Styling | Tailwind CSS 4, shadcn/ui (Base UI), design tokens in `src/app/globals.css` |
+| Motion | [Motion](https://motion.dev) |
+| Content | MDX via `@next/mdx` |
+| Icons | Iconify sets, bundled at build time into `src/lib/icons.generated.ts` |
+| Hosting | Built to deploy on Vercel |
+
+## Getting started
+
+You need Node.js 20.9 or newer.
 
 ```bash
+git clone https://github.com/CodedByYash/yashgawade.com.git
+cd yashgawade.com
+npm ci
+cp .env.example .env.local   # then set CONTACT_PHONE
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Name | Purpose |
+| --- | --- |
+| `CONTACT_PHONE` | Phone number copied by the copy button. Without it the copy button has nothing to copy and the rest of the site works normally. Set it in your hosting provider's settings too. |
 
-## Learn More
+### Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Generate route types, then run the TypeScript compiler |
+| `npm run gen:icons` | Regenerate the icon set after adding names in `scripts/gen-icons.mjs` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`dev` and `build` also refresh the package versions shown in the footer.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project structure
 
-## Deploy on Vercel
+```text
+src/
+  app/            Routes: home, /components, /blocks, /blogs and /api/phone
+  components/     Reusable UI pieces, plus blocks/ and registry/ helpers
+  content/blogs/  Blog posts (.mdx)
+  data/           Typed content: profile, stack, experience, education, projects
+  lib/            Utilities, blog loader, source reader, generated icons
+  registry/       The list of components and blocks shown on their pages
+scripts/          Icon and version generators
+docs/             README assets
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Editing content
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Profile, stack, experience, education, projects**: edit the files in `src/data/`. No component changes needed.
+- **New blog post**: add a file to `src/content/blogs/`. The file name becomes the URL.
+
+  ```mdx
+  export const meta = {
+    title: "My post",
+    description: "One line shown in the list.",
+    date: "2026-10-18",
+    tags: ["Next.js"],
+  };
+
+  Write the post here.
+  ```
+
+- **New component or block page**: add an entry to `src/registry/components.tsx` or `src/registry/blocks.tsx` with a slug, description, preview and the source files to display.
+
+## Credits
+
+Inspired by [Chanh Dai](https://chanhdai.com). Built with [Next.js](https://nextjs.org), [Tailwind CSS](https://tailwindcss.com), [shadcn/ui](https://ui.shadcn.com), and made to deploy on [Vercel](https://vercel.com).
