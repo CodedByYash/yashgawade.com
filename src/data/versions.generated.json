@@ -1,7 +1,7 @@
 [
   {
     "name": "next",
-    "version": "16.4.0"
+    "version": "16.4.2"
   },
   {
     "name": "react",
@@ -13,7 +13,7 @@
   },
   {
     "name": "shadcn",
-    "version": "4.21.4"
+    "version": "4.22.1"
   },
   {
     "name": "tailwindcss",
