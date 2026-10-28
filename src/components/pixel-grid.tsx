@@ -80,7 +80,7 @@ export function Wordmark({ className }: { className?: string }) {
       rows={WORDMARK_ROWS}
       cell={10}
       gap={4}
-      fill="#ffffff"
+      fill="var(--wordmark)"
       title="Yash Gawade"
       className={className}
     />

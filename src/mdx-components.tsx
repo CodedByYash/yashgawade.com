@@ -31,7 +31,7 @@ const components: MDXComponents = {
   },
   strong: (props) => <strong className="font-semibold" {...props} />,
   blockquote: (props) => (
-    <blockquote className="mt-4 border-l border-chip-line pl-4 text-muted" {...props} />
+    <blockquote className="mt-4 border-l border-box-line pl-4 text-muted" {...props} />
   ),
   hr: () => <hr className="my-8 border-t border-dashed border-line" />,
   code: (props) => (

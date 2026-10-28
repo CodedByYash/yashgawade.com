@@ -4,13 +4,13 @@ import { Band } from "@/components/panel";
 import { SocialButtons } from "@/components/social-links";
 import { profile, socials } from "@/data/profile";
 
-const detailText = "font-mono text-sm leading-[18px]";
+const detailText = "font-mono text-sm font-medium leading-[18px]";
 
 /** Social buttons plus role, location, email, live clock and masked phone. */
 export function ContactDetails() {
   return (
     <>
-      <Band edge="bottom" columnClassName="px-[17px] py-4">
+      <Band id="contact" edge="bottom" columnClassName="px-[17px] py-4">
         <SocialButtons items={socials} />
       </Band>
 
@@ -31,7 +31,7 @@ export function ContactDetails() {
             </a>
           </li>
         </ul>
-        <ul className="space-y-2 border-t border-line p-4 sm:border-l sm:border-t-0">
+        <ul className="space-y-2 border-t border-dashed border-line p-4 sm:border-l sm:border-t-0">
           <li className="flex items-center gap-4">
             <IconBox icon="hugeicons:time-04" />
             <span className={detailText}>

@@ -19,7 +19,7 @@ export function PageHeader({
       {back && (
         <Link
           href={back.href}
-          className="mb-4 inline-flex items-center gap-1.5 font-mono text-xs text-nav-muted transition-colors hover:text-white"
+          className="mb-4 inline-flex items-center gap-1.5 font-mono text-xs text-nav-muted transition-colors hover:text-foreground"
         >
           <Icon name="hugeicons:arrow-left-01" size={16} />
           {back.label}

@@ -22,7 +22,7 @@ export function CopyButton({ text, label }: { text: string; label: string }) {
         type="button"
         onClick={copy}
         aria-label={label}
-        className="flex items-center gap-1.5 rounded-sm px-1.5 py-0.5 font-mono text-[11px] text-nav-muted transition-colors hover:text-white"
+        className="flex items-center gap-1.5 rounded-sm px-1.5 py-0.5 font-mono text-[11px] text-nav-muted transition-colors hover:text-foreground"
       >
         <Icon name={state === "copied" ? "hugeicons:tick-02" : "hugeicons:copy-01"} size={16} />
         {state === "copied" ? "Copied" : state === "error" ? "Failed" : "Copy"}

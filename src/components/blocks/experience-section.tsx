@@ -15,21 +15,22 @@ export function ExperienceSection() {
             <div className="flex items-center gap-4">
               <span
                 aria-hidden
-                className="flex size-[38px] items-center justify-center rounded-full border border-dashed border-chip-line bg-chip"
+                className="flex size-[38px] items-center justify-center rounded-full border border-dashed border-box-line bg-box"
               >
-                <Icon name={job.companyIcon} size={24} className="text-chip-line" />
+                <Icon name={job.companyIcon} size={24} className="text-icon" />
               </span>
-              <h3 className="text-lg font-semibold leading-[27px]">{job.company}</h3>
+              <h3 className="text-xl font-semibold leading-[27px]">{job.company}</h3>
             </div>
             <p className="text-sm font-medium text-muted">{job.location}</p>
           </div>
           <TimelineEntry icon={job.icon} title={job.role} meta={[job.type, job.period, job.duration]}>
-            <ul className="list-disc space-y-3 pl-5 text-sm leading-5 marker:text-muted sm:text-justify">
+            {/* The design insets this text 24px from the right and sets it on a 25px line. */}
+            <ul className="list-disc pl-[21px] text-sm font-medium leading-[25px] marker:text-foreground sm:pr-6 sm:text-justify">
               {job.highlights.map((line) => (
                 <li key={line}>{line}</li>
               ))}
             </ul>
-            <ExpandableTags items={job.skills} className="mt-3" />
+            <ExpandableTags items={job.skills} className="mt-3 sm:pr-6" />
           </TimelineEntry>
         </Band>
       ))}

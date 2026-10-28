@@ -6,6 +6,7 @@ import "@fontsource-variable/inter";
 import "./globals.css";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { themeScript } from "@/lib/theme";
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +19,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="flex min-h-dvh flex-col bg-background text-foreground">
         <SiteHeader />
         <div className="flex-1">{children}</div>

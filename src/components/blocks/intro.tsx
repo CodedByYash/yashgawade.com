@@ -6,11 +6,13 @@ import { profile } from "@/data/profile";
 export function Intro() {
   return (
     <>
-      <Band edge="bottom" columnClassName="px-[17px] py-px">
+      <Band id="about" edge="bottom" columnClassName="px-[17px] py-px">
         <Greeting />
       </Band>
-      <Band edge="bottom" columnClassName="px-[25px] py-4">
-        <ul className="list-disc space-y-4 text-sm font-medium leading-[19px] marker:text-muted">
+      {/* Right padding is a touch under the left, so lines wrap where the design's 730px text box wraps them. */}
+      <Band edge="bottom" columnClassName="pl-[25px] pr-[22px] py-4">
+        {/* pl-[22px] hangs the text 22px in from the bullet, like the design. */}
+        <ul className="list-disc space-y-4 pl-[22px] text-sm font-medium leading-[19px] marker:text-foreground">
           {profile.intro.map((line) => (
             <li key={line}>{line}</li>
           ))}

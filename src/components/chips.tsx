@@ -13,8 +13,8 @@ export function IconChip({
   children: React.ReactNode;
 }) {
   return (
-    <li className="flex items-center justify-center gap-2.5 border border-dashed border-chip-line bg-chip px-2 py-1 font-mono text-xs font-medium text-white">
-      <Icon name={icon} size={20} monochrome={monochrome} className="text-chip-line" />
+    <li className="flex items-center justify-center gap-2.5 border border-dashed border-chip-line bg-chip px-2 py-1 font-mono text-xs font-medium text-chip-text">
+      <Icon name={icon} size={20} monochrome={monochrome} className="text-icon" />
       <span className="whitespace-nowrap">{children}</span>
     </li>
   );
@@ -53,8 +53,9 @@ export function TagList({ items, className }: { items: string[]; className?: str
 /** Small square icon box used beside personal details. */
 export function IconBox({ icon }: { icon: IconName }) {
   return (
-    <span className="flex items-center justify-center border-[0.5px] border-chip-line bg-chip p-1">
-      <Icon name={icon} size={15} className="text-chip-line" />
+    // 23px square: the design stacks these on a 31px row pitch (23px box + 8px gap).
+    <span className="flex size-[23px] shrink-0 items-center justify-center border-[0.5px] border-detail-line bg-chip">
+      <Icon name={icon} size={15} className="text-detail-icon" />
     </span>
   );
 }

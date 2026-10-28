@@ -14,9 +14,9 @@ export function ProjectRow({ project }: { project: Project }) {
       <div className="flex min-h-[88px] items-center gap-4 px-[17px] py-6">
         <span
           aria-hidden
-          className="flex size-10 shrink-0 items-center justify-center rounded border border-dashed border-chip-line bg-chip"
+          className="flex size-10 shrink-0 items-center justify-center rounded border border-dashed border-box-line bg-box"
         >
-          <Icon name="hugeicons:boxes" size={24} className="text-chip-line" />
+          <Icon name="hugeicons:boxes" size={24} className="text-icon" />
         </span>
 
         <div className="min-w-0 flex-1">
@@ -34,7 +34,7 @@ export function ProjectRow({ project }: { project: Project }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${project.name} source code on GitHub`}
-              className="relative z-10 text-nav-muted transition-colors hover:text-white"
+              className="relative z-10 text-nav-muted transition-colors hover:text-foreground"
             >
               <Icon name="hugeicons:github-01" size={20} />
             </a>
@@ -45,7 +45,7 @@ export function ProjectRow({ project }: { project: Project }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Open ${project.name}`}
-              className="relative z-10 text-nav-muted transition-colors hover:text-white"
+              className="relative z-10 text-nav-muted transition-colors hover:text-foreground"
             >
               <Icon name="hugeicons:link-01" size={20} />
             </a>

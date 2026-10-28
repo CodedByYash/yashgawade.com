@@ -6,7 +6,7 @@ import { SocialInline } from "@/components/social-links";
 import { profile, socials } from "@/data/profile";
 import { site } from "@/data/site";
 
-const label = "font-mono text-[11px] font-medium uppercase tracking-wide text-muted";
+const label = "font-mono text-[11px] font-medium uppercase tracking-wide text-label";
 // 2×2 grid on phones (divider before every even cell, rule above the second row),
 // four across from `sm` up.
 const cell =
@@ -15,7 +15,7 @@ const cell =
 function Numbered({ children, i }: { children: React.ReactNode; i: number }) {
   return (
     <li className="flex gap-2 font-mono text-[13px] leading-[19px]">
-      <span className="w-[17px] font-semibold">{String(i + 1).padStart(2, "0")}</span>
+      <span className="w-[17px] font-semibold text-index">{String(i + 1).padStart(2, "0")}</span>
       <span>{children}</span>
     </li>
   );

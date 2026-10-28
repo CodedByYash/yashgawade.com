@@ -87,7 +87,7 @@ export function CopyPhone({ countryCode = "+91" }: { countryCode?: string }) {
         type="button"
         onClick={copy}
         aria-label="Copy phone number"
-        className="-m-0.5 rounded-sm p-0.5 text-nav-muted transition-colors hover:text-white"
+        className="-m-0.5 rounded-sm p-0.5 text-nav-muted transition-colors hover:text-foreground"
       >
         <Icon name={state === "copied" ? "hugeicons:tick-02" : "hugeicons:copy-01"} size={20} />
       </button>

@@ -31,7 +31,7 @@ export function ExpandableTags({
             aria-expanded={expanded}
             aria-controls={id}
             onClick={() => setExpanded((value) => !value)}
-            className="border border-dashed border-tag-line-first bg-tag px-2 py-0.5 text-xs font-semibold leading-[1.8] text-muted transition-colors hover:text-white"
+            className="border border-dashed border-tag-line-first bg-tag px-2 py-0.5 text-xs font-semibold leading-[1.8] text-muted transition-colors hover:text-foreground"
           >
             {expanded ? "Show less" : `+${hidden} more`}
           </button>
