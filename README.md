@@ -2,9 +2,12 @@
 
 Personal portfolio of **Yash Gawade**, a frontend and full-stack developer based in Pune, India.
 
-![Portfolio home page](docs/preview.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/preview-dark.png">
+  <img alt="Portfolio home page" src="docs/preview-light.png">
+</picture>
 
-The visual language (dashed rails, hatched dividers, a pixel-grid logo) is inspired by [Chanh Dai's portfolio](https://chanhdai.com). The design was made in Figma and built from it section by section.
+The visual language (dashed rails, hatched dividers, a pixel-grid logo) is inspired by [Chanh Dai's portfolio](https://chanhdai.com). Both the light and the dark design were made in Figma and built from it section by section.
 
 ## What's inside
 
@@ -12,6 +15,8 @@ The visual language (dashed rails, hatched dividers, a pixel-grid logo) is inspi
 - **[/components](src/app/components)**: every small UI piece on the site with a live preview and its real source code.
 - **[/blocks](src/app/blocks)**: whole page sections, built from those components.
 - **[/blogs](src/app/blogs)**: posts written as plain MDX files.
+- **Search menu**: press `Ctrl+K` (`⌘K` on Mac) to jump to any page, section, component, block or blog post, open links, or copy contact details. It is built from the same data files as the pages, so new content shows up on its own.
+- **Light and dark themes**: follows the device setting by default. The header button (or the search menu) switches it, the choice is remembered, and there is no flash of the wrong theme on load. All colors are tokens in `src/app/globals.css`, written as `light-dark(<light>, <dark>)` pairs.
 - **Greeting and clock** that follow the visitor's local time.
 - **Masked phone number**: the real number is never in the page HTML. It is fetched from an API route only when someone clicks copy.
 - **Responsive** down to 320px wide.
@@ -66,10 +71,10 @@ Open [http://localhost:3000](http://localhost:3000).
 ```text
 src/
   app/            Routes: home, /components, /blocks, /blogs and /api/phone
-  components/     Reusable UI pieces, plus blocks/ and registry/ helpers
+  components/     Reusable UI pieces, plus blocks/, registry/ and search/ helpers
   content/blogs/  Blog posts (.mdx)
   data/           Typed content: profile, stack, experience, education, projects
-  lib/            Utilities, blog loader, source reader, generated icons
+  lib/            Utilities, theme logic, blog loader, search index, source reader, generated icons
   registry/       The list of components and blocks shown on their pages
 scripts/          Icon and version generators
 docs/             README assets
