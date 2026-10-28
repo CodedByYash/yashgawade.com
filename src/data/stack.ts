@@ -7,8 +7,8 @@ export const stack: StackGroup[] = [
   {
     title: "Languages",
     items: [
-      { name: "Typescript", icon: "hugeicons:typescript-01" },
-      { name: "Javascript", icon: "hugeicons:java-script" },
+      { name: "Typescript", icon: "bxl:typescript" },
+      { name: "Javascript", icon: "bxl:javascript" },
       { name: "Python", icon: "hugeicons:python" },
     ],
   },

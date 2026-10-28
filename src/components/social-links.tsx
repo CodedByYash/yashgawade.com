@@ -2,7 +2,14 @@ import { Icon } from "@/components/icon";
 import type { SocialLink } from "@/data/profile";
 
 const box =
-  "flex size-[43px] items-center justify-center border border-dashed border-social-line bg-chip text-chip-line transition-colors";
+  "flex size-[43px] items-center justify-center border border-dashed border-social-line bg-social-bg text-social-icon transition-colors";
+
+/**
+ * The solid GitHub / LinkedIn / YouTube marks fill their whole box, while the
+ * outline icons carry padding. 20px vs 24px gives both the ~19px glyph the
+ * design draws.
+ */
+const glyphSize = (name: string) => (name.startsWith("akar-icons:") ? 20 : 24);
 
 /** Square dashed social buttons. Entries without a URL yet render inert. */
 export function SocialButtons({ items }: { items: SocialLink[] }) {
@@ -12,7 +19,7 @@ export function SocialButtons({ items }: { items: SocialLink[] }) {
         <li key={item.label}>
           {item.href === "#" ? (
             <span className={`${box} opacity-60`} role="img" aria-label={`${item.label} (link not set)`}>
-              <Icon name={item.icon} size={24} />
+              <Icon name={item.icon} size={glyphSize(item.icon)} />
             </span>
           ) : (
             <a
@@ -20,9 +27,9 @@ export function SocialButtons({ items }: { items: SocialLink[] }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={item.label}
-              className={`${box} hover:border-white hover:text-white`}
+              className={`${box} hover:border-foreground hover:text-foreground`}
             >
-              <Icon name={item.icon} size={24} />
+              <Icon name={item.icon} size={glyphSize(item.icon)} />
             </a>
           )}
         </li>
@@ -43,7 +50,7 @@ export function SocialInline({ items }: { items: SocialLink[] }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={item.label}
-            className="text-white transition-colors hover:text-nav-muted"
+            className="text-foreground transition-colors hover:text-nav-muted"
           >
             <Icon name={item.icon} size={20} />
           </a>

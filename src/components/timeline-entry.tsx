@@ -25,7 +25,7 @@ export function TimelineEntry({
 
   return (
     <div className="flex gap-4 px-[17px] py-4">
-      <TimelineRail icon={icon} />
+      <TimelineRail icon={icon} open={open} />
       <div className="min-w-0 flex-1">
         <h3 className="text-base font-medium leading-[22px]">
           <button

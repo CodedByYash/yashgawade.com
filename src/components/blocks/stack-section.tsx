@@ -12,12 +12,15 @@ export function StackSection() {
           key={group.title}
           edge="none"
           className={i < stack.length - 1 ? "border-b border-dashed" : undefined}
-          columnClassName="grid grid-cols-[minmax(0,1fr)] sm:grid-cols-[260px_1fr]"
+          // One-line rows are 67px tall in the design, two-line rows 103px.
+          columnClassName={`grid grid-cols-[minmax(0,1fr)] sm:grid-cols-[260px_1fr] ${
+            i < stack.length - 1 ? "sm:min-h-[66px]" : "sm:min-h-[67px]"
+          }`}
         >
           <h3 className="flex items-center px-[25px] pt-4 font-mono text-sm font-medium uppercase sm:py-4">
-            {String(i + 1).padStart(2, "0")} {group.title}
+            <span className="text-index">{String(i + 1).padStart(2, "0")}</span>&nbsp;{group.title}
           </h3>
-          <div className="flex items-center border-line px-6 py-4 sm:border-l sm:pl-[31px]">
+          <div className="flex items-center border-dashed border-line px-6 py-4 sm:border-l sm:pl-[31px]">
             <ul className="flex flex-wrap gap-2.5">
               {group.items.map((item) => (
                 <IconChip key={item.name} icon={item.icon} monochrome={item.monochrome}>

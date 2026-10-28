@@ -1,25 +1,72 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* ── Design tokens (read from the Figma file) ─────────────────────────── */
+/* `dark:` follows the class that the theme script puts on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * ── Design tokens (read from the Figma files) ───────────────────────────
+ * Every token is written as light-dark(<light>, <dark>), so both themes sit
+ * side by side and are easy to tune. Light values come from the "Desktop - 105"
+ * frame, dark values from "Desktop - 103".
+ *
+ * With no choice made, `color-scheme: light dark` follows the visitor's system
+ * setting. The `.light` / `.dark` classes (set by the theme script and the
+ * toggle) override that.
+ */
 :root {
-  --background: #09090b;
-  --foreground: #ffffff;
-  --line: #27272a; /* every border / rail */
-  --muted: #9f9fa9; /* dates, locations, secondary labels */
-  --nav-muted: #9ca3af;
-  --nav-active: #f9fafb;
-  --chip: #1b1b1d; /* icon chips, icon boxes, social buttons */
-  --chip-line: #959ec0; /* dashed outline of chips and icon boxes */
-  --social-line: #636363;
-  --tag: #0c0c19; /* text-only skill tags */
-  --tag-line: #d1d5db;
-  --tag-line-first: #9f9fa9;
-  --tag-text: #d1d5db;
-  --tree: #3f3f46; /* timeline connector */
-  --line-strong: #52525b; /* short dividers inside meta rows */
-  --pixel: #d9d9d9; /* logo pixels */
-  --kbd: #616161;
+  color-scheme: light dark;
+
+  --background: light-dark(#ffffff, #09090b);
+  --foreground: light-dark(#09090b, #ffffff);
+  --line: light-dark(#d4d4d8, #27272a); /* every border / rail */
+  --muted: light-dark(#71717a, #9f9fa9); /* dates, locations, secondary text */
+  --label: light-dark(#52525b, #9f9fa9); /* small mono labels in the footer */
+  --index: light-dark(#a1a1aa, #ffffff); /* 01 02 03 numerals */
+  --nav-muted: light-dark(#71717a, #9ca3af);
+  --nav-active: light-dark(#09090b, #f9fafb);
+
+  --chip: light-dark(#f4f4f5, #1b1b1d); /* icon chips, small surfaces */
+  --chip-line: light-dark(#d4d4d8, #959ec0); /* dashed outline of chips */
+  --chip-text: light-dark(#52525b, #ffffff);
+  --icon: light-dark(#52525b, #959ec0); /* icon tint */
+  --box: light-dark(#e4e4e7, #1b1b1d); /* timeline / project icon boxes */
+  --box-line: light-dark(#a1a1aa, #959ec0);
+  --box-icon: light-dark(#09090b, #959ec0); /* glyph inside those boxes: black in the light design */
+  /* The small detail boxes are a 0.5px #71717b line in the design, which reads as #b8b8bd on white. */
+  --detail-line: light-dark(#b8b8bd, #959ec0);
+  --detail-icon: light-dark(#71717b, #959ec0);
+  --tagline: light-dark(#71717a, #ffffff); /* the line under the name */
+  --social-line: light-dark(#a1a1aa, #636363);
+  --social-bg: light-dark(transparent, #1b1b1d); /* the design draws light social buttons with no fill */
+  --social-icon: light-dark(#3f3f46, #959ec0);
+
+  --tag: light-dark(#f4f4f5, #0c0c19); /* text-only skill tags */
+  --tag-line: light-dark(#d4d4d8, #d1d5db);
+  --tag-line-first: light-dark(#a1a1aa, #9f9fa9);
+  --tag-text: light-dark(#52525b, #d1d5db);
+
+  --tree: light-dark(#3f3f46, #3f3f46); /* timeline connector */
+  --line-strong: light-dark(#a1a1aa, #52525b); /* short dividers inside meta rows */
+  --pixel: light-dark(#09090b, #d9d9d9); /* logo pixels */
+  --wordmark: light-dark(#09090b, #ffffff); /* footer pixel wordmark */
+  --hatch: light-dark(#d4d4d8, #4a4a50); /* diagonal section dividers */
+
+  --kbd: light-dark(#e8e8e9, #616161);
+  --kbd-text: light-dark(#71717b, #ffffff);
+  --focus: light-dark(#71717a, #959ec0); /* keyboard focus ring */
+  --selection: light-dark(#dbe0f3, #3b3f55);
+
+  --backdrop: light-dark(rgb(9 9 11 / 0.35), rgb(0 0 0 / 0.6)); /* behind the search menu */
+  --popup-shadow: light-dark(rgb(9 9 11 / 0.25), rgb(0 0 0 / 0.85));
+}
+
+:root.light {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -27,11 +74,23 @@
   --color-foreground: var(--foreground);
   --color-line: var(--line);
   --color-muted: var(--muted);
+  --color-label: var(--label);
+  --color-index: var(--index);
   --color-nav-muted: var(--nav-muted);
   --color-nav-active: var(--nav-active);
   --color-chip: var(--chip);
   --color-chip-line: var(--chip-line);
+  --color-chip-text: var(--chip-text);
+  --color-icon: var(--icon);
+  --color-box: var(--box);
+  --color-box-line: var(--box-line);
+  --color-box-icon: var(--box-icon);
+  --color-detail-line: var(--detail-line);
+  --color-detail-icon: var(--detail-icon);
+  --color-tagline: var(--tagline);
   --color-social-line: var(--social-line);
+  --color-social-bg: var(--social-bg);
+  --color-social-icon: var(--social-icon);
   --color-tag: var(--tag);
   --color-tag-line: var(--tag-line);
   --color-tag-line-first: var(--tag-line-first);
@@ -40,6 +99,7 @@
   --color-line-strong: var(--line-strong);
   --color-pixel: var(--pixel);
   --color-kbd: var(--kbd);
+  --color-kbd-text: var(--kbd-text);
 
   --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, monospace;
@@ -51,7 +111,8 @@
 }
 
 html {
-  color-scheme: dark;
+  /* Keeps #section jumps from hiding under the sticky 60px header. */
+  scroll-padding-top: 76px;
 }
 
 body {
@@ -62,7 +123,7 @@ body {
 }
 
 ::selection {
-  background: #3b3f55;
+  background: var(--selection);
 }
 
 /* Diagonal hatch used by the 40px section dividers */
@@ -71,14 +132,14 @@ body {
     135deg,
     transparent 0,
     transparent 6.07px,
-    #4a4a50 6.07px,
-    #4a4a50 7.07px
+    var(--hatch) 6.07px,
+    var(--hatch) 7.07px
   );
 }
 
 /* Keyboard focus ring that matches the dashed language of the design */
 :focus-visible {
-  outline: 1px dashed var(--chip-line);
+  outline: 1px dashed var(--focus);
   outline-offset: 2px;
 }
 
