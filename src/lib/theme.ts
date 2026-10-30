@@ -11,9 +11,11 @@ const DARK_QUERY = "(prefers-color-scheme: dark)";
 
 /**
  * Runs in <head> before the first paint, so a saved choice never flashes the
- * wrong theme. Keep it in sync with `paint()` below.
+ * wrong theme. It also adds the "js" class that scroll reveals key off, so
+ * content is only hidden when scripts can bring it back. Keep it in sync with
+ * `paint()` below.
  */
-export const themeScript = `(function(){try{var t=localStorage.getItem("${KEY}");var d=t==="dark"||(t!=="light"&&matchMedia("${DARK_QUERY}").matches);document.documentElement.classList.add(d?"dark":"light")}catch(e){}})()`;
+export const themeScript = `(function(){document.documentElement.classList.add("js");try{var t=localStorage.getItem("${KEY}");var d=t==="dark"||(t!=="light"&&matchMedia("${DARK_QUERY}").matches);document.documentElement.classList.add(d?"dark":"light")}catch(e){}})()`;
 
 export function readPreference(): ThemePreference {
   try {
@@ -35,16 +37,55 @@ function paint(theme: ResolvedTheme) {
   classes.add(theme);
 }
 
-/** Saves the choice ("system" clears it) and applies it right away. */
-export function setThemePreference(preference: ThemePreference) {
-  try {
-    if (preference === "system") localStorage.removeItem(KEY);
-    else localStorage.setItem(KEY, preference);
-  } catch {
-    // Private mode or blocked storage: the theme still changes for this visit.
+type ViewTransitionDocument = Document & {
+  startViewTransition?: (update: () => void) => { ready: Promise<void> };
+};
+
+/**
+ * Saves the choice ("system" clears it) and applies it right away. When the
+ * browser supports View Transitions the new theme grows out of `origin` (the
+ * clicked button) as a circle; otherwise it just switches.
+ */
+export function setThemePreference(
+  preference: ThemePreference,
+  origin?: { x: number; y: number },
+) {
+  const next = resolve(preference);
+  const doc = document as ViewTransitionDocument;
+  const animate =
+    typeof doc.startViewTransition === "function" &&
+    !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+    !document.documentElement.classList.contains(next);
+
+  const apply = () => {
+    try {
+      if (preference === "system") localStorage.removeItem(KEY);
+      else localStorage.setItem(KEY, preference);
+    } catch {
+      // Private mode or blocked storage: the theme still changes for this visit.
+    }
+    paint(next);
+    window.dispatchEvent(new Event(EVENT));
+  };
+
+  if (!animate) {
+    apply();
+    return;
   }
-  paint(resolve(preference));
-  window.dispatchEvent(new Event(EVENT));
+
+  const x = origin?.x ?? window.innerWidth / 2;
+  const y = origin?.y ?? window.innerHeight / 2;
+  const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+
+  doc.startViewTransition!(apply).ready.then(
+    () => {
+      document.documentElement.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        { duration: 650, easing: "cubic-bezier(0.22, 1, 0.36, 1)", pseudoElement: "::view-transition-new(root)" },
+      );
+    },
+    () => {},
+  );
 }
 
 function subscribe(onChange: () => void) {

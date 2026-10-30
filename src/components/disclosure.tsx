@@ -2,7 +2,8 @@
 
 import { useId, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Icon } from "@/components/icon";
+import { IconSwap } from "@/components/icon-swap";
+import { duration, ease } from "@/lib/motion";
 
 /** State + ARIA wiring for an expandable section. */
 export function useDisclosure(defaultOpen = false) {
@@ -23,9 +24,10 @@ export function useDisclosure(defaultOpen = false) {
 /** unfold-less when open, unfold-more when closed — matches the Figma icons. */
 export function UnfoldIcon({ open, className }: { open: boolean; className?: string }) {
   return (
-    <Icon
-      name={open ? "hugeicons:unfold-less" : "hugeicons:unfold-more"}
-      size={20}
+    <IconSwap
+      active={open}
+      from="hugeicons:unfold-more"
+      to="hugeicons:unfold-less"
       className={className ?? "text-nav-muted"}
     />
   );
@@ -50,7 +52,7 @@ export function Collapse({
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: duration.base, ease }}
           className="overflow-hidden"
         >
           {children}

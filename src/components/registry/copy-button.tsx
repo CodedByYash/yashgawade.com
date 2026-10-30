@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Icon } from "@/components/icon";
+import { IconSwap } from "@/components/icon-swap";
 
 export function CopyButton({ text, label }: { text: string; label: string }) {
   const [state, setState] = useState<"idle" | "copied" | "error">("idle");
@@ -24,7 +24,7 @@ export function CopyButton({ text, label }: { text: string; label: string }) {
         aria-label={label}
         className="flex items-center gap-1.5 rounded-sm px-1.5 py-0.5 font-mono text-[11px] text-nav-muted transition-colors hover:text-foreground"
       >
-        <Icon name={state === "copied" ? "hugeicons:tick-02" : "hugeicons:copy-01"} size={16} />
+        <IconSwap active={state === "copied"} from="hugeicons:copy-01" to="hugeicons:tick-02" size={16} />
         {state === "copied" ? "Copied" : state === "error" ? "Failed" : "Copy"}
       </button>
       <span role="status" className="sr-only">

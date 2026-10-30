@@ -15,7 +15,7 @@ export function ContactDetails() {
       </Band>
 
       <Band edge="none" columnClassName="grid sm:grid-cols-2">
-        <ul className="space-y-2 p-4">
+        <ul data-reveal="children" className="space-y-2 p-4">
           <li className="flex items-center gap-4">
             <IconBox icon="hugeicons:code" />
             <span className={detailText}>{profile.role}</span>
@@ -31,7 +31,7 @@ export function ContactDetails() {
             </a>
           </li>
         </ul>
-        <ul className="space-y-2 border-t border-dashed border-line p-4 sm:border-l sm:border-t-0">
+        <ul data-reveal="children" className="space-y-2 border-t border-dashed border-line p-4 sm:border-l sm:border-t-0">
           <li className="flex items-center gap-4">
             <IconBox icon="hugeicons:time-04" />
             <span className={detailText}>

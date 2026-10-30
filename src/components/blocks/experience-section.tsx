@@ -11,7 +11,7 @@ export function ExperienceSection() {
       <SectionHeading id="experience">Experience</SectionHeading>
       {experience.map((job) => (
         <Band key={job.company} edge="none">
-          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-[17px] pt-4">
+          <div data-reveal="fade" className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-[17px] pt-4">
             <div className="flex items-center gap-4">
               <span
                 aria-hidden

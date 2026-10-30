@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { nav } from "@/data/profile";
+import { duration, ease } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export function NavLinks() {
@@ -19,11 +21,19 @@ export function NavLinks() {
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   // py-3 grows the tap target to ~41px without moving the text.
-                  "block py-3 transition-colors hover:text-nav-active",
+                  "relative block py-3 transition-colors hover:text-nav-active",
                   active ? "text-nav-active" : "text-nav-muted",
                 )}
               >
                 {item.label}
+                {active && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    aria-hidden
+                    className="absolute inset-x-0 bottom-2 h-px bg-nav-active"
+                    transition={{ duration: duration.slow, ease }}
+                  />
+                )}
               </Link>
             </li>
           );

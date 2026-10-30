@@ -148,6 +148,203 @@ body {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion                                                              */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* One easing curve for the whole site (also exported from src/lib/motion.ts). */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Metallic name: a steel gradient plus a moving sheen. */
+  --metal-a: light-dark(#111111, #e8e8e8);
+  --metal-b: light-dark(#4a4a4a, #7f7f7f);
+  --metal-c: light-dark(#1d1d1d, #c4c4c4);
+  --sheen: light-dark(#ffffff, #ffffff);
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes reveal-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+@keyframes reveal-draw {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+/* Safety net: if scripts never run, scroll-reveal content shows after 3s. */
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0);
+  }
+}
+
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(3px);
+  }
+}
+
+@keyframes metal-sheen {
+  0% {
+    background-position: 100% 0, 0 0;
+  }
+  24%,
+  100% {
+    background-position: 0% 0, 0 0;
+  }
+}
+
+@keyframes write-in {
+  from {
+    clip-path: inset(-20% 100% -20% 0);
+  }
+  to {
+    clip-path: inset(-20% -10% -20% 0);
+  }
+}
+
+@keyframes pending-failsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Metallic text: steel gradient with a sheen that sweeps across now and then. */
+.metal-text {
+  color: var(--foreground);
+  background-image:
+    linear-gradient(105deg, transparent 40%, var(--sheen) 50%, transparent 60%),
+    linear-gradient(180deg, var(--metal-a) 0%, var(--metal-b) 52%, var(--metal-c) 100%);
+  background-size: 250% 100%, 100% 100%;
+  background-position: 100% 0, 0 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (forced-colors: active) {
+  .metal-text {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* Per-letter blur-in for the rotating tagline. */
+.blur-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.blur-char {
+  display: inline-block;
+}
+
+.blur-line {
+  transition:
+    opacity 280ms var(--ease-out),
+    filter 280ms var(--ease-out);
+}
+
+.blur-line[data-leaving="true"] {
+  opacity: 0;
+  filter: blur(6px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: enter 600ms var(--ease-out) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+
+  .metal-text {
+    animation: metal-sheen 8s var(--ease-out) 1.4s infinite;
+  }
+
+  .blur-char {
+    animation: blur-in 560ms var(--ease-out) backwards;
+    animation-delay: calc(var(--base, 0ms) + var(--i) * 30ms);
+  }
+
+  .write-in {
+    animation: write-in 1100ms cubic-bezier(0.45, 0, 0.25, 1) backwards;
+  }
+
+  /* Scroll reveals. The "js" class is set before first paint, so nothing flashes. */
+  .js [data-reveal="fade"]:not(.in),
+  .js [data-reveal="children"]:not(.in) > * {
+    opacity: 0;
+  }
+  .js [data-reveal="wipe"]:not(.in) {
+    clip-path: inset(0 100% 0 0);
+  }
+  .js [data-reveal="draw"]:not(.in) {
+    clip-path: inset(0 0 100% 0);
+  }
+  .js [data-reveal]:not(.in),
+  .js [data-reveal]:not(.in) > * {
+    animation: reveal-failsafe 1ms 3s forwards;
+  }
+
+  [data-reveal="fade"].in {
+    animation: reveal-up 600ms var(--ease-out) backwards;
+  }
+  [data-reveal="children"].in > * {
+    animation: reveal-up 560ms var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * 45ms);
+  }
+  [data-reveal="wipe"].in {
+    animation: reveal-wipe 900ms var(--ease-out) backwards;
+  }
+  [data-reveal="draw"].in {
+    animation: reveal-draw 700ms var(--ease-out) backwards;
+  }
+
+  /* Until the greeting knows the visitor's local time, keep it out of sight. */
+  .js .greeting-pending {
+    opacity: 0;
+    animation: pending-failsafe 1ms 2s forwards;
+  }
+}
+
+/* Theme switch: the new theme grows out of the button as a circle. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
 }

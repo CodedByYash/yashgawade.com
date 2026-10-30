@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { Icon } from "@/components/icon";
+import { IconSwap } from "@/components/icon-swap";
+import { cn } from "@/lib/utils";
 
 const noopSubscribe = () => () => {};
 
@@ -23,7 +24,10 @@ export function Greeting() {
   const text = hydrated ? greetingFor(new Date().getHours()) : "Hello";
   return (
     <p
-      className="font-hand text-2xl font-bold capitalize leading-normal"
+      className={cn(
+        "font-hand text-2xl font-bold capitalize leading-normal",
+        hydrated ? "write-in" : "greeting-pending",
+      )}
       suppressHydrationWarning
     >
       {text}
@@ -89,7 +93,7 @@ export function CopyPhone({ countryCode = "+91" }: { countryCode?: string }) {
         aria-label="Copy phone number"
         className="-m-0.5 rounded-sm p-0.5 text-nav-muted transition-colors hover:text-foreground"
       >
-        <Icon name={state === "copied" ? "hugeicons:tick-02" : "hugeicons:copy-01"} size={20} />
+        <IconSwap active={state === "copied"} from="hugeicons:copy-01" to="hugeicons:tick-02" />
       </button>
       <span role="status" className="sr-only">
         {state === "copied" ? "Phone number copied" : state === "error" ? "Could not copy" : ""}
