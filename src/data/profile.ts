@@ -3,6 +3,13 @@ import type { IconName } from "@/lib/icons.generated";
 export const profile = {
   name: "Yash Gawade",
   tagline: "I design and build thoughtful digital experiences.",
+  // Shown one after another under the name; the first is also the static fallback.
+  taglines: [
+    "I design and build thoughtful digital experiences.",
+    "Frontend and full-stack developer from Pune.",
+    "I turn ideas into fast, accessible interfaces.",
+    "Building real-time apps with Next.js and Node.js.",
+  ],
   role: "Frontend Developer",
   location: "Pune, India",
   email: "gawadeyash0@gmail.com",
