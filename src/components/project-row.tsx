@@ -11,7 +11,7 @@ export function ProjectRow({ project }: { project: Project }) {
 
   return (
     <div className="relative">
-      <div className="flex min-h-[88px] items-center gap-4 px-[17px] py-6">
+      <div data-reveal="fade" className="flex min-h-[88px] items-center gap-4 px-[17px] py-6">
         <span
           aria-hidden
           className="flex size-10 shrink-0 items-center justify-center rounded border border-dashed border-box-line bg-box"

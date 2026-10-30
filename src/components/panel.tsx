@@ -43,6 +43,7 @@ export function Divider() {
   return (
     <div
       aria-hidden
+      data-reveal="wipe"
       className="hatch h-10 w-full border-y border-line"
     />
   );
@@ -53,7 +54,7 @@ export function SectionHeading({ id, children }: { id?: string; children: React.
   return (
     // 33px text line + 1px above + the band's bottom line = the design's 35px heading.
     <Band edge="bottom" columnClassName="flex items-center px-4 pt-px">
-      <h2 id={id} className="text-2xl font-bold leading-[33px]">
+      <h2 id={id} data-reveal="fade" className="text-2xl font-bold leading-[33px]">
         {children}
       </h2>
     </Band>

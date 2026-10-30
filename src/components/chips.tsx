@@ -13,7 +13,7 @@ export function IconChip({
   children: React.ReactNode;
 }) {
   return (
-    <li className="flex items-center justify-center gap-2.5 border border-dashed border-chip-line bg-chip px-2 py-1 font-mono text-xs font-medium text-chip-text">
+    <li className="flex items-center justify-center gap-2.5 border border-dashed border-chip-line bg-chip px-2 py-1 transition-transform duration-200 ease-(--ease-out) hover:-translate-y-0.5 font-mono text-xs font-medium text-chip-text">
       <Icon name={icon} size={20} monochrome={monochrome} className="text-icon" />
       <span className="whitespace-nowrap">{children}</span>
     </li>

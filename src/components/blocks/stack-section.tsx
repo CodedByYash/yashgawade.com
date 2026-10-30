@@ -17,11 +17,11 @@ export function StackSection() {
             i < stack.length - 1 ? "sm:min-h-[66px]" : "sm:min-h-[67px]"
           }`}
         >
-          <h3 className="flex items-center px-[25px] pt-4 font-mono text-sm font-medium uppercase sm:py-4">
+          <h3 data-reveal="fade" className="flex items-center px-[25px] pt-4 font-mono text-sm font-medium uppercase sm:py-4">
             <span className="text-index">{String(i + 1).padStart(2, "0")}</span>&nbsp;{group.title}
           </h3>
           <div className="flex items-center border-dashed border-line px-6 py-4 sm:border-l sm:pl-[31px]">
-            <ul className="flex flex-wrap gap-2.5">
+            <ul data-reveal="children" className="flex flex-wrap gap-2.5">
               {group.items.map((item) => (
                 <IconChip key={item.name} icon={item.icon} monochrome={item.monochrome}>
                   {item.name}

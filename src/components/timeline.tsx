@@ -16,7 +16,7 @@ export function TimelineRail({ icon, open = true }: { icon: IconName; open?: boo
         bottom: 3px list padding plus half of a 28px tag). Collapsed entries have
         no tags, so they show no connector.
       */}
-      {open && <span className="mb-[17px] ml-[15px] w-[15px] flex-1 rounded-bl-[10px] border-b border-l border-tree" />}
+      {open && <span data-reveal="draw" className="mb-[17px] ml-[15px] w-[15px] flex-1 rounded-bl-[10px] border-b border-l border-tree" />}
     </div>
   );
 }
