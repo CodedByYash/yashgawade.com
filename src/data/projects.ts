@@ -19,14 +19,34 @@ export const projects: Project[] = [
     tagline:
       "Fast, Clean, Real-Time Inventory Tracking With Velocity-Based Reorder Intelligence Without Enterprise Complexity Or Pricing.",
     points: [
-      "Multi-warehouse inventory platform built for D2C brands and retailers.",
-      "Real-time stock tracking with inventory movements, warehouse management, and product analytics.",
-      "Velocity-based reorder intelligence to identify fast-moving products and potential replenishment needs.",
+      "Built a multi-warehouse inventory platform for D2C brands and retailers: products, warehouses, purchase and sales orders, low-stock alerts, and a live dashboard.",
+      "Designed an append-only stock ledger where every quantity change flows through one MongoDB-transaction-wrapped function, so stock can never go negative; verified with a test firing 50 concurrent writes at one product.",
+      "Implemented partial receipt on purchase orders and partial fulfillment with implicit backorders on sales orders, plus velocity-based reorder forecasting with plain-English suggestions and no ML infrastructure.",
+      "Shipped an installable PWA with camera-based barcode scanning (react-zxing) so warehouse staff can look up and record stock movements from a phone.",
     ],
-    tags: ["Next.js", "MongoDB", "Monorepo", "Redis"],
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Express.js",
+      "MongoDB",
+      "Tailwind CSS",
+      "JWT",
+      "PWA",
+      "Jest",
+    ],
   },
-  // MCP Server: description, links and stack still to be provided.
-  { name: "MCP Server", start: "01/10/2026" },
+  {
+    name: "Inventory MCP Server",
+    start: "01/10/2026",
+    tagline: "Talk To Your Inventory In Plain English Through Claude",
+    points: [
+      "Built a Model Context Protocol server that exposes the inventory API as 8 tools (5 read-only, 3 write) so an AI assistant can check stock, forecast reorders, and create or receive purchase orders by calling the real API.",
+      "Added resolver layers so users refer to SKUs, warehouse names, and PO numbers instead of database IDs; ambiguous or unknown names fail before anything is created, with suggestions.",
+      "Authenticated through a dedicated service account with a Bearer-token path added to the API's auth middleware, keeping all business logic in the API.",
+      "Verified end to end by spawning the compiled server as a real child process over stdio and checking that real business-rule errors, like over-receiving a PO, reach the client intact.",
+    ],
+    tags: ["MCP", "TypeScript", "Node.js", "Zod", "Claude Desktop"],
+  },
   {
     name: "Community App",
     start: "01/10/2026",
