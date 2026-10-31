@@ -18,7 +18,7 @@ const LOGO_ROWS = [
 const ALL = "1".repeat(53);
 
 // Reads "YASHGAWADE" — letters are the empty (dark) cells.
-const WORDMARK_ROWS = [
+export const WORDMARK_ROWS = [
   ALL,
   ALL,
   "111" + "1101010001" + "0001010110" + "0010001011" + "101000100" + "01100011111",
@@ -30,7 +30,7 @@ const WORDMARK_ROWS = [
   ALL,
 ];
 
-function Grid({
+export function Grid({
   rows,
   cell,
   gap,
@@ -72,17 +72,4 @@ function Grid({
 
 export function Logo({ className }: { className?: string }) {
   return <Grid rows={LOGO_ROWS} cell={3} gap={1} fill="var(--pixel)" title="YG logo" className={className} />;
-}
-
-export function Wordmark({ className }: { className?: string }) {
-  return (
-    <Grid
-      rows={WORDMARK_ROWS}
-      cell={10}
-      gap={4}
-      fill="var(--wordmark)"
-      title="Yash Gawade"
-      className={className}
-    />
-  );
 }

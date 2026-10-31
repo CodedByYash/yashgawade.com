@@ -4,6 +4,8 @@ import type { SocialLink } from "@/data/profile";
 const box =
   "flex size-[43px] items-center justify-center border border-dashed border-social-line bg-social-bg text-social-icon transition-colors";
 
+const marching = "march [--march:var(--foreground)] hover:text-foreground";
+
 /**
  * The solid GitHub / LinkedIn / YouTube marks fill their whole box, while the
  * outline icons carry padding. 20px vs 24px gives both the ~19px glyph the
@@ -27,7 +29,7 @@ export function SocialButtons({ items }: { items: SocialLink[] }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={item.label}
-              className={`${box} hover:border-foreground hover:text-foreground`}
+              className={`${box} ${marching}`}
             >
               <Icon name={item.icon} size={glyphSize(item.icon)} />
             </a>

@@ -336,6 +336,79 @@ body {
   }
 }
 
+/* Pixel wordmark wave: pixels pop in diagonally the first time it scrolls into view. */
+.pixel-wave rect {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: scale 380ms var(--ease-out);
+}
+
+@keyframes pixel-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .pixel-wave:not(.in) rect {
+    opacity: 0;
+  }
+  .pixel-wave.in rect {
+    animation: pixel-pop 520ms var(--ease-out) backwards;
+    animation-delay: calc(var(--k) * 16ms);
+  }
+  /* Failsafe if scripts never run. */
+  .js .pixel-wave:not(.in) rect {
+    animation: reveal-failsafe 1ms 3s forwards;
+  }
+}
+
+/*
+ * Marching dashes: on hover the dashed border is redrawn as four strips of
+ * dashes that crawl around the box. Needs an element with a 1px dashed border.
+ */
+.march {
+  position: relative;
+}
+
+@keyframes march {
+  to {
+    background-position: 6px 0, 100% 6px, -6px 100%, 0 -6px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .march::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    opacity: 0;
+    background-image:
+      linear-gradient(90deg, var(--march) 50%, transparent 50%),
+      linear-gradient(180deg, var(--march) 50%, transparent 50%),
+      linear-gradient(90deg, var(--march) 50%, transparent 50%),
+      linear-gradient(180deg, var(--march) 50%, transparent 50%);
+    background-size: 6px 1px, 1px 6px, 6px 1px, 1px 6px;
+    background-position: 0 0, 100% 0, 0 100%, 0 0;
+    background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+  }
+  .march:hover {
+    border-color: transparent;
+  }
+  .march:hover::after {
+    opacity: 1;
+    animation: march 450ms linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .march:hover {
+    border-color: var(--march);
+  }
+}
+
 /* Theme switch: the new theme grows out of the button as a circle. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
