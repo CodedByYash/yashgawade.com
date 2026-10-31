@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Icon } from "@/components/icon";
 import { Band } from "@/components/panel";
-import { Logo, Wordmark } from "@/components/pixel-grid";
+import { Logo } from "@/components/pixel-grid";
 import { SocialInline } from "@/components/social-links";
 import { profile, socials } from "@/data/profile";
 import { site } from "@/data/site";
+import { Wordmark } from "@/components/wordmark";
 
 const label = "font-mono text-[11px] font-medium uppercase tracking-wide text-label";
 // 2×2 grid on phones (divider before every even cell, rule above the second row),

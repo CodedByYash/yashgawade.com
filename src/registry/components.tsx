@@ -1,7 +1,8 @@
 import { IconBox, IconChip, Tag } from "@/components/chips";
 import { Greeting, LiveClock } from "@/components/live";
 import { Band, Divider, SectionHeading } from "@/components/panel";
-import { Logo, Wordmark } from "@/components/pixel-grid";
+import { Logo } from "@/components/pixel-grid";
+import { Wordmark } from "@/components/wordmark";
 import { SocialButtons } from "@/components/social-links";
 import { ExpandableTags } from "@/components/tag-list";
 import { MetaRow, TimelineRail } from "@/components/timeline";
@@ -129,7 +130,7 @@ export const componentItems: RegistryItem[] = [
     slug: "pixel-grid",
     name: "Pixel logo and wordmark",
     description: "Pixel art drawn as a single SVG from a bitmap, instead of hundreds of DOM nodes.",
-    files: ["src/components/pixel-grid.tsx"],
+    files: ["src/components/pixel-grid.tsx", "src/components/wordmark.tsx"],
     preview: (
       <div className="flex w-full flex-col items-center gap-5">
         <Logo />
