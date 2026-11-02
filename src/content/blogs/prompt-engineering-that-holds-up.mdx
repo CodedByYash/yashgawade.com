@@ -1,0 +1,44 @@
+export const meta = {
+  title: "Prompt engineering that holds up",
+  description: "Practical prompting habits: be specific, show examples, and test prompts like code.",
+  date: "2026-11-16",
+  tags: ["Prompt engineering", "AI"],
+  series: "AI engineering notes",
+  part: 3,
+  draft: true,
+};
+
+<Callout type="warning" title="Draft outline">
+  Example prompts below are illustrative. Swap in prompts you really used.
+</Callout>
+
+## Say what you want, not what you do not
+
+<Compare
+  beforeLabel="Vague"
+  before={`Write something about my project.`}
+  afterLabel="Specific"
+  after={`Write a 3-sentence summary of my project for a recruiter.
+Mention the stack, the problem it solves and one measurable result.
+Plain language, no buzzwords.`}
+/>
+
+## Give the model a role and a format
+
+<Prompt title="System prompt">
+{`You are a careful code reviewer.
+Review the diff below. For each issue give: file, line, severity (low, medium, high) and a one-line fix.
+If there are no issues, reply exactly: No issues.`}
+</Prompt>
+
+## Show examples
+
+[Few-shot examples and when they help.]
+
+## Test prompts like code
+
+[Keep a small set of inputs and expected outputs; rerun them when you change the prompt.]
+
+<Callout type="tip">
+  Change one thing at a time, otherwise you cannot tell what helped.
+</Callout>

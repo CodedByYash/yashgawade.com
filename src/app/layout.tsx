@@ -8,9 +8,11 @@ import { MotionProvider } from "@/components/motion-provider";
 import { RevealController } from "@/components/reveal-controller";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { site } from "@/data/site";
 import { themeScript } from "@/lib/theme";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: {
     default: "Yash Gawade — Frontend Developer",
     template: "%s — Yash Gawade",
