@@ -1,51 +1,51 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Band, Divider } from "@/components/panel";
+import { PostList } from "@/components/blog/post-list";
+import { Icon } from "@/components/icon";
+import { Divider } from "@/components/panel";
 import { PageHeader } from "@/components/registry/page-header";
-import { Tag } from "@/components/chips";
-import { formatDate, getPosts } from "@/lib/blogs";
+import { getPosts, getTags, tagSlug } from "@/lib/blogs";
 
 export const metadata: Metadata = {
   title: "Blogs",
   description: "Notes on frontend, full-stack and AI, written while building.",
+  alternates: { types: { "application/rss+xml": "/feed.xml" } },
 };
 
 export default async function BlogsPage() {
   const posts = await getPosts();
+  const tags = getTags(posts);
 
   return (
     <main>
-      <PageHeader title="Blogs" description="Notes on frontend, full-stack and AI, written while building." />
+      <PageHeader
+        title="Blogs"
+        description="Notes on frontend, full-stack and AI, written while building."
+        meta={
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <a
+              href="/feed.xml"
+              className="flex items-center gap-1.5 font-mono text-xs text-nav-muted transition-colors hover:text-foreground"
+            >
+              <Icon name="hugeicons:rss" size={14} />
+              RSS
+            </a>
+            {tags.length > 0 && (
+              <ul aria-label="Topics" className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs">
+                {tags.map(({ tag, slug, posts: tagged }) => (
+                  <li key={slug}>
+                    <Link href={`/blogs/tag/${slug}`} className="text-muted transition-colors hover:text-foreground">
+                      #{tagSlug(tag)} <span className="text-index">{tagged.length}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        }
+      />
       <Divider />
-      <Band edge="none" columnClassName="overflow-hidden">
-        {posts.length === 0 ? (
-          <p className="px-4 py-12 text-center text-sm text-muted">No posts yet. Check back soon.</p>
-        ) : (
-          <ul className="-mb-px">
-            {posts.map(({ slug, meta }) => (
-              <li key={slug} className="relative border-b border-dashed border-line px-4 py-5 transition-colors hover:bg-chip/40">
-                <time dateTime={meta.date} className="font-mono text-xs text-muted">
-                  {formatDate(meta.date)}
-                </time>
-                <h2 className="mt-1 text-lg font-semibold leading-snug">
-                  {/* The ::after stretches this link over the whole row. */}
-                  <Link href={`/blogs/${slug}`} className="after:absolute after:inset-0 after:content-['']">
-                    {meta.title}
-                  </Link>
-                </h2>
-                <p className="mt-1 text-sm leading-6 text-muted">{meta.description}</p>
-                {meta.tags && (
-                  <ul className="mt-3 flex flex-wrap gap-2.5">
-                    {meta.tags.map((tag) => (
-                      <Tag key={tag}>{tag}</Tag>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Band>
+      <PostList posts={posts} />
     </main>
   );
 }

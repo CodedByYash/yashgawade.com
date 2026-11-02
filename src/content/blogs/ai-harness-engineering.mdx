@@ -1,0 +1,47 @@
+export const meta = {
+  title: "AI harness engineering",
+  description: "The code around the model: the loop, the tools, the context and the guardrails that make an agent useful.",
+  date: "2026-11-23",
+  tags: ["Harness", "AI", "Agents"],
+  series: "AI engineering notes",
+  part: 4,
+  draft: true,
+};
+
+<Callout type="warning" title="Draft outline">
+  Structure only. Add your own examples and the lessons from your own agent work.
+</Callout>
+
+## The model is not the product
+
+A harness is everything around the model: how it is prompted, which tools it can call, what it can see, and what stops it from doing damage. [Your definition.]
+
+## The loop
+
+<Flow
+  steps={["Prompt", "Model", "Tool call", "Result"]}
+  loop="Repeat until the model stops asking for tools"
+  caption="The core agent loop."
+/>
+
+## Tools
+
+[Which tools, how you describe them, how errors are returned.]
+
+## Context
+
+[What goes in, what gets trimmed, how you keep it from filling up.]
+
+## Guardrails
+
+<Callout type="note">
+  [Permissions, confirmations for risky actions, limits on steps and cost.]
+</Callout>
+
+## Testing a harness
+
+[How you know a change helped: fixed tasks, logs, replay.]
+
+## Putting the series together
+
+[Link back to MCP, REA and prompting.]

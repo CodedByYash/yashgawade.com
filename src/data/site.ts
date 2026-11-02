@@ -1,6 +1,8 @@
 import versions from "./versions.generated.json";
 
 export const site = {
+  /** Public address, used for feeds, the sitemap and share links. */
+  url: "https://yashgawade.com",
   craftedBy: "yashgawade.com",
   craftedByHref: "https://yashgawade.com",
   date: "03-10-2026",

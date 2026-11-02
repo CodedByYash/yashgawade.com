@@ -1,0 +1,61 @@
+export const meta = {
+  title: "MCP: giving models hands",
+  description: "What the Model Context Protocol is, how a server exposes tools, and how I wired one into a real app.",
+  date: "2026-11-02",
+  tags: ["MCP", "AI"],
+  series: "AI engineering notes",
+  part: 1,
+  draft: true,
+};
+
+<Callout type="warning" title="Draft outline">
+  Placeholder structure. Replace each [bracket] with your own words and examples before removing `draft: true`.
+</Callout>
+
+## What MCP is
+
+The Model Context Protocol is an open protocol that lets an AI application talk to tools and data sources in one standard way, instead of a custom integration for every pair. [Add your own one-paragraph take.]
+
+<Flow
+  steps={["Host app", "MCP client", "MCP server", "Tool or data"]}
+  caption="The host app runs one client per server; each server exposes tools, resources or prompts."
+/>
+
+## The three things a server can offer
+
+- **Tools**: actions the model can call.
+- **Resources**: data the model can read.
+- **Prompts**: reusable prompt templates.
+
+## Wiring a server into a client
+
+The same config in two forms:
+
+<CodeTabs labels={["JSON", "TypeScript"]}>
+
+```json title="mcp.json" {3-6}
+{
+  "mcpServers": {
+    "my-server": {
+      "command": "node",
+      "args": ["./server.js"]
+    }
+  }
+}
+```
+
+```ts title="config.ts"
+export const mcpServers = {
+  "my-server": { command: "node", args: ["./server.js"] },
+};
+```
+
+</CodeTabs>
+
+## Building my own server
+
+[Link this to your Inventory MCP Server project: what it exposes, one tool in detail, what went wrong.]
+
+## What I would do differently
+
+[Three honest lessons.]
