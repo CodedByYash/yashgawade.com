@@ -14,6 +14,9 @@ const wanted = {
     "mail-01", "layers-01", "briefcase-01", "graduation-scroll", "user", "contact-01",
     // Theme
     "sun-01", "computer",
+    // Blog
+    "information-circle", "idea-01", "alert-02", "command-line", "rss", "clock-01",
+    "arrow-down-01", "arrow-right-02", "repeat", "table-of-contents", "git-fork", "star",
   ],
   "akar-icons": [
     "nextjs-fill", "postgresql-fill", "github-fill", "vercel-fill", "linkedin-box-fill",

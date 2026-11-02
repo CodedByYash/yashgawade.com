@@ -15,6 +15,23 @@ const nextConfig: NextConfig = {
 };
 
 // Blog posts are `.mdx` files imported from src/content/blogs.
-const withMDX = createMDX({});
+// Turbopack takes plugins by name, with options that are plain data.
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-gfm"],
+    rehypePlugins: [
+      "rehype-slug",
+      [
+        "rehype-pretty-code",
+        {
+          // One highlight pass produces both themes; CSS picks one (see globals.css).
+          theme: { light: "github-light", dark: "github-dark" },
+          keepBackground: false,
+          defaultLang: "plaintext",
+        },
+      ],
+    ],
+  },
+});
 
 export default withMDX(nextConfig);

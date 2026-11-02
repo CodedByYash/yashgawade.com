@@ -1,3 +1,6 @@
+import { CodeTabs } from "@/components/blog/code-tabs";
+import { Callout, Compare, Details, Flow, RepoCard, Terminal } from "@/components/blog/parts";
+import { Prompt } from "@/components/blog/prompt";
 import { IconBox, IconChip, Tag } from "@/components/chips";
 import { Greeting, LiveClock } from "@/components/live";
 import { Band, Divider, SectionHeading } from "@/components/panel";
@@ -156,6 +159,68 @@ export const componentItems: RegistryItem[] = [
         <p className="font-mono text-sm">
           <LiveClock timeZone={profile.timeZone} label={profile.timeZoneLabel} />
         </p>
+      </div>
+    ),
+  },
+  {
+    slug: "callout",
+    name: "Callout",
+    description: "Highlighted note, tip or warning for blog posts.",
+    files: ["src/components/blog/parts.tsx"],
+    preview: (
+      <div className="w-full max-w-md space-y-3 [&_aside]:mt-0">
+        <Callout type="tip">Change one thing at a time so you can tell what helped.</Callout>
+        <Callout type="warning">Never commit your API keys.</Callout>
+      </div>
+    ),
+  },
+  {
+    slug: "prompt",
+    name: "Prompt and compare",
+    description: "Shows a prompt as a prompt, with a copy button, and a before/after pair for rewrites.",
+    files: ["src/components/blog/prompt.tsx", "src/components/blog/parts.tsx"],
+    preview: (
+      <div className="w-full max-w-lg [&>figure]:mt-0 [&>div]:mt-3">
+        <Prompt title="System prompt">{`You are a careful code reviewer.\nReply with one line per issue.`}</Prompt>
+        <Compare before="Write something about my project." after="Write a 3-sentence summary of my project for a recruiter." />
+      </div>
+    ),
+  },
+  {
+    slug: "terminal-and-flow",
+    name: "Terminal and flow",
+    description: "Command output block and a small theme-aware flow diagram that wraps on phones.",
+    files: ["src/components/blog/parts.tsx"],
+    preview: (
+      <div className="w-full max-w-lg [&>figure]:mt-0 [&>figure+figure]:mt-4">
+        <Terminal title="Setup">{`$ npm install\n$ npm run dev\nready on http://localhost:3000`}</Terminal>
+        <Flow steps={["Prompt", "Model", "Tool call", "Result"]} loop="Repeat until done" />
+      </div>
+    ),
+  },
+  {
+    slug: "code-tabs",
+    name: "Code tabs",
+    description: "The same example in several languages, with arrow-key tab navigation.",
+    files: ["src/components/blog/code-tabs.tsx", "src/components/blog/code-block.tsx"],
+    preview: (
+      <div className="w-full max-w-lg [&>div]:mt-0">
+        <CodeTabs labels={["JSON", "TypeScript"]}>
+          <pre className="overflow-x-auto border border-dashed border-chip-line bg-chip p-4 font-mono text-[13px]">{`{ "name": "my-server" }`}</pre>
+          <pre className="overflow-x-auto border border-dashed border-chip-line bg-chip p-4 font-mono text-[13px]">{`export const name = "my-server";`}</pre>
+        </CodeTabs>
+      </div>
+    ),
+  },
+  {
+    slug: "repo-card",
+    name: "Repo card and details",
+    description: "A plain link card for a repository, and a collapsible section for long logs.",
+    files: ["src/components/blog/parts.tsx"],
+    preview: (
+      <div className="w-full max-w-md [&>*]:mt-0 [&>*+*]:mt-3">
+        <RepoCard repo="CodedByYash/yashgawade.com" description="This portfolio, with its source." />
+        <Details summary="Full session log">Long output goes here, out of the way until opened.</Details>
       </div>
     ),
   },

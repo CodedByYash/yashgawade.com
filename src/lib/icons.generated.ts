@@ -2,16 +2,6 @@
 export type IconData = { body: string; w: number; h: number };
 
 export const icons = {
-  "hugeicons:typescript-01": {
-    "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-linejoin=\"round\" stroke-width=\"1.5\"><path d=\"M2.5 12c0-4.478 0-6.717 1.391-8.109c1.391-1.39 3.63-1.39 8.109-1.39c4.478 0 6.718 0 8.109 1.39c1.391 1.392 1.391 3.63 1.391 8.11c0 4.478 0 6.717-1.391 8.108S16.479 21.5 12 21.5c-4.478 0-6.718 0-8.109-1.391S2.5 16.479 2.5 12Z\"/><path stroke-linecap=\"round\" d=\"M18 12h-1.8a1.2 1.2 0 0 0-1.2 1.2v.6a1.2 1.2 0 0 0 1.2 1.2h.6a1.2 1.2 0 0 1 1.2 1.2v.6a1.2 1.2 0 0 1-1.2 1.2H15m-6.5-6h2m2 0h-2m0 0v6\"/></g>",
-    "w": 24,
-    "h": 24
-  },
-  "hugeicons:java-script": {
-    "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M2.5 12c0-4.478 0-6.718 1.391-8.109S7.521 2.5 12 2.5c4.478 0 6.718 0 8.109 1.391S21.5 7.521 21.5 12c0 4.478 0 6.718-1.391 8.109S16.479 21.5 12 21.5c-4.478 0-6.718 0-8.109-1.391S2.5 16.479 2.5 12Z\"/><path stroke-linecap=\"round\" d=\"M11.732 12v4A2 2 0 0 1 8 17m10.467-4a2 2 0 0 0-1.733-1h-.5a1.5 1.5 0 1 0 0 3h1a1.5 1.5 0 0 1 0 3h-.5a2 2 0 0 1-1.732-1\"/></g>",
-    "w": 24,
-    "h": 24
-  },
   "hugeicons:python": {
     "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\"><path d=\"M17.498 8H16V7c0-1.886 0-2.828-.586-3.414S13.886 3 12 3s-2.828 0-3.414.586S8 5.114 8 7v2H6.498c-1.404 0-2.107 0-2.611.337a2 2 0 0 0-.552.552c-.337.504-.337 1.207-.337 2.611s0 2.107.337 2.611a2 2 0 0 0 .552.552C4.39 16 5.094 16 6.498 16H8v1c0 1.886 0 2.828.586 3.414S10.114 21 12 21s2.828 0 3.414-.586S16 18.886 16 17v-2h1.498c1.404 0 2.107 0 2.611-.337a2 2 0 0 0 .552-.552c.337-.504.337-1.207.337-2.611s0-2.107-.337-2.611a2 2 0 0 0-.552-.552C19.605 8 18.902 8 17.498 8\"/><path d=\"M11.125 6H11m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0m1.875 12H13m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0M16 8v2c0 .943 0 1.414-.293 1.707S14.943 12 14 12h-4c-.943 0-1.414 0-1.707.293S8 13.057 8 14v2m4-1h4M8 9h4\"/></g>",
     "w": 24,
@@ -224,6 +214,66 @@ export const icons = {
   },
   "hugeicons:computer": {
     "body": "<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M14 21h2m-2 0a1.5 1.5 0 0 1-1.5-1.5V17H12m2 4h-4m0 0H8m2 0a1.5 1.5 0 0 0 1.5-1.5V17h.5m0 0v4m4-18H8c-2.828 0-4.243 0-5.121.879C2 4.757 2 6.172 2 9v2c0 2.828 0 4.243.879 5.121C3.757 17 5.172 17 8 17h8c2.828 0 4.243 0 5.121-.879C22 15.243 22 13.828 22 11V9c0-2.828 0-4.243-.879-5.121C20.243 3 18.828 3 16 3\"/>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:information-circle": {
+    "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 16v-4m.125-3.75H12m.25 0a.25.25 0 1 0-.5 0a.25.25 0 0 0 .5 0\"/></g>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:idea-01": {
+    "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><path d=\"M8 16.5A6.05 6.05 0 0 1 6 12a6 6 0 1 1 12 0a6.05 6.05 0 0 1-2 4.5\"/><path stroke-linejoin=\"round\" d=\"M12 12v4.5M9.5 19h5m-4 2.5h3M3.5 12h-1m3.484-6.024l-.75-.746m12.786.746l.75-.746M21.5 12h-1M12 2.5v1\"/></g>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:alert-02": {
+    "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\"><path d=\"M13.925 21h-3.85c-4.63 0-6.945 0-7.799-1.506c-.853-1.506.331-3.503 2.7-7.495L6.9 8.753C9.176 4.918 10.313 3 12 3s2.824 1.918 5.1 5.753L19.023 12c2.369 3.992 3.553 5.989 2.7 7.495C20.87 21 18.555 21 13.924 21M12 9v4\"/><path d=\"M12.125 16.75H12m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0\"/></g>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:command-line": {
+    "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\"><path d=\"M14 4h-4C6.229 4 4.343 4 3.172 5.172S2 8.229 2 12s0 5.657 1.172 6.828S6.229 20 10 20h4c3.771 0 5.657 0 6.828-1.172S22 15.771 22 12s0-5.657-1.172-6.828S17.771 4 14 4\"/><path d=\"m7 9l1.84 1.586c.773.666 1.16 1 1.16 1.414s-.387.748-1.16 1.414L7 15m6 1h4\"/></g>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:rss": {
+    "body": "<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M19.5 19.5c0-8.284-6.716-15-15-15m8 15a8 8 0 0 0-8-8m.75 7.5H5m.5 0a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0\"/>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:clock-01": {
+    "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 8v4l2 2\"/></g>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:arrow-down-01": {
+    "body": "<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M18 9s-4.419 6-6 6s-6-6-6-6\"/>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:arrow-right-02": {
+    "body": "<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M18.5 12H5m8 6s6-4.419 6-6s-6-6-6-6\"/>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:repeat": {
+    "body": "<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"m16.388 3l1.003.976c.448.436.672.654.593.839C17.906 5 17.59 5 16.955 5h-7.76C5.22 5 2 8.134 2 12c0 1.487.477 2.866 1.29 4m4.322 5l-1.003-.976c-.448-.436-.672-.654-.593-.839C6.094 19 6.41 19 7.045 19h7.76C18.78 19 22 15.866 22 12a6.84 6.84 0 0 0-1.29-4\"/>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:table-of-contents": {
+    "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.5\"><path d=\"M3.879 5h12m-12 7h12m-12 7h12\"/><path stroke-linejoin=\"round\" d=\"M20.004 5h-.125m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0m-.125 7h-.125m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0m-.125 7h-.125m.25 0a.25.25 0 1 1-.5 0a.25.25 0 0 1 .5 0\"/></g>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:git-fork": {
+    "body": "<g fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M6 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4Zm6 12a2 2 0 1 0 0-4a2 2 0 0 0 0 4Zm6-12a2 2 0 1 0 0-4a2 2 0 0 0 0 4Z\"/><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6.017 8.74c0 1.674-.242 3.46 3.204 3.246h2.784m5.988-3.41c.133 3.41-1.073 3.189-2.207 3.41h-3.78m0 3.714v-3.714\"/></g>",
+    "w": 24,
+    "h": 24
+  },
+  "hugeicons:star": {
+    "body": "<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"m13.728 3.444l1.76 3.549c.24.494.88.968 1.42 1.058l3.189.535c2.04.343 2.52 1.835 1.05 3.307l-2.48 2.5c-.42.423-.65 1.24-.52 1.825l.71 3.095c.56 2.45-.73 3.397-2.88 2.117l-2.99-1.785c-.54-.322-1.43-.322-1.98 0L8.019 21.43c-2.14 1.28-3.44.322-2.88-2.117l.71-3.095c.13-.585-.1-1.402-.52-1.825l-2.48-2.5C1.39 10.42 1.86 8.929 3.899 8.586l3.19-.535c.53-.09 1.17-.564 1.41-1.058l1.76-3.549c.96-1.925 2.52-1.925 3.47 0\"/>",
     "w": 24,
     "h": 24
   },
