@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Icon } from "@/components/icon";
 import type { IconName } from "@/lib/icons.generated";
 import { cn } from "@/lib/utils";
@@ -167,5 +168,71 @@ export function Details({ summary, children }: { summary: string; children: Reac
       </summary>
       <div className="border-t border-dashed border-chip-line px-4 pb-4 [&>:first-child]:mt-3">{children}</div>
     </details>
+  );
+}
+
+/**
+ * A diagram with a numbered caption. Give `src` (and optionally `srcDark`, shown
+ * in the dark theme) once the image exists in /public. Without `src` it shows a
+ * clearly marked placeholder with the one-line brief, so drafts are never
+ * mistaken for finished posts.
+ */
+export function Figure({
+  n,
+  title,
+  src,
+  srcDark,
+  alt,
+  caption,
+  width = 1600,
+  height = 900,
+}: {
+  n: number;
+  title: string;
+  src?: string;
+  srcDark?: string;
+  /** Describes the diagram for people who cannot see it. */
+  alt: string;
+  caption?: string;
+  width?: number;
+  height?: number;
+}) {
+  const image = (url: string, className?: string) => (
+    <Image
+      src={url}
+      alt={alt}
+      width={width}
+      height={height}
+      unoptimized={url.endsWith(".svg")}
+      className={cn("h-auto w-full", className)}
+    />
+  );
+  return (
+    <figure className="mt-6">
+      {src ? (
+        <div className="border border-dashed border-chip-line bg-chip p-2">
+          {srcDark ? (
+            <>
+              {image(src, "dark:hidden")}
+              {image(srcDark, "hidden dark:block")}
+            </>
+          ) : (
+            image(src)
+          )}
+        </div>
+      ) : (
+        <div
+          role="img"
+          aria-label={alt}
+          className="flex min-h-40 flex-col items-center justify-center gap-1 border border-dashed border-chip-line bg-chip px-4 py-8 text-center"
+        >
+          <span className="font-mono text-xs uppercase tracking-wide text-label">Diagram {n} to come</span>
+          <span className="text-sm font-medium">{title}</span>
+        </div>
+      )}
+      <figcaption className="mt-2 text-xs leading-5 text-muted">
+        <span className="font-mono text-label">Figure {n}.</span> {caption ?? title}
+      </figcaption>
+    </figure>
   );
 }
