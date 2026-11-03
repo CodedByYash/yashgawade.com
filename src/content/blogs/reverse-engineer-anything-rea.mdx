@@ -1,43 +1,79 @@
 export const meta = {
   title: "Reverse engineer anything with REA",
-  description: "A walkthrough of the REA repo: what it does, how to run it, and how I use it to understand unfamiliar systems.",
+  description: "How I use REA, an MCP server that gives an AI agent reverse-engineering tools, to understand software I did not write.",
   date: "2026-11-09",
-  tags: ["Reverse engineering", "AI"],
+  tags: ["Reverse engineering", "MCP", "AI"],
   series: "AI engineering notes",
   part: 2,
   draft: true,
 };
 
 <Callout type="warning" title="Draft outline">
-  Needs the repo link and the real workflow. Nothing below describes REA yet.
+  Structure built from the REA README. Your own experience, examples and opinions still go in the [brackets].
 </Callout>
 
-## Why I built it
+## What REA is
 
-[The problem: something you had to understand without documentation.]
+<RepoCard
+  repo="morluto/rea"
+  description="REA (Reverse Engineer Anything): one MCP server for reverse engineering across binaries, apps and runtime behavior."
+/>
 
-## Getting it running
+REA is an MCP server. An agent connects to it, inspects a target, traces the relevant code, and reports findings with the evidence behind them and the limits of what it could tell. That makes it a good real-world example of the idea from the [MCP post](/blogs/mcp-model-context-protocol). [Say why you picked it.]
+
+## Setting it up
+
+The README gives a one-command setup for supported agents (Claude Code, Codex, Cursor, Gemini CLI and others), plus a standalone CLI:
 
 <Terminal title="Setup">
 {`
-$ git clone [repo-url]
-$ cd [repo]
-$ [install command]
+$ npx rea-agents setup
+$ npm install --global rea-agents
+$ rea --help
 `}
 </Terminal>
 
-## How it works
+<Callout type="note" title="Check the official source">
+  The README warns that similarly named repositories are not necessarily official. Download from the GitHub repo, rea.tools or the `rea-agents` package.
+</Callout>
 
-[Describe the approach in plain language, with a diagram.]
+## What it can look at
 
-<Flow steps={["Input", "Analyse", "Explain"]} caption="Replace with the real pipeline." />
+[Pick the few targets you tried, so this reads as your experience and not a feature list.] According to the README the list includes:
 
-## A worked example
+- Native binaries, with pseudocode, assembly, symbols and references.
+- Android apps and devices.
+- JavaScript and Electron apps, .NET assemblies, and Flutter apps.
+- Websites, saved network captures and packet captures.
+- Firmware, SQLite databases, model files and more.
+
+## How an agent uses it
+
+<Flow
+  steps={["You ask a question", "Agent calls REA tools", "REA inspects the target", "Findings with evidence"]}
+  caption="Replace with the real flow you observed."
+/>
+
+[Walk through one real session: the question you asked, what the agent did, what evidence it returned.]
 
 <Details summary="Full session log">
-  [Paste the real log here, trimmed.]
+  [Paste a trimmed real log here when you have one.]
 </Details>
 
-## Limits and what is next
+## Analysis stays local
 
-[Where it fails, and what you would add.]
+The README says analysis runs locally, and native analysis can use Hopper, Ghidra, IDA or Kuna, with some static analysis needing no external engine. [Say which you used and why that matters to you.]
+
+## Use it responsibly
+
+<Callout type="warning">
+  Only analyse software you own or are allowed to examine, and respect licences. The README also says commercial tools such as IDA Pro or Hopper must be obtained legally. [Add your own rule of thumb.]
+</Callout>
+
+## Where it falls short
+
+[Honest limits from your own use: what it missed, what needed a human.]
+
+## Takeaways
+
+[Three lessons, and a pointer to the harness post for how agents use tools like this.]
