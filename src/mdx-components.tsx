@@ -2,7 +2,7 @@ import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
 import { CodeBlock } from "@/components/blog/code-block";
 import { CodeTabs } from "@/components/blog/code-tabs";
-import { Callout, Compare, Details, Flow, RepoCard, Terminal } from "@/components/blog/parts";
+import { Callout, Compare, Details, Figure, Flow, RepoCard, Terminal } from "@/components/blog/parts";
 import { Prompt } from "@/components/blog/prompt";
 
 /** The "#" that appears beside a heading so a section can be linked to. */
@@ -84,6 +84,7 @@ const components: MDXComponents = {
   Flow,
   RepoCard,
   Details,
+  Figure,
 };
 
 export function useMDXComponents(): MDXComponents {
