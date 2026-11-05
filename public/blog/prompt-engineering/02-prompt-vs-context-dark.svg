@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="t d"><title id="t">Prompt engineering versus context engineering</title><desc id="d">Prompt engineering covers the instructions: task, role, constraints, format and examples. Context engineering covers the information the model needs: code, schema, conventions, history and tool results. Both feed the same context window.</desc><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#71717a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#7aa2ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs><text x="800" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="700" fill="#fafafa" text-anchor="middle">Two jobs, one context window</text>
+<rect x="60" y="130" width="680" height="430" rx="24" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="400" y="200" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="38" font-weight="800" fill="#fafafa" text-anchor="middle">Prompt engineering</text>
+<text x="400" y="252" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#a1a1aa" text-anchor="middle">What should the model do, and how?</text>
+<rect x="120" y="290" width="12" height="12" rx="3" fill="#71717a" stroke="none" stroke-width="2"/>
+<text x="150" y="303" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Clear task and goal</text>
+<rect x="120" y="332" width="12" height="12" rx="3" fill="#71717a" stroke="none" stroke-width="2"/>
+<text x="150" y="345" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Role and tone</text>
+<rect x="120" y="374" width="12" height="12" rx="3" fill="#71717a" stroke="none" stroke-width="2"/>
+<text x="150" y="387" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Constraints and boundaries</text>
+<rect x="120" y="416" width="12" height="12" rx="3" fill="#71717a" stroke="none" stroke-width="2"/>
+<text x="150" y="429" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Output format</text>
+<rect x="120" y="458" width="12" height="12" rx="3" fill="#71717a" stroke="none" stroke-width="2"/>
+<text x="150" y="471" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Examples</text>
+<rect x="860" y="130" width="680" height="430" rx="24" fill="#18181b" stroke="#7aa2ff" stroke-width="3"/>
+<text x="1200" y="200" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="38" font-weight="800" fill="#7aa2ff" text-anchor="middle">Context engineering</text>
+<text x="1200" y="252" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#a1a1aa" text-anchor="middle">What should the model know?</text>
+<rect x="920" y="290" width="12" height="12" rx="3" fill="#7aa2ff" stroke="none" stroke-width="2"/>
+<text x="950" y="303" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Relevant source code and docs</text>
+<rect x="920" y="332" width="12" height="12" rx="3" fill="#7aa2ff" stroke="none" stroke-width="2"/>
+<text x="950" y="345" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Database schema</text>
+<rect x="920" y="374" width="12" height="12" rx="3" fill="#7aa2ff" stroke="none" stroke-width="2"/>
+<text x="950" y="387" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Coding conventions</text>
+<rect x="920" y="416" width="12" height="12" rx="3" fill="#7aa2ff" stroke="none" stroke-width="2"/>
+<text x="950" y="429" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Earlier decisions and history</text>
+<rect x="920" y="458" width="12" height="12" rx="3" fill="#7aa2ff" stroke="none" stroke-width="2"/>
+<text x="950" y="471" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#fafafa" text-anchor="start">Tool results (for example via MCP)</text>
+<line x1="400" y1="560" x2="400" y2="640" stroke="#71717a" stroke-width="3.5" marker-end="url(#ah)"/>
+<line x1="1200" y1="560" x2="1200" y2="640" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<rect x="60" y="650" width="1480" height="90" rx="20" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+<text x="800" y="708" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="700" fill="#fafafa" text-anchor="middle">Context window  →  Model  →  Answer</text>
+<text x="800" y="818" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#a1a1aa" text-anchor="middle">A perfect instruction cannot replace missing information, and information cannot fix an unclear task.</text></svg>

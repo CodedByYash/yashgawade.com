@@ -1,6 +1,7 @@
 import { CodeTabs } from "@/components/blog/code-tabs";
 import { Callout, Compare, Details, Flow, RepoCard, Terminal } from "@/components/blog/parts";
 import { Prompt } from "@/components/blog/prompt";
+import { PromptAnatomy } from "@/components/blog/prompt-anatomy";
 import { IconBox, IconChip, Tag } from "@/components/chips";
 import { Greeting, LiveClock } from "@/components/live";
 import { Band, Divider, SectionHeading } from "@/components/panel";
@@ -183,6 +184,23 @@ export const componentItems: RegistryItem[] = [
       <div className="w-full max-w-lg [&>figure]:mt-0 [&>div]:mt-3">
         <Prompt title="System prompt">{`You are a careful code reviewer.\nReply with one line per issue.`}</Prompt>
         <Compare before="Write something about my project." after="Write a 3-sentence summary of my project for a recruiter." />
+      </div>
+    ),
+  },
+  {
+    slug: "prompt-anatomy",
+    name: "Prompt anatomy",
+    description: "A prompt split into tinted, labelled parts (role, task, context, constraints, format) with a copy button.",
+    files: ["src/components/blog/prompt-anatomy.tsx"],
+    preview: (
+      <div className="w-full max-w-lg [&>figure]:mt-0">
+        <PromptAnatomy
+          parts={[
+            { label: "Role", text: "You are a careful code reviewer." },
+            { label: "Task", text: "Review the diff below." },
+            { label: "Format", text: "One line per issue: file, line, severity." },
+          ]}
+        />
       </div>
     ),
   },

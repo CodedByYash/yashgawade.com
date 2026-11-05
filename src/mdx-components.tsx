@@ -4,6 +4,7 @@ import { CodeBlock } from "@/components/blog/code-block";
 import { CodeTabs } from "@/components/blog/code-tabs";
 import { Callout, Compare, Details, Figure, Flow, RepoCard, Terminal } from "@/components/blog/parts";
 import { Prompt } from "@/components/blog/prompt";
+import { PromptAnatomy } from "@/components/blog/prompt-anatomy";
 
 /** The "#" that appears beside a heading so a section can be linked to. */
 function Anchor({ id }: { id?: string }) {
@@ -78,6 +79,7 @@ const components: MDXComponents = {
   td: (props) => <td className="border-b border-dashed border-line px-3 py-2 align-top" {...props} />,
   Callout,
   Prompt,
+  PromptAnatomy,
   Compare,
   CodeTabs,
   Terminal,
