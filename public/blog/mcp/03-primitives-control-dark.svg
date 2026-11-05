@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="t d"><title id="t">Who controls each primitive</title><desc id="d">Prompts are chosen by the user, resources by the application, and tools by the model.</desc><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#71717a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#7aa2ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs><text x="800" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="700" fill="#fafafa" text-anchor="middle">Three primitives, three owners</text>
+<rect x="50" y="130" width="480" height="590" rx="24" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="290" y="210" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="46" font-weight="800" fill="#fafafa" text-anchor="middle">Prompts</text>
+<text x="290" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="400" fill="#a1a1aa" text-anchor="middle">controlled by</text>
+<rect x="170" y="288" width="240" height="48" rx="24" fill="#1e2a4a" stroke="none" stroke-width="0"/>
+<text x="290" y="320" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="600" fill="#7aa2ff" text-anchor="middle">User</text>
+<text x="290" y="400" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">Reusable templates</text>
+<text x="290" y="438" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">the person picks, like</text>
+<text x="290" y="476" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">a slash command</text>
+<rect x="80" y="540" width="420" height="70" rx="12" fill="#27272a" stroke="none" stroke-width="2"/>
+<text x="290" y="586" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">/review-pr</text>
+<text x="290" y="672" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="24" font-weight="400" fill="#a1a1aa" text-anchor="middle">discover with  prompts/list</text>
+<rect x="560" y="130" width="480" height="590" rx="24" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="800" y="210" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="46" font-weight="800" fill="#fafafa" text-anchor="middle">Resources</text>
+<text x="800" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="400" fill="#a1a1aa" text-anchor="middle">controlled by</text>
+<rect x="680" y="288" width="240" height="48" rx="24" fill="#1e2a4a" stroke="none" stroke-width="0"/>
+<text x="800" y="320" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="600" fill="#7aa2ff" text-anchor="middle">Application</text>
+<text x="800" y="400" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">Read-only context</text>
+<text x="800" y="438" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">the app attaches, like</text>
+<text x="800" y="476" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">a file or a schema</text>
+<rect x="590" y="540" width="420" height="70" rx="12" fill="#27272a" stroke="none" stroke-width="2"/>
+<text x="800" y="586" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fafafa" text-anchor="middle">schema://products</text>
+<text x="800" y="672" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="24" font-weight="400" fill="#a1a1aa" text-anchor="middle">discover with  resources/list</text>
+<rect x="1070" y="130" width="480" height="590" rx="24" fill="#18181b" stroke="#7aa2ff" stroke-width="3"/>
+<text x="1310" y="210" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="46" font-weight="800" fill="#fafafa" text-anchor="middle">Tools</text>
+<text x="1310" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="400" fill="#a1a1aa" text-anchor="middle">controlled by</text>
+<rect x="1190" y="288" width="240" height="48" rx="24" fill="#7aa2ff" stroke="none" stroke-width="0"/>
+<text x="1310" y="320" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="600" fill="#18181b" text-anchor="middle">Model</text>
+<text x="1310" y="400" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">Actions the model</text>
+<text x="1310" y="438" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">chooses to run, like</text>
+<text x="1310" y="476" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#fafafa" text-anchor="middle">a query or an update</text>
+<rect x="1100" y="540" width="420" height="70" rx="12" fill="#27272a" stroke="none" stroke-width="2"/>
+<text x="1310" y="586" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fafafa" text-anchor="middle">create_purchase_order</text>
+<text x="1310" y="672" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="24" font-weight="400" fill="#a1a1aa" text-anchor="middle">discover with  tools/list</text>
+<text x="800" y="800" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#a1a1aa" text-anchor="middle">The more control the model has, the more care it needs:</text>
+<text x="800" y="842" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#a1a1aa" text-anchor="middle">validate inputs and keep a human in the loop for writes.</text></svg>

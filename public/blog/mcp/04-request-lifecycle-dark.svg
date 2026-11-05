@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="t d"><title id="t">Request lifecycle</title><desc id="d">Sequence diagram. The user asks a question; the host asks its client for tools; the client optionally calls server/discover, then tools/list; the model picks a tool; the client sends tools/call; the server calls the backend API with a Bearer token and returns the result; the host answers the user.</desc><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#71717a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#7aa2ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs><line x1="150" y1="110" x2="150" y2="870" stroke="#3f3f46" stroke-width="2.5" stroke-dasharray="8 8"/>
+<rect x="50" y="30" width="200" height="76" rx="16" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+<text x="150" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="700" fill="#fafafa" text-anchor="middle">User</text>
+<line x1="470" y1="110" x2="470" y2="870" stroke="#3f3f46" stroke-width="2.5" stroke-dasharray="8 8"/>
+<rect x="345" y="30" width="250" height="76" rx="16" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+<text x="470" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="700" fill="#fafafa" text-anchor="middle">Host + model</text>
+<line x1="790" y1="110" x2="790" y2="870" stroke="#3f3f46" stroke-width="2.5" stroke-dasharray="8 8"/>
+<rect x="675" y="30" width="230" height="76" rx="16" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+<text x="790" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="700" fill="#fafafa" text-anchor="middle">MCP client</text>
+<line x1="1110" y1="110" x2="1110" y2="870" stroke="#3f3f46" stroke-width="2.5" stroke-dasharray="8 8"/>
+<rect x="995" y="30" width="230" height="76" rx="16" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+<text x="1110" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="700" fill="#fafafa" text-anchor="middle">MCP server</text>
+<line x1="1430" y1="110" x2="1430" y2="870" stroke="#3f3f46" stroke-width="2.5" stroke-dasharray="8 8"/>
+<rect x="1315" y="30" width="230" height="76" rx="16" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+<text x="1430" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="700" fill="#fafafa" text-anchor="middle">Backend API</text>
+<line x1="158" y1="170" x2="462" y2="170" stroke="#71717a" stroke-width="3.5" marker-end="url(#ah)"/>
+<text x="310" y="156" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="500" fill="#fafafa" text-anchor="middle">What needs reordering?</text>
+<line x1="478" y1="235" x2="782" y2="235" stroke="#71717a" stroke-width="3.5" marker-end="url(#ah)"/>
+<text x="630" y="221" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="500" fill="#fafafa" text-anchor="middle">find the tools</text>
+<line x1="798" y1="300" x2="1102" y2="300" stroke="#71717a" stroke-width="3.5" stroke-dasharray="10 7" marker-end="url(#ah)"/>
+<text x="950" y="286" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" font-weight="500" fill="#fafafa" text-anchor="middle">server/discover</text>
+<rect x="890" y="316" width="120" height="48" rx="24" fill="#27272a" stroke="none" stroke-width="0"/>
+<text x="950" y="348" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="600" fill="#a1a1aa" text-anchor="middle">optional</text>
+<line x1="798" y1="410" x2="1102" y2="410" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<text x="950" y="396" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" font-weight="700" fill="#7aa2ff" text-anchor="middle">tools/list</text>
+<line x1="1102" y1="460" x2="798" y2="460" stroke="#71717a" stroke-width="3.5" stroke-dasharray="10 7" marker-end="url(#ah)"/>
+<text x="950" y="446" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="500" fill="#fafafa" text-anchor="middle">tool schemas</text>
+<rect x="280" y="505" width="370" height="80" rx="14" fill="#1e2a4a" stroke="#7aa2ff" stroke-width="2"/>
+<text x="465" y="538" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="400" fill="#a1a1aa" text-anchor="middle">model picks</text>
+<text x="465" y="570" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" font-weight="600" fill="#7aa2ff" text-anchor="middle">get_low_stock_alerts</text>
+<line x1="798" y1="640" x2="1102" y2="640" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<text x="950" y="626" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" font-weight="700" fill="#7aa2ff" text-anchor="middle">tools/call</text>
+<line x1="1118" y1="705" x2="1422" y2="705" stroke="#71717a" stroke-width="3.5" marker-end="url(#ah)"/>
+<text x="1270" y="691" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="500" fill="#fafafa" text-anchor="middle">GET /alerts</text>
+<line x1="1422" y1="755" x2="1118" y2="755" stroke="#71717a" stroke-width="3.5" stroke-dasharray="10 7" marker-end="url(#ah)"/>
+<text x="1270" y="741" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="500" fill="#fafafa" text-anchor="middle">JSON</text>
+<line x1="1102" y1="805" x2="798" y2="805" stroke="#71717a" stroke-width="3.5" stroke-dasharray="10 7" marker-end="url(#ah)"/>
+<text x="950" y="791" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="500" fill="#fafafa" text-anchor="middle">result · isError?</text>
+<line x1="462" y1="860" x2="158" y2="860" stroke="#71717a" stroke-width="3.5" stroke-dasharray="10 7" marker-end="url(#ah)"/>
+<text x="310" y="846" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="500" fill="#fafafa" text-anchor="middle">“12 SKUs to reorder”</text>
+<rect x="1135" y="500" width="440" height="130" rx="14" fill="#18181b" stroke="#7aa2ff" stroke-width="2"/>
+<text x="1355" y="544" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" fill="#7aa2ff" text-anchor="middle">No handshake</text>
+<text x="1355" y="580" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">Every request carries its protocol</text>
+<text x="1355" y="610" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">version and client capabilities</text></svg>
