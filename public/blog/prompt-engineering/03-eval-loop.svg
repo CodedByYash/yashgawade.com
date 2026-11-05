@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="t d"><title id="t">Prompt evaluation loop</title><desc id="d">Six steps: define the objective, set success criteria, write test cases, run the prompt, score the results, then refine and retest, repeating until the prompt passes. Each run checks accuracy, relevance, completeness, format, consistency and safety.</desc><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#8b8b94" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs><text x="800" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="700" fill="#09090b" text-anchor="middle">Test a prompt the way you test code</text>
+<rect x="45" y="250" width="215" height="170" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<rect x="55" y="230" width="48" height="48" rx="24" fill="#f4f4f5" stroke="none" stroke-width="0"/>
+<text x="79" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="600" fill="#52525b" text-anchor="middle">1</text>
+<text x="152.5" y="334" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#09090b" text-anchor="middle">Define</text>
+<text x="152.5" y="374" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#09090b" text-anchor="middle">the objective</text>
+<line x1="265" y1="335" x2="299" y2="335" stroke="#8b8b94" stroke-width="3.5" marker-end="url(#ah)"/>
+<rect x="304" y="250" width="215" height="170" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<rect x="314" y="230" width="48" height="48" rx="24" fill="#f4f4f5" stroke="none" stroke-width="0"/>
+<text x="338" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="600" fill="#52525b" text-anchor="middle">2</text>
+<text x="411.5" y="334" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#09090b" text-anchor="middle">Success</text>
+<text x="411.5" y="374" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#09090b" text-anchor="middle">criteria</text>
+<line x1="524" y1="335" x2="558" y2="335" stroke="#8b8b94" stroke-width="3.5" marker-end="url(#ah)"/>
+<rect x="563" y="250" width="215" height="170" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<rect x="573" y="230" width="48" height="48" rx="24" fill="#f4f4f5" stroke="none" stroke-width="0"/>
+<text x="597" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="600" fill="#52525b" text-anchor="middle">3</text>
+<text x="670.5" y="334" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#09090b" text-anchor="middle">Write</text>
+<text x="670.5" y="374" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#09090b" text-anchor="middle">test cases</text>
+<line x1="783" y1="335" x2="817" y2="335" stroke="#8b8b94" stroke-width="3.5" marker-end="url(#ah)"/>
+<rect x="822" y="250" width="215" height="170" rx="16" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+<rect x="832" y="230" width="48" height="48" rx="24" fill="#2563eb" stroke="none" stroke-width="0"/>
+<text x="856" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="600" fill="#ffffff" text-anchor="middle">4</text>
+<text x="929.5" y="334" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#2563eb" text-anchor="middle">Run the</text>
+<text x="929.5" y="374" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#2563eb" text-anchor="middle">prompt</text>
+<line x1="1042" y1="335" x2="1076" y2="335" stroke="#2563eb" stroke-width="3.5" marker-end="url(#aa)"/>
+<rect x="1081" y="250" width="215" height="170" rx="16" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+<rect x="1091" y="230" width="48" height="48" rx="24" fill="#2563eb" stroke="none" stroke-width="0"/>
+<text x="1115" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="600" fill="#ffffff" text-anchor="middle">5</text>
+<text x="1188.5" y="334" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#2563eb" text-anchor="middle">Score the</text>
+<text x="1188.5" y="374" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#2563eb" text-anchor="middle">results</text>
+<line x1="1301" y1="335" x2="1335" y2="335" stroke="#2563eb" stroke-width="3.5" marker-end="url(#aa)"/>
+<rect x="1340" y="250" width="215" height="170" rx="16" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+<rect x="1350" y="230" width="48" height="48" rx="24" fill="#2563eb" stroke="none" stroke-width="0"/>
+<text x="1374" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="600" fill="#ffffff" text-anchor="middle">6</text>
+<text x="1447.5" y="334" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#2563eb" text-anchor="middle">Refine and</text>
+<text x="1447.5" y="374" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="29" font-weight="700" fill="#2563eb" text-anchor="middle">retest</text>
+<path d="M1447.5 420 V490 H929.5 V428" fill="none" stroke="#2563eb" stroke-width="3.5" stroke-linejoin="round" marker-end="url(#aa)"/>
+<text x="1188.5" y="538" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="600" fill="#2563eb" text-anchor="middle">repeat until it passes</text>
+<text x="800" y="610" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" fill="#09090b" text-anchor="middle">What to check on every run</text>
+<rect x="164" y="648" width="188" height="48" rx="24" fill="#f4f4f5" stroke="none" stroke-width="0"/>
+<text x="258" y="680" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#09090b" text-anchor="middle">Accuracy</text>
+<rect x="368" y="648" width="204" height="48" rx="24" fill="#f4f4f5" stroke="none" stroke-width="0"/>
+<text x="470" y="680" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#09090b" text-anchor="middle">Relevance</text>
+<rect x="588" y="648" width="252" height="48" rx="24" fill="#f4f4f5" stroke="none" stroke-width="0"/>
+<text x="714" y="680" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#09090b" text-anchor="middle">Completeness</text>
+<rect x="856" y="648" width="156" height="48" rx="24" fill="#f4f4f5" stroke="none" stroke-width="0"/>
+<text x="934" y="680" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#09090b" text-anchor="middle">Format</text>
+<rect x="1028" y="648" width="236" height="48" rx="24" fill="#f4f4f5" stroke="none" stroke-width="0"/>
+<text x="1146" y="680" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#09090b" text-anchor="middle">Consistency</text>
+<rect x="1280" y="648" width="156" height="48" rx="24" fill="#f4f4f5" stroke="none" stroke-width="0"/>
+<text x="1358" y="680" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#09090b" text-anchor="middle">Safety</text>
+<text x="800" y="800" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#52525b" text-anchor="middle">Include normal inputs, edge cases and ambiguous requests in your test set.</text></svg>
