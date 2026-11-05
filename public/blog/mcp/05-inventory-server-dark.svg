@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="t d"><title id="t">Inventory MCP server in context</title><desc id="d">Claude Desktop launches the Inventory MCP server as a local stdio process. The server exposes five read-only and three write tools, and calls the Inventory API with a service-account Bearer token. The API owns authentication, validation and business rules, and reads and writes MongoDB.</desc><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#71717a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#7aa2ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs><text x="800" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="700" fill="#fafafa" text-anchor="middle">My inventory MCP server in context</text>
+<rect x="40" y="330" width="300" height="220" rx="16" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="190" y="420" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="700" fill="#fafafa" text-anchor="middle">Claude Desktop</text>
+<text x="190" y="462" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="400" fill="#a1a1aa" text-anchor="middle">host + client</text>
+<text x="190" y="500" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">launches the server</text>
+<line x1="340" y1="440" x2="480" y2="440" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<text x="410" y="418" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" font-weight="600" fill="#7aa2ff" text-anchor="middle">stdio</text>
+<rect x="480" y="130" width="400" height="640" rx="22" fill="#18181b" stroke="#7aa2ff" stroke-width="3"/>
+<text x="680" y="185" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="800" fill="#7aa2ff" text-anchor="middle">Inventory MCP server</text>
+<text x="680" y="224" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">thin, well-described adapter</text>
+<text x="510" y="284" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="700" fill="#fafafa" text-anchor="start">Read-only tools · 5</text>
+<text x="510" y="324" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fafafa" text-anchor="start">check_stock</text>
+<text x="510" y="362" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fafafa" text-anchor="start">search_products</text>
+<text x="510" y="400" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fafafa" text-anchor="start">get_low_stock_alerts</text>
+<text x="510" y="438" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fafafa" text-anchor="start">get_forecast</text>
+<text x="510" y="476" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fafafa" text-anchor="start">get_dashboard_summary</text>
+<rect x="500" y="530" width="360" height="3" rx="1" fill="#3f3f46" stroke="none" stroke-width="2"/>
+<text x="510" y="580" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="700" fill="#fbbf24" text-anchor="start">Write tools · 3</text>
+<text x="510" y="620" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fbbf24" text-anchor="start">create_purchase_order</text>
+<text x="510" y="658" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fbbf24" text-anchor="start">receive_purchase_order</text>
+<text x="510" y="696" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#fbbf24" text-anchor="start">record_stock_movement</text>
+<rect x="505" y="715" width="350" height="40" rx="10" fill="#27272a" stroke="none" stroke-width="2"/>
+<text x="680" y="743" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="400" fill="#a1a1aa" text-anchor="middle">Resolvers: SKU · warehouse · PO</text>
+<line x1="880" y1="440" x2="1070" y2="440" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<text x="975" y="402" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" font-weight="600" fill="#7aa2ff" text-anchor="middle">HTTP</text>
+<text x="975" y="486" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">Bearer token</text>
+<text x="975" y="516" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">service account</text>
+<rect x="1070" y="310" width="240" height="260" rx="16" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="1190" y="372" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="700" fill="#fafafa" text-anchor="middle">Inventory API</text>
+<text x="1190" y="424" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="400" fill="#a1a1aa" text-anchor="middle">auth</text>
+<text x="1190" y="460" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="400" fill="#a1a1aa" text-anchor="middle">validation</text>
+<text x="1190" y="496" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="400" fill="#a1a1aa" text-anchor="middle">stock ledger</text>
+<text x="1190" y="532" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="400" fill="#a1a1aa" text-anchor="middle">business rules</text>
+<line x1="1310" y1="440" x2="1410" y2="440" stroke="#71717a" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="1410" y="370" width="150" height="140" rx="16" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="1485" y="432" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="700" fill="#fafafa" text-anchor="middle">MongoDB</text>
+<text x="1485" y="470" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">data</text>
+<rect x="1070" y="606" width="240" height="48" rx="24" fill="#1e2a4a" stroke="none" stroke-width="0"/>
+<text x="1190" y="638" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="600" fill="#7aa2ff" text-anchor="middle">Rules live here</text>
+<text x="1190" y="690" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">one source of truth for</text>
+<text x="1190" y="720" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">the web app and the AI</text>
+<text x="800" y="850" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="600" fill="#fafafa" text-anchor="middle">The MCP server translates. The API decides.</text></svg>

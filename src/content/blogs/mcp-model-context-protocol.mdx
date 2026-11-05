@@ -4,8 +4,8 @@ export const meta = {
     "A practical guide to the Model Context Protocol: the problem it solves, its architecture, how a request travels, a working TypeScript server, and the security mistakes to avoid.",
   date: "2026-11-02",
   tags: ["MCP", "AI", "TypeScript"],
-  series: "AI engineering notes",
-  part: 1,
+  series: "From Prompts to Protocols",
+  part: 2,
   draft: true,
 };
 
@@ -28,7 +28,9 @@ Function calling, the feature that lets a model ask for a function to be run, he
 <Figure
   n={1}
   title="Custom integrations vs one protocol"
-  alt="Left: three AI apps each connected by separate custom connectors to three tools, nine lines in total. Right: the same three apps and three tools all connected through a single MCP layer, six lines in total."
+  src="/blog/mcp/01-custom-vs-mcp.svg"
+  srcDark="/blog/mcp/01-custom-vs-mcp-dark.svg"
+  alt="Left: three AI apps each connected by separate custom connectors to four tools, twelve lines in total. Right: the same three apps and four tools all connected through a single MCP layer, seven connections in total."
   caption="Without a shared protocol, every app needs a connector for every tool. With MCP, each side implements the protocol once."
 />
 
@@ -60,7 +62,9 @@ MCP has three roles.
 <Figure
   n={2}
   title="Host, clients and servers"
-  alt="A host application box containing three clients. Client 1 connects to a local files and git server, client 2 to a local database server, and client 3 over the internet to an external API server. Each server connects to its own data source."
+  src="/blog/mcp/02-architecture.svg"
+  srcDark="/blog/mcp/02-architecture-dark.svg"
+  alt="A host application box containing an LLM and three MCP clients. Client A connects to a local files server over stdio. Clients B and C connect over Streamable HTTP to a remote Postgres server and a remote SaaS API server. Each client talks to exactly one server."
   caption="One host, many clients, and exactly one server behind each client. Local servers run on your machine; remote ones are reached over HTTP."
 />
 
@@ -100,7 +104,9 @@ A server can offer three kinds of capability. What separates them is **who decid
 <Figure
   n={3}
   title="Who controls each primitive"
-  alt="Three columns labelled Prompts (user-controlled), Resources (application-controlled) and Tools (model-controlled), each with a one-line example."
+  src="/blog/mcp/03-primitives-control.svg"
+  srcDark="/blog/mcp/03-primitives-control-dark.svg"
+  alt="Three cards labelled Prompts (controlled by the user), Resources (controlled by the application) and Tools (controlled by the model), each with an example and the list call that discovers it. Tools is highlighted as the one needing the most care."
   caption="Tools are chosen by the model, resources by the application, prompts by the user."
 />
 
@@ -123,6 +129,8 @@ The life of a typical interaction looks like this:
 <Figure
   n={4}
   title="Request lifecycle"
+  src="/blog/mcp/04-request-lifecycle.svg"
+  srcDark="/blog/mcp/04-request-lifecycle-dark.svg"
   alt="A sequence diagram with five participants: user, host with model, client, server and backend. The user asks a question, the model selects a tool, the client sends tools/call, the server queries the backend, and the result flows back to the model, which answers the user."
   caption="The path of one question, from the user to the backend and back."
 />
@@ -320,10 +328,27 @@ I already had a full-stack inventory system: an Express API over MongoDB, with p
 
 The server exposes the existing API as eight tools, five read-only and three that write. With them an assistant can check stock, forecast reorders, and create or receive purchase orders by calling the real API.
 
+| Tool | Kind | What it does |
+| --- | --- | --- |
+| `check_stock` | read | Stock for a SKU in one or every warehouse, with its reorder point |
+| `search_products` | read | Search the catalogue by name or SKU |
+| `get_low_stock_alerts` | read | Open (or all) low-stock and reorder alerts |
+| `get_forecast` | read | Velocity-based forecast: days of stock left and whether a reorder is due |
+| `get_dashboard_summary` | read | Stock value, unit count and top movers, optionally for one warehouse |
+| `create_purchase_order` | write | Draft a purchase order with one or more lines |
+| `receive_purchase_order` | write | Receive stock against a PO number, partial receipts allowed |
+| `record_stock_movement` | write | Inbound, outbound or adjustment by barcode |
+
+<Callout type="note" title="Which SDK this server uses">
+I built this server before the 2026-07-28 revision. It uses the v1 TypeScript SDK (`@modelcontextprotocol/sdk`), and its end-to-end tests still drive the older `initialize` handshake. The tutorial above uses the current v2 SDK. The tool design carries over unchanged; only the plumbing differs.
+</Callout>
+
 <Figure
   n={5}
   title="Inventory MCP server in context"
-  alt="Claude Desktop launches the Inventory MCP server as a local stdio process. The server calls the Inventory API using a service account bearer token. The API reads and writes the database. Business logic and validation live in the API."
+  src="/blog/mcp/05-inventory-server.svg"
+  srcDark="/blog/mcp/05-inventory-server-dark.svg"
+  alt="Claude Desktop launches the Inventory MCP server as a local stdio process. The server exposes five read-only and three write tools plus resolvers, and calls the Inventory API over HTTP with a service-account Bearer token. The API owns authentication, validation and business rules, and reads and writes MongoDB."
   caption="The MCP server is a thin, well-described adapter. All business rules stay in the API."
 />
 
@@ -333,7 +358,14 @@ The design decisions that mattered most were about how a **model** behaves, not 
 - **Fail before anything is created.** If a name is unknown or ambiguous, the tool errors out with suggestions instead of picking one. For a tool that writes data, "I could not tell which warehouse you meant" is the correct outcome.
 - **Keep the business logic in the API.** The server does not re-implement rules. It authenticates, translates and reports. That keeps one source of truth and means the web app and the assistant can never disagree.
 - **A dedicated service account.** The server authenticates with its own account through a Bearer-token path added to the API's auth middleware, so its access can be scoped and revoked without touching anyone's personal login. (For local stdio servers, the specification recommends reading credentials from the environment rather than running an OAuth flow.)
-- **Test through the real transport.** My end-to-end test spawns the compiled server as an actual child process and talks to it over stdio. It checks that genuine business-rule errors, such as receiving more units than a purchase order allows, reach the client intact. A test that calls the handler directly would not catch a broken wire.
+- **Test through the real transport.** My end-to-end test spawns the compiled server as an actual child process and talks to it over stdio. It checks that genuine business-rule errors, such as receiving more units than a purchase order allows, reach the client intact. A test that calls the handler directly would not catch a broken wire. The write-tool script runs 15 checks against a stub API that returns real failures in the real shape, such as "only 6 remaining" when receiving too much, and confirms the exact message survives all the way out.
+
+Building it also taught me a few smaller lessons:
+
+- **Read configuration lazily.** My first verification run failed because the API client captured environment variables at import time, so it only worked if `dotenv` happened to load first. Reading them inside the function removed the import-order dependency.
+- **Guard against stale assertions.** Adding the three write tools broke the read-only test, which asserted the server had exactly five tools. The server was right and the test was wrong. It now checks that the read-only tools are a subset.
+- **Write down known limits.** The SKU resolver filters the results of a search endpoint for an exact match. That is fine for tens of SKUs, but at thousands the right fix is a dedicated by-SKU endpoint. I documented it instead of hiding it.
+- **Leave out what does not fit a single call.** There is no `transfer` movement, because a transfer needs two warehouse legs. The service account is a `manager`, not an `admin`, so the assistant cannot do more than the job needs.
 
 ## MCP, REST and function calling
 
@@ -356,7 +388,7 @@ The same pattern applies to anything an assistant should be able to reach:
 - **Developer tools:** repositories, issues and pull requests, local files, terminals and build systems.
 - **Data:** SQL and document databases, analytics and data warehouses, with read-only access as a sensible default.
 - **Business applications:** CRMs, ticketing systems, calendars, internal admin tools.
-- **Specialist analysis:** for example, REA, an MCP server that gives an agent reverse-engineering tools. I cover it in the [next post](/blogs/reverse-engineer-anything-rea).
+- **Specialist analysis:** for example, REA, an MCP server that gives an agent reverse-engineering tools. I cover it [later in this series](/blogs/reverse-engineer-anything-rea).
 
 ## Security
 
@@ -397,9 +429,11 @@ The direction is consistent: make servers easy to build, easy to scale and easy 
 - A good server is small, clearly described, validates its input and returns errors a model can recover from.
 - The security work is not optional. Least privilege, human confirmation and distrust of tool output are the baseline.
 
-Next in the series: a look at REA, a real MCP server for reverse engineering, and what it shows about working with agents.
+Next in the series: the harness that wraps a model and its tools into an agent, and after that REA, a real MCP server for reverse engineering.
 
-{/* TODO(Yash): add a RepoCard here once the inventory MCP server repo is public. */}
+The inventory server from this post is open source:
+
+<RepoCard repo="CodedByYash/Inventory-management-mcp" description="MCP server that exposes an inventory API as eight tools for Claude Desktop: stock checks, forecasts and purchase orders in plain English." />
 
 ## Further reading
 
