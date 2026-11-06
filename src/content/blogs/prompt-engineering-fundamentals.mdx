@@ -1,0 +1,397 @@
+export const meta = {
+  title: "Prompt engineering fundamentals: from your first prompt to confident results",
+  description:
+    "Part 1 of a two-part guide for beginners and intermediate users: how a language model reads your prompt, the parts of a good one, the techniques you will use every day, real prompts for real work, and the mistakes to avoid.",
+  date: "2026-11-16",
+  tags: ["Prompt engineering", "LLM", "AI"],
+  series: "From Prompts to Protocols",
+  part: 1,
+  draft: true,
+};
+
+Two people can open the same AI model on the same day and get very different results. One gets a generic answer that could have been written for anyone. The other gets something structured, specific and immediately useful.
+
+The model is not the difference. The difference is how each person asked.
+
+A language model cannot read your mind. It does not know your goal, your audience, your tech stack or what a good result looks like to you. It works with the words you give it and fills every gap with a guess. **Prompt engineering** is the habit of removing those guesses: writing instructions so clearly that the most likely answer is also the answer you wanted.
+
+This is part one of a two-part guide. It is for people early in their tech journey, and for developers who use LLMs daily but have never looked under the hood. It covers how a model reads a prompt, the parts of a good prompt, the techniques you will use every day, prompts for real work, and the mistakes everyone makes. [Part two](/blogs/prompt-engineering-advanced) picks up where this one ends: reasoning, chaining, context engineering, prompts inside applications, evaluation and security.
+
+<Callout type="note" title="How to read this post">
+  Every example prompt has a copy button, so you can try it yourself. Models differ, and prompting advice ages quickly, so I link the official guides from OpenAI, Anthropic and Google at the end.
+</Callout>
+
+## How a model actually reads your prompt
+
+You do not need to understand the mathematics to prompt well, but one mental model helps a lot.
+
+A large language model (LLM) is trained on a huge amount of text to learn patterns in language. When you send a prompt, it does not look up an answer. It breaks your text into **tokens**, which are pieces of words, whole words or punctuation, and then repeatedly predicts the most likely next token given everything it has seen so far.
+
+<Figure
+  n={1}
+  title="From prompt to response"
+  src="/blog/prompt-engineering/01-llm-pipeline.svg"
+  srcDark="/blog/prompt-engineering/01-llm-pipeline-dark.svg"
+  alt="A pipeline: your prompt goes into a tokenizer, then a transformer that weighs every token, which predicts the next token. The token is appended to the context and the loop repeats until the response is complete. The tokenizer, transformer and next token steps sit inside the context window."
+  caption="The model sees tokens, not intentions. Each new token is added to the context and the loop repeats."
+/>
+
+Four ideas matter here:
+
+- **Tokenization.** Text becomes tokens. Cost, speed and limits are all measured in tokens, not words.
+- **The context window.** The model can only consider a limited amount of text at once: your instructions, the conversation so far and its own answer. Anything outside the window does not exist for the model.
+- **Attention.** Modern models are built on the transformer architecture, which weighs how every token relates to every other token. This is why wording and the placement of information both affect the result.
+- **Next-token prediction.** The answer is generated one token at a time, so outputs are probabilistic. The same prompt can produce slightly different answers.
+
+Here is why this matters in practice. If your instructions are unclear, the model has to assume. If context is missing, it falls back to the most generic answer. If you do not describe the format, it picks one. **Every gap in your prompt is a decision you left to chance.**
+
+## What a prompt is made of
+
+Most people think of a prompt as a question. A useful prompt is closer to a **task specification**. It can contain:
+
+- **Instructions:** what the model should do.
+- **Context:** the situation, the audience, the background.
+- **Examples:** a demonstration of the pattern you want.
+- **Constraints:** what to include, what to avoid, how long it can be.
+- **Output requirements:** the shape of the answer.
+
+Compare two prompts for the same task.
+
+<Compare
+  beforeLabel="Vague"
+  before={`Write an email.`}
+  afterLabel="Specific"
+  after={`Write a professional email to a recruiter expressing my interest in a frontend developer internship.
+Mention my experience with React, Next.js, TypeScript and Tailwind CSS.
+Keep it concise, confident and friendly. Include a subject line and a clear closing.`}
+/>
+
+The first prompt leaves the recipient, purpose, tone and content to chance. The second leaves almost nothing. This is not about length. It is about whether the model has what it needs.
+
+## The anatomy of a good prompt
+
+For anything non-trivial, a reliable structure is to cover six things: a role, a task, context, constraints, an output format and, when useful, examples. Here is a complete prompt with each part marked.
+
+<PromptAnatomy
+  title="A complete prompt, taken apart"
+  parts={[
+    { label: "Role", text: "You are a senior backend developer who specialises in Node.js, TypeScript and MongoDB." },
+    { label: "Task", text: "Design a REST API for an inventory management system." },
+    { label: "Context", text: "The users are small and medium-sized retailers who manage several warehouses and thousands of products." },
+    { label: "Constraints", text: "Use Express and Mongoose.\nFollow a modular architecture.\nValidate all input and handle errors consistently.\nAvoid unnecessary dependencies." },
+    { label: "Output format", text: "1. Architecture overview\n2. Database schema\n3. API endpoints\n4. Authentication approach\n5. Implementation roadmap" },
+    { label: "Example", text: "Every successful response uses this shape: { success: true, data: {} }" },
+  ]}
+/>
+
+A few notes on using it well:
+
+- **Role** sets perspective and vocabulary. It does not give the model real experience or guarantee expert accuracy, so treat it as framing, not a credential.
+- **Context** is the part beginners skip most often, and it usually matters most.
+- **Constraints** work best as short, checkable rules. "Under 200 words" is checkable. "Keep it fairly short" is not.
+- **Not every prompt needs all six.** A quick factual question needs one clear sentence. Use the full structure when the task is complex, the result will be reused, or a wrong guess is expensive.
+
+## Techniques you will use every day
+
+### Zero-shot, one-shot and few-shot
+
+The difference is how many examples you include.
+
+**Zero-shot** means no examples. You describe the task and rely on what the model already knows. It is the right starting point for summaries, translations and simple classification.
+
+<Prompt title="Zero-shot">
+{`Classify the customer review as Positive, Negative or Neutral.
+
+Review: "The product quality is excellent, but delivery was delayed by three days."
+
+Return only the label.`}
+</Prompt>
+
+**One-shot** gives a single example. That is often enough when only the format matters.
+
+<Prompt title="One-shot">
+{`Classify customer reviews as Positive or Negative.
+
+Review: "The product is excellent."
+Label: Positive
+
+Review: "The delivery was terrible."
+Label:`}
+</Prompt>
+
+**Few-shot** adds more examples so the model can copy a pattern instead of interpreting a description. It is one of the most reliable ways to control format, tone and edge-case behaviour.
+
+<Prompt title="Few-shot">
+{`Classify customer reviews as Positive, Negative or Neutral.
+
+Review: "Amazing product and great quality."
+Label: Positive
+
+Review: "Completely disappointed with this purchase."
+Label: Negative
+
+Review: "It is okay, nothing special."
+Label: Neutral
+
+Review: "Good quality, but expensive."
+Label:`}
+</Prompt>
+
+Use a few **varied, representative** examples rather than many near-duplicates. If every example looks the same, the model learns to produce that one shape and nothing else.
+
+### Role and instruction prompting
+
+Role prompting sets a perspective, and instruction prompting states explicitly what to do and what to avoid. They combine naturally.
+
+<Prompt title="Role plus instructions">
+{`You are an experienced React instructor.
+
+Explain React Server Components.
+
+- Assume I know basic React.
+- Go step by step.
+- Compare them with Client Components.
+- Include short code examples.
+- End with the three most common mistakes.
+- Skip theory that does not help me write code.`}
+</Prompt>
+
+Notice that the instructions say what *to* do. Saying what to avoid is useful, but a prompt made only of prohibitions leaves the model guessing about what you want instead.
+
+### Structured output
+
+Often the quality of the answer is not enough. You also need it in a form your code or your document can use: JSON, a table, Markdown.
+
+<Prompt title="Structured output">
+{`Extract the following from the text and return valid JSON only:
+
+{
+  "name": "",
+  "email": "",
+  "skills": [],
+  "experience_years": 0
+}
+
+If a field is not in the text, use null. Do not invent information.`}
+</Prompt>
+
+In a casual chat, asking nicely is fine. In an application, prefer the structured-output or schema-constrained features most APIs now offer, so the response is guaranteed to match your schema instead of depending on the model following a sentence.
+
+### Constraints keep answers focused
+
+Constraints limit length, vocabulary, scope and how the answer ends.
+
+<Prompt title="Constrained">
+{`Explain database indexing.
+
+- Maximum 200 words.
+- Use simple English.
+- Include one SQL example.
+- Skip unrelated database concepts.
+- End with one practical takeaway.`}
+</Prompt>
+
+A constraint works best when you can check it. If you cannot tell whether an answer obeyed the rule, the model cannot reliably tell either.
+
+## Choosing a technique
+
+| You need… | Reach for |
+| --- | --- |
+| A quick answer to a simple question | A clear instruction, zero-shot |
+| A specific format or tone | One-shot or few-shot examples |
+| A particular perspective or level | Role plus context |
+| Predictable length and scope | Constraints you can check |
+| A table, a list or JSON | Say the format outright, with a sample if it is strict |
+
+## Prompts for real work
+
+The pattern is identical in every field: replace a vague request with a specified one.
+
+### Software development
+
+"Build a login system" leaves the stack, the requirements and the security model undefined. Compare it with a prompt that carries them.
+
+<Compare
+  beforeLabel="Vague"
+  before={`Build a login system.`}
+  afterLabel="Specific"
+  after={`Act as a senior full-stack developer.
+Build an authentication module with Next.js, TypeScript and Tailwind on the frontend and Node.js, Express and MongoDB on the backend.
+Features: registration, login and logout, password hashing, input validation, protected routes and error handling.
+Before writing code, explain the architecture, define the API endpoints, design the schema and list the security considerations.
+Then build it in small steps and include tests for the important parts.`}
+/>
+
+### Learning
+
+Tell the model your current level, because it cannot guess it.
+
+<Prompt title="Learning a concept">
+{`Act as an experienced JavaScript instructor.
+
+My level: I know HTML and CSS but I am new to JavaScript.
+
+Teach me closures:
+1. Explain the idea in plain language.
+2. Show a minimal example.
+3. Explain the code line by line.
+4. Show one real-world use.
+5. Give me three practice questions.
+
+Do not move on until I confirm I understand.`}
+</Prompt>
+
+### Debugging
+
+The most useful debugging prompt separates what you expected, what happened and what you have already tried.
+
+<Prompt title="Debugging">
+{`Act as a senior software engineer.
+
+Problem: [describe the error]
+Expected behaviour: [what should happen]
+Actual behaviour: [what happens instead]
+Environment: [language, framework, versions]
+Relevant code: [paste the smallest snippet that reproduces it]
+
+1. Identify the root cause.
+2. Explain why it happens.
+3. Suggest the smallest appropriate fix.
+4. Say how to prevent it in future.
+
+If you need more information, ask before guessing.`}
+</Prompt>
+
+### UI and UX design
+
+<Prompt title="Design brief">
+{`Act as a senior product designer who specialises in SaaS dashboards.
+
+Design a dashboard for inventory management, aimed at small retailers.
+
+Include: sidebar navigation, an inventory overview, stock level indicators, recent stock movements, low-stock alerts and sales analytics.
+
+Visual direction: dark interface, clean typography, strong hierarchy, consistent spacing, minimal clutter.
+
+Describe the layout, the components and the interactions.`}
+</Prompt>
+
+### Research
+
+<Prompt title="Research brief">
+{`Act as a technology researcher.
+
+Research: [TOPIC]
+
+Structure the answer as:
+1. Introduction
+2. Core concepts
+3. How it works
+4. Current applications
+5. Advantages and limitations
+6. Recent developments
+
+Requirements:
+- Prioritise primary sources and official documentation.
+- Include publication dates.
+- Separate verified facts from speculation.
+- Cite important claims.
+- Point out conflicting evidence.
+- Do not invent statistics or references.`}
+</Prompt>
+
+That last requirement does not eliminate hallucinations, but it makes the model less likely to bluff and makes your own verification easier.
+
+### Data analysis
+
+<Prompt title="Analysis brief">
+{`Act as a senior data analyst.
+
+Analyze the attached dataset.
+
+1. Describe its structure.
+2. Find missing values and anomalies.
+3. Calculate the key statistics.
+4. Identify patterns and trends.
+5. Suggest useful visualisations.
+6. Summarise the actionable insights.
+
+Do not assume relationships without evidence. Explain the limits of your analysis.`}
+</Prompt>
+
+## Common mistakes
+
+| Mistake | What to do instead |
+| --- | --- |
+| Being vague ("make my site better") | Name the aspects and the output: "review hierarchy, spacing and accessibility, and give five prioritised fixes" |
+| Leaving out context | Include the audience, the goal and the facts that change the answer |
+| Overloading the prompt | Keep it focused; long is not better, and repeated rules bury the important ones |
+| Mixing unrelated tasks | One prompt, one job; chain the rest |
+| Not defining the output | Say whether you want JSON, a table, a list or prose |
+| Trusting the answer blindly | Verify facts, numbers, citations and code |
+| Assuming one prompt fits every model | Test on each model you use; context limits and behaviour differ |
+| Treating the first version as final | Test, compare, refine, and change one thing at a time |
+
+## Templates you can reuse
+
+Three starting points. Replace the bracketed parts, and delete any line you do not need.
+
+<PromptAnatomy
+  title="General-purpose template"
+  parts={[
+    { label: "Role", text: "[the perspective or expertise you want]" },
+    { label: "Task", text: "[what you want accomplished]" },
+    { label: "Context", text: "[background, audience, what you have already tried]" },
+    { label: "Constraints", text: "[requirements, limits, things to avoid]" },
+    { label: "Output format", text: "[the structure of the answer]" },
+    { label: "Success criteria", text: "[what makes the result good enough]" },
+  ]}
+/>
+
+<Prompt title="Learn a technical concept">
+{`Act as an experienced technical instructor.
+
+I want to learn: [TOPIC]
+My current level: [DESCRIBE IT]
+
+Teach me with this structure:
+1. A plain-language explanation
+2. How it works internally
+3. A practical example
+4. Real-world uses
+5. Common mistakes
+6. Practice questions
+
+Keep it simple without losing technical accuracy.`}
+</Prompt>
+
+<Prompt title="Improve an existing prompt">
+{`Act as an expert prompt engineer.
+
+Review this prompt:
+
+[PASTE PROMPT]
+
+Evaluate its clarity, context, task definition, constraints, output requirements and any ambiguity.
+Rewrite it to be more effective while keeping the original goal.
+Explain the three most important changes.`}
+</Prompt>
+
+## Key takeaways
+
+- A model works with what you give it and guesses the rest, so every gap in a prompt is a decision left to chance.
+- A strong prompt covers a task, context, constraints and an output format, and adds a role and examples when they help.
+- Examples teach format better than descriptions do. Use a few varied ones.
+- Write constraints you can check.
+- Say who the answer is for and what level you are at.
+- Verify facts, numbers and code. A confident answer is not a correct one.
+- Treat your first prompt as a draft. Change one thing at a time and compare.
+
+Next in this guide: [Advanced prompt engineering](/blogs/prompt-engineering-advanced) covers what to do when a single good prompt is not enough: guiding reasoning, chaining tasks, managing context, testing prompts like code and keeping them secure.
+
+## Further reading
+
+- [Anthropic: Prompt engineering overview](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview)
+- [OpenAI: Prompt engineering guide](https://developers.openai.com/api/docs/guides/prompt-engineering)
+- [Google: Prompt design strategies (Gemini API)](https://ai.google.dev/gemini-api/docs/prompting-strategies)
+- [OpenAI Cookbook](https://github.com/openai/openai-cookbook)
