@@ -1,47 +1,639 @@
 export const meta = {
-  title: "AI harness engineering",
-  description: "The code around the model: the loop, the tools, the context and the guardrails that make an agent useful.",
-  date: "2026-11-23",
-  tags: ["Harness", "AI", "Agents"],
+  title: "AI harness engineering: building the systems that make AI agents work",
+  description:
+    "A powerful model does not make a reliable agent by itself. This guide explains what an AI harness is, how its architecture and core components work, and walks through building a small, tested coding harness in TypeScript.",
+  date: "2026-11-25",
+  tags: ["Harness engineering", "AI agents", "TypeScript"],
   series: "From Prompts to Protocols",
   part: 4,
   draft: true,
 };
 
-<Callout type="warning" title="Draft outline">
-  Structure only. Add your own examples and the lessons from your own agent work.
+Ask an AI coding assistant to "build a complete authentication system for my app, with registration, login, password reset, database integration and tests", and a good model will happily write the code. It will suggest a schema, explain the design and produce something that looks right.
+
+But writing the code is not the same as finishing the task. Finishing means reading the existing project, following its conventions, creating and editing real files, installing dependencies, running the tests, reading the errors, fixing them, and checking that the result actually works. A language model on its own does none of that. It produces text.
+
+Everything in that list has to be provided by something else: an environment to work in, tools to act with, context to understand the task, and a way to find out when it got something wrong. That "something else" is called a **harness**, and designing it is becoming one of the most important skills in AI engineering.
+
+The idea in one sentence: **a powerful model does not automatically make a reliable agent. The engineering around the model does.**
+
+This post explains what a harness is, why agents need one, how its parts fit together, and how to build a small one yourself. By the end you will have a working harness of about two hundred lines of TypeScript, with tools, a permission layer, an agent loop, a verification step and a trace, and you will have seen it catch a model making a false claim.
+
+<Callout type="note" title="An emerging discipline">
+  Harness engineering is young. The term is used slightly differently by different teams, and there is no finished standard. I draw on public work from OpenAI, Google and Anthropic and on a recent research paper, all linked at the end, and I say where something is one team's approach rather than a settled rule. This is the fourth post in the series. The earlier ones covered [prompts](/blogs/prompt-engineering-fundamentals) and [MCP](/blogs/mcp-model-context-protocol), and they help but are not required.
 </Callout>
 
-## The model is not the product
+## From answering to finishing
 
-A harness is everything around the model: how it is prompted, which tools it can call, what it can see, and what stops it from doing damage. [Your definition.]
+It helps to see how we got here. Each stage added a capability to the one before.
 
-## The loop
+| Stage | What it adds |
+| --- | --- |
+| Plain LLM | Reads a prompt, writes a response |
+| Tool-using LLM | Can ask for external operations: search, APIs, databases, calculations |
+| Agent | Takes a goal, plans steps, uses tools, observes results and keeps going until it stops |
+| Harness | The environment and controls that make the agent's work reliable, safe and checkable |
 
-<Flow
-  steps={["Prompt", "Model", "Tool call", "Result"]}
-  loop="Repeat until the model stops asking for tools"
-  caption="The core agent loop."
+These are not strict historical stages, and they are not alternatives. A modern agent uses tools and runs inside a harness. The last row simply names the part that is easy to overlook: everything around the model that decides what it can see, what it can do and whether its work counts.
+
+## What a harness is
+
+An **AI harness** is the software around a model that lets it interact with its environment, execute tasks, receive feedback and stay within defined boundaries. **Harness engineering** is the practice of designing, building and improving that system.
+
+<Figure
+  n={1}
+  title="Model, harness and environment"
+  src="/blog/harness/01-model-harness-environment.svg"
+  srcDark="/blog/harness/01-model-harness-environment-dark.svg"
+  alt="Three boxes in a row. The model, which reasons and plans, sends requests to the harness and receives results. The harness, which manages context, tools, permissions, memory and verification, executes actions in the environment and observes the results. The environment is the codebase, files, database, browser or cloud services."
+  caption="The model decides. The harness turns decisions into verified actions. The environment is where they take effect."
 />
 
-## Tools
+A useful way to hold it in your head is **agent system = model + harness + environment**. A recent research paper, [AI Harness Engineering](https://arxiv.org/abs/2605.13357) by Hailin Zhong and Shengxin Zhu, makes the same split. It argues that the reliability of a software agent is a property of the whole system rather than of the model alone, and it breaks the harness into eleven responsibilities, including task specification, context selection, tool access, verification, permissions and recording human interventions.
 
-[Which tools, how you describe them, how errors are returned.]
+The word fits. A harness is a controlled structure around something powerful. Take a coding agent that can generate shell commands. Whether those commands run is not the model's call. The harness decides which commands exist at all, which directories they can touch, whether a human must approve them, where they execute, how the output comes back, and what happens when they fail.
 
-## Context
+## Why you need one
 
-[What goes in, what gets trimmed, how you keep it from filling up.]
+"Why not connect a model to a few tools and let it run?" Because real tasks are messy, multi-step and sometimes irreversible. Each of these is a failure you will meet, and each is a job for the harness.
 
-## Guardrails
+| Problem | What goes wrong | What the harness does |
+| --- | --- | --- |
+| The model does not know your environment | It writes valid React that does not fit your React app | Supplies the relevant files, docs and conventions |
+| Context windows are finite | A real project cannot fit; irrelevant text crowds out the important | Selects, retrieves and compresses context as work proceeds |
+| Tool use is unreliable | Wrong tool, bad arguments, misread output, pointless repeats | Validates calls, limits execution, returns clear errors |
+| Nothing checks the work | "Authentication implemented successfully" may be false | Runs tests and checks independently |
+| Access is too broad | Sensitive files, destructive commands, external services | Enforces permissions and isolates risky operations |
+| Tasks outlast one session | Progress and intent are lost between runs | Persists state, checkpoints and notes |
 
-<Callout type="note">
-  [Permissions, confirmations for risky actions, limits on steps and cost.]
+Better prompts and better models help with all of these, but they do not remove the need for the system underneath.
+
+## The architecture of a harness
+
+There is no single correct design, and real harnesses combine, split or skip these parts depending on need. The diagram below is a reference design that makes the responsibilities easy to see.
+
+<Figure
+  n={2}
+  title="Anatomy of an AI harness"
+  src="/blog/harness/02-architecture.svg"
+  srcDark="/blog/harness/02-architecture-dark.svg"
+  alt="A user request enters the harness runtime. The context manager feeds the model, which returns either a tool call or a final answer. Tool calls pass through permission checks to a tool executor that acts on the environment, and results flow back into state and context. Final answers go to a verification layer: if it fails the agent retries, if it passes the final result is returned."
+  caption="The model proposes. The harness decides what runs, and whether the work counts."
+/>
+
+Reading it clockwise from the left:
+
+1. **Runtime.** Coordinates everything: model requests, tool calls, state updates, limits and when to stop.
+2. **Context manager.** Decides what the model sees: instructions, relevant files, earlier results, task history.
+3. **Model.** Reads the context and either requests a tool call or gives a final answer.
+4. **Permissions and validation.** Checks every requested action against the rules before anything runs.
+5. **Tool executor.** Runs the approved action: read a file, execute a command, query a database.
+6. **Environment.** Where the action actually happens: a workspace, container, virtual machine or remote service.
+7. **State and memory.** Records progress and intermediate results for the next step, or the next session.
+8. **Verification.** Checks whether the task is really done. If not, the failure goes back to the agent, within retry limits.
+9. **Final result.** Returned only when the completion criteria are met.
+
+The key point is the one at the bottom of the diagram: **the model does not control the process.** It proposes, and the harness disposes.
+
+## The core components
+
+This is the heart of the discipline. Each component is a small engineering problem of its own.
+
+### Context engineering
+
+Prompt engineering is about the instructions you give. **Context engineering** is about everything the model has in front of it while it works: instructions, repository structure, relevant source files, schemas, conventions, earlier tool results and the task's progress. [Part two of the prompt guide](/blogs/prompt-engineering-advanced#prompt-engineering-and-context-engineering) covers the idea in more depth.
+
+The goal is not *more* information. It is the *right* information at the right time. The main techniques:
+
+- **Selection:** retrieve only what is relevant to the current step.
+- **Retrieval:** use search or indexes to find it in large sources.
+- **Compression:** summarise older turns and bulky tool output.
+- **Progressive disclosure:** load details when they become necessary instead of up front.
+- **Prioritisation:** keep critical instructions and the current goal easy to find.
+
+OpenAI's team describes a memorable version of this in their Codex experiment, covered below. They gave the agent "a map, not a 1,000-page instruction manual": a short `AGENTS.md` of roughly a hundred lines that points into a structured `docs/` folder, with checks to keep those docs current.
+
+### Tool engineering
+
+Tools are how an agent touches the world: reading and writing files, running commands, searching, querying databases, calling APIs, driving a browser. Handing a model tools is easy. Designing tools it can use *correctly* is the work.
+
+A good tool has a clear name, one specific purpose, well-described parameters, validated arguments, predictable output, errors that help and a permission boundary. Compare one broad tool with a set of narrow ones. For an inventory system you could expose a single `query_database` tool, or this:
+
+```text
+check_stock(sku)
+get_low_stock_alerts()
+get_forecast(sku)
+create_purchase_order(lines)
+```
+
+These are close to the tools of the [inventory MCP server](/blogs/mcp-model-context-protocol#case-study-an-mcp-server-for-my-inventory-system) from the previous post. Each one has a single responsibility, which makes the right choice obvious to the model and the permission rule obvious to you. Anthropic's guidance on [writing tools for agents](https://www.anthropic.com/research/writing-tools-for-agents) adds practical advice: group related tools under shared prefixes, return readable, high-signal fields instead of opaque IDs, keep responses token-efficient with pagination and filters, make error messages specific and actionable, and describe each tool the way you would to a new teammate.
+
+Also design for repetition. Tools should think about idempotency, timeouts and rate limits, because an agent will retry. This is where [MCP](/blogs/mcp-model-context-protocol) fits in: it is a standard way to attach external tools and data, and a harness can use MCP servers alongside its own built-in tools.
+
+### The agent loop and orchestration
+
+The agent loop is the central mechanism. In pseudocode:
+
+1. Receive the task and prepare context.
+2. Ask the model what to do.
+3. If it requests a tool, validate and run it.
+4. Put the result into the context and update the state.
+5. Ask the model again.
+6. Stop when a stopping condition is met, then return the result.
+
+This is often called the tool-use loop. A well-known framing is **ReAct**, which alternates *think, act, observe*: the agent decides it needs a file, calls a tool to read it, sees the contents, and decides what to do next. Treat ReAct as a useful mental model, not a rule that every agent must expose its reasoning in a particular way.
+
+Orchestration patterns range from simple to elaborate: sequential steps, parallel independent tasks, conditional branches and multiple specialised agents (planner, implementer, reviewer, tester). Be sceptical of the last one. Multi-agent systems add coordination overhead and more places to fail, and they are not automatically better. Anthropic's [Building effective agents](https://www.anthropic.com/research/building-effective-agents) draws the useful line between *workflows*, where code orchestrates the model through predefined paths, and *agents*, where the model directs its own process, and it recommends finding the simplest solution possible and adding complexity only when needed.
+
+### Memory and state
+
+These are related but different. **State** is where the current task stands: the goal, completed and pending steps, files changed, tests run, current errors. **Memory** is what is worth keeping beyond it: project architecture, conventions, past decisions. Memory is usually described in four kinds: short-term (the current conversation), long-term (across sessions), episodic (records of past tasks) and semantic (facts and project knowledge). You rarely need all four.
+
+Long-running work makes this concrete. Anthropic's write-up on [effective harnesses for long-running agents](https://www.anthropic.com/research/effective-harnesses-for-long-running-agents) describes agents that work in sessions with no memory of the last one. Their fix is a handoff made of plain artifacts. An initializer session sets up the environment and expands the request into a detailed feature list stored as JSON, with every feature initially marked failing and agents allowed to change only a `passes` field. Later sessions pick one feature, work on it, commit to git with a descriptive message and update a progress file, and each new session starts by reading that file, the git log and the feature list. They also found that agents often marked features done after only unit tests, and that prompting them to test like a human user with browser automation improved results markedly.
+
+### Execution environments and sandboxing
+
+The environment is where actions take place: filesystem, shell, git, package managers, a browser, databases, test runners. Giving an agent your whole machine is a risk you do not need to take. A **sandbox** provides an isolated place to work under controlled permissions. Common choices are containers, virtual machines, restricted workspaces limited to approved directories, git worktrees for parallel tasks, and remote execution on isolated infrastructure.
+
+A good sandbox plan covers five boundaries: the filesystem, the network, credentials, resource limits and process permissions. The aim is that an agent can do useful work without being able to reach anything it does not need.
+
+### Guardrails and human in the loop
+
+Guardrails are the boundaries the agent works within: restricted files, blocked destructive commands, limited API access, validated arguments, timeouts, retry caps and approval for sensitive actions. Consider two operations: reading a source file and deleting a production database. Both are technically just "tool calls", but they should not need the same permission.
+
+A human may need to approve production deployments, financial transactions, destructive database operations, permission changes and external communication. The model can recommend an action. The harness enforces whether it is allowed.
+
+<Callout type="warning" title="Prompts are not security">
+  Never rely on a prompt alone to enforce a rule. "Please do not touch the production database" is a request. A permission check in code is a boundary. If you take one idea from this post into your own agents, take this one. It is the same point made in the [prompt injection section](/blogs/prompt-engineering-advanced#limits-and-security) of the prompt guide and the [MCP security section](/blogs/mcp-model-context-protocol#security).
 </Callout>
 
-## Testing a harness
+### Verification and evaluation
 
-[How you know a change helped: fixed tasks, logs, replay.]
+One of the biggest mistakes in agent development is treating the model's final message as proof that the work is done. An agent can say it fixed a bug while the application still fails. For coding agents, independent verification can include unit, integration and end-to-end tests, type checking, linting, build validation, static analysis and security scanning.
 
-## Putting the series together
+Verification and evaluation are different things, and mixing them up causes confusion:
 
-[Link back to MCP, REA and prompting.]
+- **Verification** asks whether *this task* meets its requirements. "Did the authentication module pass its tests?"
+- **Evaluation** asks how well the agent or harness performs *across many tasks*. "Across a hundred authentication tasks, how often did it get the required behaviour right?"
+
+Google's engineers make a sharp point about evaluation in [The Anatomy of Harness Engineering](https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/). End-to-end benchmarks are report cards: they tell you whether the agent finished, not why it failed. They propose **behavioral evals** as the integration tests for a harness. These assert on intermediate actions, such as whether the agent asked a clarifying question on an ambiguous request, or ran a validator before declaring a build change done, instead of judging the final prose. The behavioral checks are meant to be fast, deterministic and local so they can guard against regressions, and they suggest tracking aggregate pass rates over time instead of blocking changes on a single noisy run.
+
+In practice you will use four kinds of evaluation together: behavioural (did it do the expected things, such as running tests before reporting success), outcome-based (does the result meet the requirements), end-to-end benchmarks, and regression suites that rerun after any change to a prompt, tool or model.
+
+### Observability
+
+When an agent fails you need to know why. Was it the model, bad context, a failed tool, an execution error or a missing permission? Without records you are guessing. A harness should capture model requests and responses (with sensible data protection), tool calls and arguments, tool results, errors, progress, token usage, latency, cost and verification results.
+
+Three ideas cover most of it. **Logs** record individual events. **Metrics** are numbers over time, such as success rate, latency and cost. **Traces** connect a whole run, from the first model request through every tool call to the final check. You will see a real trace later in this post, and it is the single most useful debugging tool a harness can have.
+
+### Failure recovery
+
+Agents fail for many reasons: network errors, rate limits, invalid arguments, unexpected tool output, wrong decisions, failing tests and interruptions. A robust harness has answers ready:
+
+- **Retries and exponential backoff** for temporary failures.
+- **Error classification** to separate temporary failures from bad input, permission errors and permanent faults.
+- **Checkpointing** so work can resume after an interruption.
+- **Recovery workflows** that give the model the failure and let it try again.
+- **Stopping conditions** so a confused agent cannot loop forever or burn unlimited money.
+
+Use retries with care. Repeating a non-idempotent action, such as charging a payment, or calling `create_purchase_order` twice after a timeout, creates real duplicates. Know which of your tools are safe to repeat.
+
+## Prompt, context and harness engineering
+
+These three get confused, so here they are side by side.
+
+<Figure
+  n={3}
+  title="Prompt, context and harness engineering"
+  src="/blog/harness/04-three-disciplines.svg"
+  srcDark="/blog/harness/04-three-disciplines-dark.svg"
+  alt="Three nested boxes. The outer box is harness engineering: how the work is done safely and verified. Inside it is context engineering: what the model should know. Innermost is prompt engineering: what the model should do."
+  caption="Each discipline sits inside the next. None of them replaces the others."
+/>
+
+| Discipline | The question it answers | Example, for "add product search" |
+| --- | --- | --- |
+| Prompt engineering | What should the model do? | "Implement product search with filtering and pagination" |
+| Context engineering | What should it know? | The project structure, the product model, API conventions, related components |
+| Harness engineering | How does the work get done, safely and verified? | File access, edit tools, a terminal, permission checks, task state, test runs, error recovery |
+
+A good prompt says what to do. Good context lets the model understand the task. A good harness lets it carry the task out, and prove it.
+
+## Build a mini coding harness
+
+Time to build one. We will make a small agent harness that can read files, edit code and run tests, enforces a permission layer, and refuses to believe the model when it says it is finished. It is deliberately small. It shows the architecture and the flow, not a production agent.
+
+One honest note first. To keep the demo deterministic, free and runnable without an API key, the "model" here is a **scripted stand-in** that behaves like an over-eager real one. The harness only sees a function with the type `Model`, so swapping in a real LLM later changes one file. I wrote and ran everything below, including six tests for the harness itself.
+
+<Figure
+  n={4}
+  title="The verified agent loop"
+  src="/blog/harness/03-verified-loop.svg"
+  srcDark="/blog/harness/03-verified-loop-dark.svg"
+  alt="The model either requests a tool or gives a final answer. Tool calls go through a permission check, run, and their results return to the model; denied calls return the reason as the result. A final answer makes the harness run the tests: if they pass the result is verified, otherwise the report is sent back for another attempt, up to three tries."
+  caption="Two paths out of the model: act, or claim to be done. Only the second one ends the run, and only if the tests agree."
+/>
+
+### The project
+
+```text
+mini-harness/
+├── src/
+│   ├── types.ts          # messages, tool calls, the Model interface
+│   ├── permissions.ts    # what the agent may touch
+│   ├── tools.ts          # read_file, write_file, run_tests
+│   ├── verify.ts         # the harness's own check
+│   ├── trace.ts          # a record of everything that happened
+│   ├── loop.ts           # the agent loop
+│   ├── scriptedModel.ts  # a stand-in for a real LLM
+│   └── index.ts          # runs the demo
+├── test/harness.test.ts  # tests for the harness itself
+└── workspace-template/   # a tiny project with a bug in it
+```
+
+The project the agent will work on is a one-function library with a bug. `slugify()` is supposed to turn a title into a URL slug, but the implementation only lowercases and replaces spaces, and the tests expect more.
+
+### 1. The types
+
+Everything the model and the harness exchange fits in a few types. A model response is either a request for a tool or a final answer, and `Model` is just a function.
+
+```ts title="src/types.ts"
+export type ToolCall = { id: string; name: string; args: Record<string, unknown> };
+
+export type ToolSpec = {
+  name: string;
+  description: string;
+  parameters: Record<string, string>;
+};
+
+/** What the model sends back: either a tool request or a final answer. */
+export type ModelResponse =
+  | { type: "tool_call"; call: ToolCall }
+  | { type: "final"; content: string };
+
+export type Message =
+  | { role: "user"; content: string }
+  | { role: "assistant"; call?: ToolCall; content?: string }
+  | { role: "tool"; callId: string; name: string; content: string; isError: boolean };
+
+/** Anything that can turn a conversation into the next step. Plug a real LLM in here. */
+export type Model = (messages: Message[], tools: ToolSpec[]) => Promise<ModelResponse>;
+```
+
+### 2. Permissions
+
+This is the smallest file and the most important one. Every path the model supplies is resolved and checked against the workspace root, and a second rule stops the agent from editing the very tests that judge it. Without that rule, "make the tests pass" has an easy and useless solution.
+
+```ts title="src/permissions.ts"
+import path from "node:path";
+
+export class PermissionError extends Error {}
+
+/** Resolve a model-supplied path and refuse anything outside the workspace. */
+export function resolveInside(root: string, requested: string): string {
+  const full = path.resolve(root, requested);
+  if (full !== root && !full.startsWith(root + path.sep)) {
+    throw new PermissionError(`"${requested}" is outside the workspace`);
+  }
+  return full;
+}
+
+/** The agent may fix code, but it may not rewrite the tests that judge it. */
+export function assertWritable(requested: string): void {
+  if (/\.test\.[cm]?[jt]s$/.test(requested)) {
+    throw new PermissionError(`"${requested}" is a test file and is read-only`);
+  }
+}
+```
+
+### 3. Tools
+
+Each tool has a spec the model can read and a `run` function the harness executes. Arguments are validated, and every path goes through `resolveInside`. Notice that tools do not decide *whether* they may run. That is the permission layer's job.
+
+```ts title="src/tools.ts"
+import { readFile, writeFile } from "node:fs/promises";
+import { assertWritable, resolveInside } from "./permissions.js";
+import type { ToolSpec } from "./types.js";
+import { verify } from "./verify.js";
+
+export type Tool = {
+  spec: ToolSpec;
+  run: (args: Record<string, unknown>) => Promise<string>;
+};
+
+function text(args: Record<string, unknown>, key: string): string {
+  const value = args[key];
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error(`Missing or invalid "${key}": expected a non-empty string`);
+  }
+  return value;
+}
+
+export function createTools(root: string): Record<string, Tool> {
+  return {
+    read_file: {
+      spec: {
+        name: "read_file",
+        description: "Read a UTF-8 text file from the workspace.",
+        parameters: { path: "string, relative to the workspace" },
+      },
+      run: async (args) => readFile(resolveInside(root, text(args, "path")), "utf8"),
+    },
+    write_file: {
+      spec: {
+        name: "write_file",
+        description: "Replace the contents of a source file. Test files are read-only.",
+        parameters: { path: "string", content: "string" },
+      },
+      run: async (args) => {
+        const requested = text(args, "path");
+        assertWritable(requested);
+        await writeFile(resolveInside(root, requested), text(args, "content"), "utf8");
+        return `Wrote ${requested}`;
+      },
+    },
+    run_tests: {
+      spec: {
+        name: "run_tests",
+        description: "Run the project's test suite and return the report.",
+        parameters: {},
+      },
+      run: async () => (await verify(root)).report,
+    },
+  };
+}
+```
+
+### 4. The agent loop
+
+Here is the core. The highlighted part is the point of the whole exercise: when the model says it is done, the harness does not take its word. It runs the tests itself, and if they fail it hands the report back and lets the model try again, up to a limit.
+
+```ts title="src/loop.ts" {58-76}
+import { PermissionError } from "./permissions.js";
+import type { Tool } from "./tools.js";
+import { Trace } from "./trace.js";
+import type { Message, Model } from "./types.js";
+import { verify } from "./verify.js";
+
+export type RunResult = {
+  status: "verified" | "verification_failed" | "step_limit";
+  steps: number;
+  message: string;
+};
+
+type RunOptions = {
+  task: string;
+  model: Model;
+  tools: Record<string, Tool>;
+  root: string;
+  trace: Trace;
+  maxSteps?: number;
+  maxVerifyAttempts?: number;
+};
+
+export async function runAgent(opts: RunOptions): Promise<RunResult> {
+  const { task, model, tools, root, trace } = opts;
+  const maxSteps = opts.maxSteps ?? 12;
+  const maxVerifyAttempts = opts.maxVerifyAttempts ?? 3;
+  const specs = Object.values(tools).map((t) => t.spec);
+  const messages: Message[] = [{ role: "user", content: task }];
+  let verifyAttempts = 0;
+
+  for (let step = 1; step <= maxSteps; step++) {
+    const response = await model(messages, specs);
+
+    if (response.type === "tool_call") {
+      const { call } = response;
+      trace.add(step, "model", `requests ${call.name}`, JSON.stringify(call.args));
+      messages.push({ role: "assistant", call });
+
+      let output: string;
+      let isError = false;
+      const tool = tools[call.name];
+      try {
+        if (!tool) throw new Error(`Unknown tool "${call.name}"`);
+        output = await tool.run(call.args);
+        trace.add(step, "tool", `${call.name} ok`);
+      } catch (err) {
+        isError = true;
+        output = err instanceof Error ? err.message : String(err);
+        const denied = err instanceof PermissionError;
+        trace.add(step, denied ? "denied" : "error", `${call.name} ${denied ? "denied" : "failed"}`, output);
+        output = denied ? `Denied: ${output}` : `Error: ${output}`;
+      }
+      // Errors go back to the model as data, so it can correct itself.
+      messages.push({ role: "tool", callId: call.id, name: call.name, content: output, isError });
+      continue;
+    }
+
+    // The model says it is finished. The harness checks for itself.
+    trace.add(step, "model", "claims it is done", response.content);
+    const check = await verify(root);
+    if (check.passed) {
+      trace.add(step, "verify", "tests passed");
+      trace.add(step, "final", "verified");
+      return { status: "verified", steps: step, message: response.content };
+    }
+
+    verifyAttempts++;
+    trace.add(step, "verify", "tests failed", `attempt ${verifyAttempts} of ${maxVerifyAttempts}`);
+    if (verifyAttempts >= maxVerifyAttempts) {
+      return { status: "verification_failed", steps: step, message: check.report };
+    }
+    messages.push({ role: "assistant", content: response.content });
+    messages.push({
+      role: "user",
+      content: `Verification failed. The test report is below. Fix the code and try again.\n\n${check.report}`,
+    });
+  }
+
+  trace.add(maxSteps, "final", "step limit reached");
+  return { status: "step_limit", steps: maxSteps, message: "Stopped: step limit reached." };
+}
+```
+
+Three details are worth pausing on. Errors and denials go back to the model as ordinary tool results, so it can read them and adapt. The loop has a hard step limit, so a confused model cannot run forever. And the verification budget is separate from the step budget, so a model that keeps claiming success cannot loop either.
+
+### 5. Verification
+
+Verification is a few lines of code, but it hides a lesson.
+
+```ts title="src/verify.ts"
+import { execFile } from "node:child_process";
+
+export type Verification = { passed: boolean; report: string };
+
+/** The harness's own check. It never trusts what the model says about its work. */
+export function verify(root: string, timeoutMs = 20_000): Promise<Verification> {
+  // If this harness is itself running under `node --test`, the child would inherit
+  // NODE_TEST_CONTEXT and report success without running anything. Strip it.
+  const env: NodeJS.ProcessEnv = { ...process.env, NO_COLOR: "1" };
+  delete env.NODE_TEST_CONTEXT;
+
+  return new Promise((resolve) => {
+    execFile(
+      process.execPath,
+      ["--test", "--test-reporter=spec"],
+      { cwd: root, timeout: timeoutMs, env },
+      (error, stdout, stderr) => {
+        const report = (stdout + stderr).trim();
+        resolve({ passed: !error, report });
+      },
+    );
+  });
+}
+```
+
+<Callout type="tip" title="A bug the harness caught in itself">
+  My first version passed the demo but failed two of my own tests: verification reported success when the project was clearly broken. The cause was an environment variable. When the harness ran inside Node's test runner, the child `node --test` process inherited `NODE_TEST_CONTEXT` and quietly exited without running anything. The check "passed" because nothing ran. That is the strongest argument for testing the harness itself, and for making verification fail loudly.
+</Callout>
+
+### 6. Run it
+
+Install the dev dependencies (TypeScript, `tsx` and the Node types), then run the demo. I ran it on Node 22.
+
+<Terminal title="Run the demo and the tests">
+{`$ npm install
+$ npm run demo
+$ npm test`}
+</Terminal>
+
+This is the real trace from the run. Read it as a story.
+
+<TraceLog
+  title="npm run demo"
+  events={[
+    { step: 1, kind: "model", label: "requests read_file", detail: '{"path":"slugify.js"}' },
+    { step: 1, kind: "tool", label: "read_file ok" },
+    { step: 2, kind: "model", label: "requests read_file", detail: '{"path":"../.env"}' },
+    { step: 2, kind: "denied", label: "read_file denied", detail: '"../.env" is outside the workspace' },
+    { step: 3, kind: "model", label: "requests write_file", detail: '{"path":"slugify.test.js","content":"// no tests"}' },
+    { step: 3, kind: "denied", label: "write_file denied", detail: '"slugify.test.js" is a test file and is read-only' },
+    { step: 4, kind: "model", label: "requests write_file", detail: '{"path":"slugify.js", …}' },
+    { step: 4, kind: "tool", label: "write_file ok" },
+    { step: 5, kind: "model", label: "claims it is done", detail: "Fixed slugify: it now trims and collapses whitespace." },
+    { step: 5, kind: "verify", label: "tests failed", detail: "attempt 1 of 3" },
+    { step: 6, kind: "model", label: "requests write_file", detail: '{"path":"slugify.js", …}' },
+    { step: 6, kind: "tool", label: "write_file ok" },
+    { step: 7, kind: "model", label: "requests run_tests", detail: "{}" },
+    { step: 7, kind: "tool", label: "run_tests ok" },
+    { step: 8, kind: "model", label: "claims it is done", detail: "Fixed slugify: it now strips punctuation and trims stray hyphens too." },
+    { step: 8, kind: "verify", label: "tests passed" },
+    { step: 8, kind: "final", label: "verified" },
+  ]}
+/>
+
+Four things happened that a bare model-plus-tools setup would not have handled:
+
+- **Step 2.** The model tried to read `../.env`, outside its workspace. The harness denied it and told the model why.
+- **Step 3.** It tried to "fix" the problem by rewriting the test file. Denied again.
+- **Step 5.** The model declared victory after a partial fix. The harness ran the tests, found that the punctuation test still failed, and sent the report back. A system that trusted the final message would have shipped broken code.
+- **Step 8.** After a second, correct fix, the same independent check passed, and only then did the run end as verified.
+
+Every line of that story is something you can inspect later, which is the whole point of the trace.
+
+### 7. Test the harness itself
+
+The six tests in `test/harness.test.ts` check the behaviours that matter most: paths outside the workspace and test files are refused, the scripted run ends verified with exactly two denials and one failed verification and leaves the tests untouched, a model that lies about being done is not believed, a model that never finishes hits the step limit, and unknown tools or bad arguments come back as errors instead of crashes. They all pass. A harness is software that sits between a model and the real world, so it deserves tests more than most.
+
+### 8. From scripted to real
+
+To use a real model, write one function that implements `Model`. It converts the harness's messages into your provider's format, passes the tool specs as that provider's tool or function schema, calls the API, and converts the reply back into a `tool_call` or a `final` response. Nothing else changes: the permissions, tools, loop, verification and trace stay exactly as they are. Check your provider's documentation for the tool-calling format, because it differs between vendors.
+
+From here the natural next steps follow the components above:
+
+- Run the workspace in a **container** instead of a temp folder.
+- **Persist state** and checkpoint so a run can resume.
+- Export the trace to a real **observability** tool.
+- Add an `evals/` folder with tasks you rerun after every change.
+- Bring in **MCP servers** as another source of tools.
+- Add **human approval** for tools that write outside the workspace.
+
+{/* TODO(Yash): add a RepoCard here if you publish the mini-harness project as a repository. */}
+
+## Harnesses in the wild
+
+Any multi-step AI system benefits from one, not only coding agents. Coding agents such as OpenAI Codex, Claude Code and GitHub's Copilot coding agent are harnesses around models: they inspect repositories, edit code, run commands and use the output of development tools. The same shape appears elsewhere:
+
+| Application | What the harness manages |
+| --- | --- |
+| Research agent | Search tools, source tracking, context across many documents, checking claims |
+| Data analysis agent | Restricted database access, query validation, verifying calculations |
+| Customer support agent | Access to customer records and CRM, authorisation rules for sensitive actions |
+| DevOps agent | Log and metric access, incident investigation, tightly gated remediation |
+
+The last row deserves the most care, because infrastructure actions have the largest consequences.
+
+## Case study: OpenAI's agent-first experiment
+
+The most detailed public account is OpenAI's [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/) by Ryan Lopopolo, published on February 11, 2026. Over five months, a small team built an internal beta product in which, by their account, every line of code was written by Codex, including application logic, tests, CI configuration, documentation, observability and internal tooling. The repository reached roughly a million lines and about 1,500 merged pull requests, with a team that grew from three engineers to seven, and they estimate it took about a tenth of the time hand-writing would have.
+
+The interesting part is what the humans did instead of typing code. They built the environment:
+
+- **A legible repository.** A short `AGENTS.md` as a map into structured docs, plus checks and a recurring "doc-gardening" agent to keep those docs honest. Anything not in the repo is invisible to the agent.
+- **An observable app.** The app could be booted per git worktree, and each worktree got its own temporary logs, metrics and traces stack, so the agent could reproduce bugs and validate fixes itself.
+- **Enforced architecture.** Fixed layers per domain, enforced by custom linters whose error messages tell the agent how to fix the violation.
+- **Automated feedback.** Validation, review and cleanup encoded into the workflow, including background agents that fight accumulating "AI slop".
+
+The lesson is not that models can generate a lot of code. It is that **more autonomy came from a better environment, not from a better prompt.** The authors are also careful about the limits. They note that this depends heavily on the repo's tooling, that it was a specific experiment, and that they do not yet know how architectural coherence holds up over years. Treat it as a data point, not a recipe.
+
+Together with the sources above, you get three complementary views:
+
+| Source | Contribution |
+| --- | --- |
+| OpenAI, Feb 2026 | An environment designed for agents: legible repo, observability, enforced architecture |
+| Anthropic, Nov 2025 | Making long-running work survive session boundaries: feature lists, progress files, git |
+| Google, Sep 2026 | Evaluating a harness itself with fast behavioural evals alongside benchmarks |
+
+## Frameworks and tools
+
+You do not have to build everything from scratch. Several frameworks provide parts of a harness.
+
+| Framework | What it gives you |
+| --- | --- |
+| [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) | A low-level runtime that models workflows as graphs of state, nodes and edges, with durable execution, human-in-the-loop and memory |
+| [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/) | A small set of primitives: agents with instructions and tools, handoffs between agents, and guardrails, with built-in tracing |
+| [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/overview/) | Agents and graph-based workflows in .NET, Python and Go, with sessions, middleware and MCP clients |
+| [CrewAI](https://docs.crewai.com/) | Agents, tasks and flows for collaborating agents, with persistence and human-in-the-loop steps |
+
+Observability and evaluation tools such as OpenTelemetry, Langfuse, MLflow and DeepEval cover individual pieces too. One distinction matters: **a framework is not harness engineering.** Frameworks help you implement agent systems. Harness engineering is the wider discipline of designing the whole operating environment, including the sandbox, the permissions, the verification and the feedback loops, and no library does that for you. Anthropic's advice is a good default: start with direct API calls and add a framework only when you understand what it is abstracting.
+
+## Limits and open problems
+
+A harness improves reliability. It does not remove the hard parts.
+
+- **Model unpredictability.** The same input can lead down different paths, so design for variation.
+- **Context degradation.** Long runs accumulate irrelevant material and the model loses focus, so selection and summarisation keep mattering.
+- **Tool reliability.** APIs, databases and sandboxes fail independently of the model.
+- **Security.** Untrusted inputs plus command execution plus sloppy permissions turn a useful agent into a risk.
+- **Cost and latency.** Every model call and tool run costs time and money, and agents can burn both repeating failed attempts.
+- **Evaluation is hard.** The final answer alone says little. You also need to look at intermediate actions, safety, consistency and resource use.
+- **Maintenance.** Agents can copy existing mistakes and add needless complexity, so automated cleanup and human review stay necessary.
+
+## Where this is heading
+
+Expect agents to take on whole workflows and run across multiple sessions, which raises the stakes on state, checkpoints and recovery. Evaluation should move from judging the final answer to judging actions, tool use, safety and efficiency, as Google's behavioural evals already do. Multi-agent collaboration may grow, but it will need better coordination. Sandboxing and controlled computer access will matter more as agents gain more capabilities. And the engineer's role keeps widening: less typing every line, more designing the environments in which agents can understand a project, do the work and prove the result. The aim is not to remove engineering discipline, but to apply it to a larger part of the process.
+
+## Key takeaways
+
+- A model generates actions. A **harness** turns them into verified results. Agent system = model + harness + environment.
+- The model proposes, the harness decides. Permissions, limits and approvals live in code, never only in a prompt.
+- **Never accept "done" at face value.** Verify with tests or other independent checks, and treat verification and evaluation as different jobs.
+- Narrow, well-described tools beat one all-powerful tool, and design them with retries in mind.
+- Manage context deliberately: the right information at the right time, not everything at once.
+- Record a trace of every run. You cannot fix what you cannot see.
+- Start simple. A small harness with a loop, three tools, a permission check and a test gate already changes what an agent can be trusted with.
+
+The question moves from "How do I make the model smarter?" to "How do I build an environment where the model can reliably do useful work?" **Build better environments, design reliable feedback loops, and verify every important action.**
+
+Next in the series: the last post turns from building systems to taking them apart, with [REA](/blogs/reverse-engineer-anything-rea), a tool for reverse engineering software with agents.
+
+## Further reading
+
+- [OpenAI: Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/)
+- [Google Developers: The Anatomy of Harness Engineering](https://developers.googleblog.com/en/the-anatomy-of-harness-engineering-how-to-evaluate-iterate-and-guard-ai-coding-agents/)
+- [Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/research/effective-harnesses-for-long-running-agents)
+- [Anthropic: Effective context engineering for AI agents](https://www.anthropic.com/research/effective-context-engineering-for-ai-agents)
+- [Anthropic: Building effective agents](https://www.anthropic.com/research/building-effective-agents)
+- [Anthropic: Writing effective tools for agents](https://www.anthropic.com/research/writing-tools-for-agents)
+- [Zhong and Zhu: AI Harness Engineering: A Runtime Substrate for Foundation-Model Software Agents (arXiv)](https://arxiv.org/abs/2605.13357)

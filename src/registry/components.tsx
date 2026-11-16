@@ -2,6 +2,7 @@ import { CodeTabs } from "@/components/blog/code-tabs";
 import { Callout, Compare, Details, Flow, RepoCard, Terminal } from "@/components/blog/parts";
 import { Prompt } from "@/components/blog/prompt";
 import { PromptAnatomy } from "@/components/blog/prompt-anatomy";
+import { TraceLog } from "@/components/blog/trace-log";
 import { IconBox, IconChip, Tag } from "@/components/chips";
 import { Greeting, LiveClock } from "@/components/live";
 import { Band, Divider, SectionHeading } from "@/components/panel";
@@ -199,6 +200,25 @@ export const componentItems: RegistryItem[] = [
             { label: "Role", text: "You are a careful code reviewer." },
             { label: "Task", text: "Review the diff below." },
             { label: "Format", text: "One line per issue: file, line, severity." },
+          ]}
+        />
+      </div>
+    ),
+  },
+  {
+    slug: "trace-log",
+    name: "Trace log",
+    description: "An agent run as a colour-coded timeline of model requests, tool results, denials and verification.",
+    files: ["src/components/blog/trace-log.tsx"],
+    preview: (
+      <div className="w-full max-w-lg [&>figure]:mt-0">
+        <TraceLog
+          events={[
+            { step: 1, kind: "model", label: "requests read_file", detail: '{"path":"app.js"}' },
+            { step: 1, kind: "tool", label: "read_file ok" },
+            { step: 2, kind: "denied", label: "write_file denied", detail: "test file is read-only" },
+            { step: 3, kind: "verify", label: "tests passed" },
+            { step: 3, kind: "final", label: "verified" },
           ]}
         />
       </div>

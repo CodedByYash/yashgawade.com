@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="t d"><title id="t">Model, harness and environment</title><desc id="d">The model reasons and requests actions. The harness manages context, tools, permissions, memory and verification, executes the requests and returns results. The environment, such as a codebase or database, is where actions take effect and what the harness observes.</desc><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#71717a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#7aa2ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs><text x="800" y="80" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="700" fill="#fafafa" text-anchor="middle">AI agent system = model + harness + environment</text>
+<rect x="50" y="230" width="380" height="300" rx="16" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="240" y="320" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="42" font-weight="800" fill="#fafafa" text-anchor="middle">Model</text>
+<text x="240" y="372" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#a1a1aa" text-anchor="middle">reasons and plans</text>
+<text x="240" y="408" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#a1a1aa" text-anchor="middle">asks for actions</text>
+<text x="240" y="470" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#a1a1aa" text-anchor="middle">decides</text>
+<rect x="590" y="170" width="420" height="450" rx="24" fill="#1e2a4a" stroke="#7aa2ff" stroke-width="3.5"/>
+<text x="800" y="262" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="46" font-weight="800" fill="#7aa2ff" text-anchor="middle">Harness</text>
+<text x="800" y="306" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="400" fill="#a1a1aa" text-anchor="middle">turns decisions into</text>
+<text x="800" y="340" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="400" fill="#a1a1aa" text-anchor="middle">verified actions</text>
+<rect x="670" y="372" width="260" height="48" rx="24" fill="#18181b" stroke="none" stroke-width="0"/>
+<text x="800" y="404" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="600" fill="#fafafa" text-anchor="middle">context</text>
+<rect x="670" y="422" width="260" height="48" rx="24" fill="#18181b" stroke="none" stroke-width="0"/>
+<text x="800" y="454" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="600" fill="#fafafa" text-anchor="middle">tools</text>
+<rect x="670" y="472" width="260" height="48" rx="24" fill="#18181b" stroke="none" stroke-width="0"/>
+<text x="800" y="504" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="600" fill="#fafafa" text-anchor="middle">permissions</text>
+<rect x="670" y="522" width="260" height="48" rx="24" fill="#18181b" stroke="none" stroke-width="0"/>
+<text x="800" y="554" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="600" fill="#fafafa" text-anchor="middle">memory and state</text>
+<rect x="670" y="572" width="260" height="48" rx="24" fill="#18181b" stroke="none" stroke-width="0"/>
+<text x="800" y="604" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="600" fill="#fafafa" text-anchor="middle">verification</text>
+<rect x="1170" y="230" width="380" height="300" rx="16" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="1360" y="320" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="42" font-weight="800" fill="#fafafa" text-anchor="middle">Environment</text>
+<text x="1360" y="372" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="400" fill="#a1a1aa" text-anchor="middle">codebase, files, database,</text>
+<text x="1360" y="408" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="400" fill="#a1a1aa" text-anchor="middle">browser, cloud services</text>
+<text x="1360" y="470" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#a1a1aa" text-anchor="middle">changes</text>
+<line x1="440" y1="340" x2="580" y2="340" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<text x="510" y="320" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="600" fill="#7aa2ff" text-anchor="middle">requests</text>
+<line x1="580" y1="420" x2="440" y2="420" stroke="#71717a" stroke-width="3.5" marker-end="url(#ah)"/>
+<text x="510" y="456" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">results</text>
+<line x1="1020" y1="340" x2="1160" y2="340" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<text x="1090" y="320" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="600" fill="#7aa2ff" text-anchor="middle">executes</text>
+<line x1="1160" y1="420" x2="1020" y2="420" stroke="#71717a" stroke-width="3.5" marker-end="url(#ah)"/>
+<text x="1090" y="456" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">observes</text>
+<text x="800" y="690" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="600" fill="#fafafa" text-anchor="middle">A smart model alone can only answer.</text>
+<text x="800" y="740" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="400" fill="#a1a1aa" text-anchor="middle">The harness lets it act, see what happened, and prove the work.</text></svg>
