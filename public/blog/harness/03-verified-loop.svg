@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="t d"><title id="t">The verified agent loop</title><desc id="d">The model either requests a tool or gives a final answer. Tool calls go through a permission check, run, and their results go back to the model; denied calls return an explanation. A final answer triggers the harness to run the tests: if they pass the result is verified, otherwise the report is sent back for another attempt, up to three tries.</desc><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#8b8b94" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs><text x="800" y="56" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="700" fill="#09090b" text-anchor="middle">The mini harness, one step at a time</text>
+<rect x="60" y="370" width="240" height="120" rx="16" fill="#dbeafe" stroke="#2563eb" stroke-width="3.5"/>
+<text x="180" y="424" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="800" fill="#2563eb" text-anchor="middle">Model</text>
+<text x="180" y="460" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="400" fill="#52525b" text-anchor="middle">scripted or real</text>
+<rect x="400" y="170" width="260" height="120" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<text x="530" y="222" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" fill="#09090b" text-anchor="middle">Permission check</text>
+<text x="530" y="260" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="400" fill="#52525b" text-anchor="middle">path and tool rules</text>
+<rect x="760" y="170" width="220" height="120" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<text x="870" y="240" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" fill="#09090b" text-anchor="middle">Run the tool</text>
+<rect x="1080" y="170" width="320" height="120" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<text x="1240" y="240" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" fill="#09090b" text-anchor="middle">Add result to context</text>
+<path d="M300 400 H350 V230 H400" fill="none" stroke="#2563eb" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#aa)"/>
+<text x="330" y="214" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="600" fill="#2563eb" text-anchor="middle">tool call</text>
+<line x1="660" y1="230" x2="760" y2="230" stroke="#8b8b94" stroke-width="3.5" marker-end="url(#ah)"/>
+<text x="710" y="212" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="400" fill="#52525b" text-anchor="middle">ok</text>
+<line x1="980" y1="230" x2="1080" y2="230" stroke="#8b8b94" stroke-width="3.5" marker-end="url(#ah)"/>
+<path d="M1240 170 V110 H180 V370" fill="none" stroke="#8b8b94" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#ah)"/>
+<text x="700" y="96" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="400" fill="#52525b" text-anchor="middle">the model sees the result and decides the next step</text>
+<path d="M530 290 V345 H1240 V292" fill="none" stroke="#8b8b94" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 8" marker-end="url(#ah)"/>
+<text x="885" y="380" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#b45309" text-anchor="middle">denied: the reason becomes the result</text>
+<rect x="400" y="600" width="260" height="120" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<text x="530" y="652" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" fill="#09090b" text-anchor="middle">Run the tests</text>
+<text x="530" y="690" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="400" fill="#52525b" text-anchor="middle">run by the harness</text>
+<path d="M300 460 H350 V660 H400" fill="none" stroke="#2563eb" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#aa)"/>
+<text x="366" y="560" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="600" fill="#2563eb" text-anchor="start">final answer</text>
+<line x1="660" y1="660" x2="760" y2="660" stroke="#8b8b94" stroke-width="3.5" marker-end="url(#ah)"/>
+<rect x="760" y="600" width="220" height="120" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<text x="870" y="672" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="700" fill="#09090b" text-anchor="middle">Tests pass?</text>
+<line x1="980" y1="660" x2="1080" y2="660" stroke="#2563eb" stroke-width="3.5" marker-end="url(#aa)"/>
+<text x="1030" y="642" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="600" fill="#2563eb" text-anchor="middle">yes</text>
+<rect x="1080" y="600" width="320" height="120" rx="16" fill="#2563eb" stroke="#2563eb" stroke-width="2"/>
+<text x="1240" y="672" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="700" fill="#ffffff" text-anchor="middle">Verified result</text>
+<path d="M870 720 V800 H180 V490" fill="none" stroke="#8b8b94" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 8" marker-end="url(#ah)"/>
+<text x="520" y="786" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#52525b" text-anchor="middle">no: send the test report back (up to 3 tries)</text>
+<text x="800" y="860" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="400" fill="#52525b" text-anchor="middle">Stops after 12 steps, whatever the model wants.</text></svg>

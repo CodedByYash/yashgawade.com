@@ -5,6 +5,7 @@ import { CodeTabs } from "@/components/blog/code-tabs";
 import { Callout, Compare, Details, Figure, Flow, RepoCard, Terminal } from "@/components/blog/parts";
 import { Prompt } from "@/components/blog/prompt";
 import { PromptAnatomy } from "@/components/blog/prompt-anatomy";
+import { TraceLog } from "@/components/blog/trace-log";
 
 /** The "#" that appears beside a heading so a section can be linked to. */
 function Anchor({ id }: { id?: string }) {
@@ -80,6 +81,7 @@ const components: MDXComponents = {
   Callout,
   Prompt,
   PromptAnatomy,
+  TraceLog,
   Compare,
   CodeTabs,
   Terminal,
