@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="t d"><title id="t">Guessing versus investigating</title><desc id="d">On the left, an LLM alone answers from training data, which may be right but cannot be checked. On the right, an LLM with REA's tools inspects the real target, traces evidence and returns findings with stated limits.</desc><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#8b8b94" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs><text x="800" y="70" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="38" font-weight="700" fill="#09090b" text-anchor="middle">Guessing how it works vs investigating how it works</text>
+<rect x="60" y="130" width="680" height="640" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<text x="400" y="196" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="800" fill="#09090b" text-anchor="middle">LLM alone</text>
+<text x="400" y="236" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="400" fill="#52525b" text-anchor="middle">no access to the target</text>
+<rect x="130" y="290" width="540" height="90" rx="16" fill="#f4f4f5" stroke="#d4d4d8" stroke-width="2"/>
+<text x="400" y="345" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#09090b" text-anchor="middle">"How does the search feature work?"</text>
+<line x1="400" y1="380" x2="400" y2="450" stroke="#8b8b94" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="130" y="450" width="540" height="90" rx="16" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+<text x="400" y="505" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#b45309" text-anchor="middle">Plausible answer from training data</text>
+<line x1="400" y1="540" x2="400" y2="610" stroke="#8b8b94" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="130" y="610" width="540" height="100" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2" stroke-dasharray="8 8"/>
+<text x="400" y="655" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#09090b" text-anchor="middle">Might be right.</text>
+<text x="400" y="690" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="400" fill="#52525b" text-anchor="middle">Nothing shows whether it is.</text>
+<rect x="860" y="130" width="680" height="640" rx="16" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+<text x="1200" y="196" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="800" fill="#2563eb" text-anchor="middle">LLM + tools (REA)</text>
+<text x="1200" y="236" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="25" font-weight="400" fill="#52525b" text-anchor="middle">can inspect the real target</text>
+<rect x="930" y="290" width="540" height="90" rx="16" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+<text x="1200" y="345" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="25" font-weight="400" fill="#09090b" text-anchor="middle">"How does the search feature work?"</text>
+<line x1="1200" y1="380" x2="1200" y2="450" stroke="#2563eb" stroke-width="3.5" marker-end="url(#aa)"/>
+<rect x="930" y="450" width="540" height="90" rx="16" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+<text x="1200" y="495" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#2563eb" text-anchor="middle">Inspect, trace, collect evidence</text>
+<text x="1200" y="525" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" font-weight="400" fill="#52525b" text-anchor="middle">modules · calls · requests</text>
+<line x1="1200" y1="540" x2="1200" y2="610" stroke="#2563eb" stroke-width="3.5" marker-end="url(#aa)"/>
+<rect x="930" y="610" width="540" height="100" rx="16" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+<text x="1200" y="655" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="600" fill="#09090b" text-anchor="middle">Findings with evidence</text>
+<text x="1200" y="690" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="400" fill="#52525b" text-anchor="middle">and stated limits</text>
+<text x="800" y="848" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="27" font-weight="400" fill="#52525b" text-anchor="middle">The difference is not a smarter model. It is a model with tools and evidence.</text></svg>

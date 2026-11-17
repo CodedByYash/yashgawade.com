@@ -1,79 +1,340 @@
 export const meta = {
-  title: "Reverse engineer anything with REA",
-  description: "How I use REA, an MCP server that gives an AI agent reverse-engineering tools, to understand software I did not write.",
-  date: "2026-11-09",
-  tags: ["Reverse engineering", "MCP", "AI"],
+  title: "Reverse engineer anything with AI: understand, explore and rebuild software using REA",
+  description:
+    "You do not always have to build from scratch. Learn what reverse engineering is, how an AI agent with the right tools can investigate an existing app, site or codebase, and how to use REA to understand it and rebuild what you learn, responsibly.",
+  date: "2026-12-02",
+  tags: ["Reverse engineering", "MCP", "AI agents"],
   series: "From Prompts to Protocols",
   part: 5,
   draft: true,
 };
 
-<Callout type="warning" title="Draft outline">
-  Structure built from the REA README. Your own experience, examples and opinions still go in the [brackets].
+Imagine you are using an app and find a feature you really like. Maybe it is a search box that suggests results as you type, a clipboard that keeps its formatting when you paste, or an animation that feels better than anything you have built.
+
+You want to know how it works. You open the source code, except there is none. The app is compiled, the site is minified, or the project is ten years old and the person who wrote it left long ago. All you have is the running thing.
+
+Developers have always dealt with this, and the work is called **reverse engineering**. It used to take specialist tools and a lot of patience. AI agents are changing that. The idea of this post in one line:
+
+**You do not always have to build something from scratch. You can use an AI agent to understand how an existing product, website or codebase works, and then recreate, adapt or improve what you learn.**
+
+This is the last post in the series. It starts from zero, so you do not need to have read the others, though the [MCP post](/blogs/mcp-model-context-protocol) and the [harness post](/blogs/ai-harness-engineering) explain the machinery that makes this possible. We will cover what reverse engineering is, why it matters in everyday development, how an agent changes the workflow, and how to try it yourself with [REA](https://github.com/morluto/rea), an open-source MCP server for reverse engineering.
+
+<Callout type="note" title="About the examples">
+  REA is a young, fast-moving project, so check its [repository](https://github.com/morluto/rea) and [documentation](https://rea.tools/) before installing anything. The real-world walkthrough later is based on REA's own published case study, and I mark where I simplify. Where I show prompts or workflows of my own, they are templates for you to adapt, not transcripts.
 </Callout>
 
-## What REA is
+## What is reverse engineering?
+
+**Reverse engineering is studying an existing product or system to understand how it works inside.**
+
+Normal development goes forward. You start with requirements, design a system, write code and end with a working application. Reverse engineering runs the other way. You start with the finished thing, study its behaviour and structure, and use the evidence to work out how it was built.
+
+| Forward engineering | Reverse engineering |
+| --- | --- |
+| Starts with requirements | Starts with an existing system |
+| Designs the architecture | Investigates the architecture |
+| Writes the implementation | Studies the implementation |
+| Produces a working product | Produces understanding, or a reconstruction |
+
+Short version: forward engineering asks "how do I build this?", and reverse engineering asks "how was this built, and how does it work?"
+
+Take the suggestion box on a shopping site. From the outside you only see the output. To learn how it works you need to ask questions the screen will not answer. Does it call a backend on every keystroke or wait until you pause? Where do the suggestions come from? What happens when there are no results, or the request fails? Reverse engineering is the way you move from watching the output to investigating the implementation.
+
+### It is not only about code
+
+The evidence you can study comes in layers, and which layer you need depends on the system.
+
+1. **Visual behaviour:** what appears on screen and how people interact with it.
+2. **Application structure:** components, modules, dependencies and how they connect.
+3. **Network behaviour:** requests, responses, endpoints and the data exchanged.
+4. **Runtime behaviour:** what happens while the program runs.
+5. **Binary structure:** machine instructions, symbols, strings and references.
+6. **File formats:** how data and resources are organised inside a file.
+
+## Why developers need it
+
+This is not only for security researchers. It shows up in ordinary work.
+
+- **Learning from existing products.** You like a competitor's filtering experience. Study how it handles several filters, loading states and errors, then design your own version.
+- **Understanding legacy applications.** Documentation is thin and the original authors are gone. Investigate before you change anything.
+- **Working without source code.** All you have is an installed app, an executable or an APK. Depending on the format, analysis can still reveal a lot about structure and behaviour.
+- **Debugging unfamiliar systems.** When something misbehaves, function calls, network activity and dependencies give you evidence the interface cannot.
+- **Rebuilding functionality.** Understand the original behaviour first, then design an implementation that fits your needs.
+
+On that last point, the goal is to **learn from a system and build your own version**, not to copy proprietary code or assets. We come back to this in the responsible-use section.
+
+## How AI changes the workflow
+
+Traditional reverse engineering is powerful but slow. You identify the target, find suitable tools, inspect files, extract information, trace the relevant behaviour, interpret what you found and then test your conclusions. Every step needs specialist knowledge.
+
+Now picture an AI agent with tools that can perform those steps. Instead of running each one yourself, you describe what you want to understand:
+
+> Understand how the search feature works in this application. Trace the relevant implementation, identify how it communicates with the backend, explain the important functions, and show me the evidence behind your conclusions.
+
+The agent reads the request, picks tools, inspects the target, looks at the results and asks follow-up questions. Your role shifts from collecting low-level details to asking good questions, judging the evidence and deciding what to build.
+
+### Can an LLM reverse engineer something by itself?
+
+Not reliably. A language model is good at reading and writing text, reasoning over what it has been given, and writing code. It cannot open an application it has no access to, run a program it was not given or decode a binary it has never seen. Without tools it can only *guess* how something works from its training data.
+
+<Figure
+  n={1}
+  title="Guessing vs investigating"
+  src="/blog/rea/01-guess-vs-investigate.svg"
+  srcDark="/blog/rea/01-guess-vs-investigate-dark.svg"
+  alt="Two columns. On the left, an LLM alone turns the question 'How does the search feature work?' into a plausible answer from training data, which might be right but cannot be checked. On the right, an LLM with tools inspects the real target, traces evidence and returns findings with stated limits."
+  caption="The difference is not a smarter model. It is a model with tools and evidence."
+/>
+
+That is the whole point of the next two ideas, agents and MCP, and if you have read the earlier posts you already know them.
+
+## Agents and MCP in two minutes
+
+An ordinary chat is one question and one answer. An **AI agent** takes a goal, decides what steps are needed, uses tools, looks at the results and keeps going until it finishes or needs your input. Ask one to "find out how login works in this app" and it might list the files, search for authentication code, follow the flow between components, and summarise.
+
+**MCP**, the Model Context Protocol, is the open standard that lets AI applications connect to tools and data in a consistent way: a filesystem, a database, a browser, a code analysis tool, a reverse-engineering engine. The [MCP post](/blogs/mcp-model-context-protocol) covers it in depth.
+
+| Without tools | With tools |
+| --- | --- |
+| Guesses how a feature might work | Inspects the implementation evidence |
+| Describes plausible API behaviour | Examines recorded requests or source code |
+| Suggests where a bug might be | Investigates the relevant functions and results |
+| Writes code from assumptions | Uses findings to guide and test the code |
+
+## Meet REA
+
+[REA](https://github.com/morluto/rea), short for Reverse Engineer Anything, is an open-source MCP server for reverse engineering across binaries, applications and runtime behaviour. Your agent calls it to inspect a target, and it returns findings together with the evidence behind them.
 
 <RepoCard
   repo="morluto/rea"
   description="REA (Reverse Engineer Anything): one MCP server for reverse engineering across binaries, apps and runtime behavior."
 />
 
-REA is an MCP server. An agent connects to it, inspects a target, traces the relevant code, and reports findings with the evidence behind them and the limits of what it could tell. That makes it a good real-world example of the idea from the [MCP post](/blogs/mcp-model-context-protocol). [Say why you picked it.]
+You can use it two ways:
 
-## Setting it up
+- **Through MCP,** where the agent calls REA's tools as part of an investigation.
+- **From the CLI,** where you run REA's workflows directly in a terminal.
 
-The README gives a one-command setup for supported agents (Claude Code, Codex, Cursor, Gemini CLI and others), plus a standalone CLI:
+The part that matters is how it is built to be used. Plain tools tend to dump technical output for a human to interpret. REA is designed so an agent can use the output: it returns findings, supporting evidence and relevant limitations, so the agent knows what to trust and what to check next. The agent does not need to understand the whole application in one step. It investigates the relevant part and follows the evidence.
 
-<Terminal title="Setup">
-{`
-$ npx rea-agents setup
-$ npm install --global rea-agents
-$ rea --help
-`}
-</Terminal>
+### The architecture
 
-<Callout type="note" title="Check the official source">
-  The README warns that similarly named repositories are not necessarily official. Download from the GitHub repo, rea.tools or the `rea-agents` package.
-</Callout>
-
-## What it can look at
-
-[Pick the few targets you tried, so this reads as your experience and not a feature list.] According to the README the list includes:
-
-- Native binaries, with pseudocode, assembly, symbols and references.
-- Android apps and devices.
-- JavaScript and Electron apps, .NET assemblies, and Flutter apps.
-- Websites, saved network captures and packet captures.
-- Firmware, SQLite databases, model files and more.
-
-## How an agent uses it
-
-<Flow
-  steps={["You ask a question", "Agent calls REA tools", "REA inspects the target", "Findings with evidence"]}
-  caption="Replace with the real flow you observed."
+<Figure
+  n={2}
+  title="Where REA sits"
+  src="/blog/rea/02-rea-architecture.svg"
+  srcDark="/blog/rea/02-rea-architecture-dark.svg"
+  alt="The developer states a goal to an AI agent, which calls REA over MCP. REA runs analysis providers such as Ghidra, JADX or a browser against the target. Findings, separated into observed, inferred, unknown and limits, return through REA to the agent."
+  caption="MCP is the connection. REA and its analysis providers do the investigating."
 />
 
-[Walk through one real session: the question you asked, what the agent did, what evidence it returned.]
+Walking through it:
 
-<Details summary="Full session log">
-  [Paste a trimmed real log here when you have one.]
-</Details>
+1. **Developer request.** Everything starts with a goal, such as "understand how the clipboard works in this desktop app". Clear instructions are enough. You do not need advanced prompting tricks.
+2. **AI agent.** Interprets the goal and decides what to look at: files, modules, call paths or runtime behaviour. It chooses among the tools it has been given.
+3. **REA through MCP.** The bridge between the model's reasoning and the actual analysis. The agent requests specific investigations and gets structured results.
+4. **Analysis providers.** Different targets need different techniques, so REA coordinates existing tools instead of pretending one tool understands everything. Native binaries can use Hopper, Ghidra, IDA or Kuna, Android APKs use JADX with a full JDK, and websites use a Chrome-family browser. Some static inspection, such as Go, Rust and .NET binaries or GGUF model files, needs no external engine.
+5. **Findings and evidence.** Reverse engineering is uncertain, so good investigations separate what was **directly observed**, what can be **reasonably inferred** and what is **still unknown**. A string in a binary does not prove how a feature works, and a function name does not describe everything the function does.
+6. **Implementation and validation.** With enough evidence the agent can help you build a similar feature, and then you test it against the intended behaviour.
 
-## Analysis stays local
+## What can you investigate?
 
-The README says analysis runs locally, and native analysis can use Hopper, Ghidra, IDA or Kuna, with some static analysis needing no external engine. [Say which you used and why that matters to you.]
+The name says "anything", but what you can actually do depends on the target format, your operating system, the analysis provider and the dependencies you have installed. These are the main categories from the project's documentation:
 
-## Use it responsibly
+| Target | What you can investigate |
+| --- | --- |
+| Websites | Page structure, scripts, network observations, screenshots (needs a Chrome-family browser) |
+| JavaScript and Electron apps | Modules, imports, routes, IPC, native add-on relationships, source maps |
+| Native binaries | Pseudocode, assembly, strings, symbols, calls and references, through Hopper, Ghidra, IDA or Kuna |
+| Android apps | Manifest, classes, decompiled methods and references (JADX and a full JDK), plus device inspection through ADB |
+| .NET assemblies | Metadata, CIL instructions, declared native dependencies, build comparisons, inspected without running them |
+| Network captures | Requests, responses, repeated values, payloads, from saved HAR files and similar captures |
+| Firmware and other formats | Regions and extracted content, SQLite databases, WASM, Godot PCK files |
+| Model files | Metadata and tensor declarations in GGUF or safetensors files |
 
-<Callout type="warning">
-  Only analyse software you own or are allowed to examine, and respect licences. The README also says commercial tools such as IDA Pro or Hopper must be obtained legally. [Add your own rule of thumb.]
+The takeaway is breadth: REA spans several layers of software, not one language or app type. But not every target works the same way, and some need extra tools installed. Check the guide for your target before assuming a capability is available.
+
+## A real example: how does Notion copy to the clipboard?
+
+Theory only goes so far, so let us follow a documented case. REA's own [Notion showcase](https://rea.tools/showcase/notion/) investigates one question: **how does the Notion desktop app write text and HTML to the system clipboard?**
+
+Notion's desktop app is an Electron app, and the Electron structure matters here. The *renderer* draws the interface, the *main process* handles application-level work, and a *preload script* exposes selected functions from the main side to the page. Messages travel between them over *IPC*, inter-process communication.
+
+Here is what the case study reports, in plain terms:
+
+1. The author pointed REA's JavaScript analysis at the app's preload code, and REA located the exposed clipboard API and the place where it makes its call.
+2. The page calls `clipboard.write`, exposed to it through `window.__electronApi.clipboard`.
+3. In the preload code, that method is built by a helper that calls `ipcRenderer.invoke` on an IPC channel named `notion:clipboard:write`.
+4. In the main process, a wrapper registers that channel with `ipcMain.handle`. The handler checks that the request comes from a Notion window, then calls Electron's own `clipboard.write`.
+5. Copied HTML carries an ID in a comment, and Notion keeps the richer block data locally under that ID. On paste, a matching ID restores the block structure, while a stale or missing one falls back to text and HTML.
+
+<Flow
+  steps={["Page calls clipboard.write", "Preload: ipcRenderer.invoke", "IPC channel notion:clipboard:write", "Main process: ipcMain.handle", "Electron clipboard.write"]}
+  caption="The path the case study traces, simplified. The real code is minified; names here are the expanded ones the article uses."
+/>
+
+The case study is also honest about its limits, and those limits are the best lesson in how to work this way. REA found the exposed API and the call site, but **linking that call to the main-process receiver came from reading the wrapper functions by hand**, not from a single REA result. The clipboard-format example is marked illustrative, and some examples came from cached web assets that may differ from the desktop build. The code excerpts are simplified, with minified names expanded.
+
+That mix is realistic. The tool finds and organises evidence, and a human (or an agent a human is supervising) still follows the trail and decides what is established and what is not.
+
+## The investigation loop
+
+Generalise that example and you get a workflow you can reuse on almost any target.
+
+<Figure
+  n={3}
+  title="Investigate, understand, recreate, validate"
+  src="/blog/rea/03-investigate-loop.svg"
+  srcDark="/blog/rea/03-investigate-loop-dark.svg"
+  alt="Four steps in a row: investigate the target with REA, understand the evidence, recreate the behavior in your own code, validate with tests. If validation shows a mismatch, return to investigation. A note says you stay in charge of the questions, the legal scope and the final call."
+  caption="Generated code is not the finish line. Tests are."
+/>
+
+**1. Investigate.** Define the objective before touching any tool. A specific question gets a more useful investigation. "How does the renderer talk to the main process, and which formats does the clipboard handle?" beats "analyse this app".
+
+**2. Understand.** Ask the agent to explain what each important module does, how data is structured, how errors are handled and, critically, **what is still uncertain**. This turns technical findings into an explanation you can check.
+
+**3. Recreate.** Ask for an implementation in your own project, based on verified behaviour. For example:
+
+> Based on the verified behavior you found, implement a rich-text clipboard feature in my React and Node.js application. Preserve the existing architecture, explain which files you plan to modify, and write tests for copying and pasting supported content. Do not reuse proprietary source code or assets from the original application.
+
+**4. Validate.** Test the result. Is plain text copied correctly? Is rich formatting preserved? Are unsupported formats handled safely? What about an empty selection or an error? If something fails, go back and investigate the gap instead of assuming the first version is right. This is the same lesson as the [harness post](/blogs/ai-harness-engineering): never accept "done" without an independent check.
+
+## Getting started with REA
+
+REA works with agents that support local MCP servers, including Claude Code, Codex, Cursor, Gemini CLI and Grok Build. Setup details change as the project evolves, so treat what follows as a snapshot and check the official documentation.
+
+**1. Check the prerequisites.** The project's installation docs require Node.js 22.x (22.23.4 or later), 24.x (24.22.1 or later) or 26.12.1 and above, plus npm, and a compatible agent. Some features need more: native binary analysis needs a provider such as Ghidra, Hopper, IDA or Kuna, and Android APK analysis needs JADX and a full JDK. You do not need every provider just to start exploring.
+
+**2. Run setup.**
+
+<Terminal title="Set up REA for your agent">
+{`$ npx rea-agents setup`}
+</Terminal>
+
+You choose which agents to configure and review the proposed changes. Setup registers the REA MCP server and installs matching workflow instructions, and backs up existing configuration first. Read what it wants to change before you approve it.
+
+**3. Restart your agent** so it loads the new MCP configuration and instructions.
+
+**4. Start with a small investigation** on something you are allowed to examine:
+
+```text
+Understand how search works in the app at <path or URL>.
+Identify the relevant modules, trace how the feature is implemented,
+and explain the behavior. Show me the evidence behind your findings,
+and say what you could not confirm.
+```
+
+**5. Use the CLI when you want direct control.** For example, to inspect an extracted JavaScript or Electron app directory:
+
+<Terminal title="Inspect a JavaScript or Electron app">
+{`$ npx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json`}
+</Terminal>
+
+You can also install the CLI globally and explore what it offers:
+
+<Terminal title="Install the CLI">
+{`$ npm install --global rea-agents
+$ rea --help`}
+</Terminal>
+
+The CLI and the MCP server expose the same general workflows. They differ in how you drive them.
+
+<Callout type="warning" title="Get it from the right place">
+  The project says to install only from the official repository, rea.tools or the `rea-agents` npm package, since similar names and copied READMEs do not make a download official. Run setup and analysis commands only from sources you trust.
 </Callout>
 
-## Where it falls short
+## Writing better instructions for an agent
 
-[Honest limits from your own use: what it missed, what needed a human.]
+You do not need to be a prompt-engineering expert, but the quality of your request decides the quality of the investigation. Compare these two.
 
-## Takeaways
+<Compare
+  beforeLabel="Vague"
+  before="Analyze this app."
+  afterLabel="Specific"
+  after="Investigate how authentication works in this application. Identify the relevant modules, trace the login flow, explain how credentials are handled, and show the evidence behind your findings. Do not modify any files."
+/>
 
-[Three lessons, and a pointer to the harness post for how agents use tools like this.]
+The second one gives the agent an objective, a scope, an expected output and a constraint. A simple five-part frame covers it:
+
+<PromptAnatomy
+  title="A request frame for investigations"
+  parts={[
+    { label: "Goal", text: "Understand how the authentication system works." },
+    { label: "Target", text: "My local desktop application, installed at <path>." },
+    { label: "Scope", text: "The login and logout flow only." },
+    { label: "Evidence", text: "Name the relevant files, functions and the communication between components." },
+    { label: "Constraints", text: "Do not modify files or expose credentials. Clearly separate confirmed findings from assumptions." },
+  ]}
+/>
+
+If you want more on this, [part one of the prompt guide](/blogs/prompt-engineering-fundamentals) covers the fundamentals, and the [advanced part](/blogs/prompt-engineering-advanced) covers how to structure tasks like this one.
+
+## What REA does not do
+
+The name describes an ambition, not a guarantee. Knowing the limits keeps you honest.
+
+- **It does not recover original source code.** Compiled programs do not contain it. Decompilers produce pseudocode or other representations that help you understand the program, but variable names, comments, formatting and high-level structure may be missing.
+- **It does not guarantee full understanding.** Some behaviour depends on services you cannot reach, encrypted data, runtime conditions or unsupported formats. A good investigation says what remains unknown.
+- **It does not remove the need for testing.** An agent can write code from its findings that is wrong, or that misunderstands the original behaviour.
+- **It does not support every target equally.** Some workflows need external tools, particular operating systems or extra dependencies.
+- **It does not replace your judgment.** The agent helps collect and interpret evidence. You decide whether the conclusions are right and whether the proposed implementation is appropriate.
+
+## Security, privacy and responsible use
+
+Reverse engineering is powerful, so use it carefully.
+
+- Analyse software you own, have permission to inspect, or are legally authorised to investigate. The project itself describes its intended use as lawful research, education, interoperability, software preservation and analysis of software you are authorised to examine.
+- Do not try to reach private systems or data without authorisation.
+- Keep API keys, credentials, tokens and personal information away from the model.
+- Use isolated environments for untrusted files and binaries, in the same spirit as the sandboxing section of the [harness post](/blogs/ai-harness-engineering#execution-environments-and-sandboxing).
+- Understand what a runtime capture does before you allow it. According to the docs, it runs or interacts with the target using your user permissions.
+- Avoid modifying original applications or production systems during an investigation.
+- Respect licences, intellectual property and applicable law. Commercial tools such as IDA Pro and Hopper must be obtained legally, and REA grants no licence for them.
+
+One detail is easy to miss. REA's analysis runs **locally**, but your agent still receives the tool results, and the model provider has its own data-handling policy. Local analysis does not automatically mean everything stays private from the provider.
+
+<Callout type="warning" title="Learn from it, do not copy it">
+  Use reverse engineering to understand systems, improve compatibility, learn, debug and build better software. Do not use it to compromise systems or to lift someone else's code and assets. Understanding how something behaves and writing your own implementation is different from copying it.
+</Callout>
+
+## Where this is heading
+
+AI-assisted reverse engineering sits at the meeting point of language models, agents, MCP, static and dynamic analysis, program comprehension and automated testing. A few uses look likely to grow, and I say "likely" on purpose, because this field is young.
+
+- **Faster onboarding** into unfamiliar codebases: an agent that finds the important modules, traces a feature and explains how the system is organised.
+- **Recovering missing documentation** from code and runtime evidence.
+- **Combining analysis tools** so you do not run every step by hand.
+- **Building realistic test environments.** REA documents a workflow that builds an environment from a recorded session, such as a HAR file, which can be used to test whether agents complete tasks.
+- **Everyday developer tooling,** where agent-assisted investigation sits next to the debugger.
+
+The broader shift is that agents are moving beyond generating code toward investigating the systems that code has to live in.
+
+## Key takeaways
+
+- Reverse engineering means studying an existing system to understand it. It helps with learning, legacy code, debugging and rebuilding behaviour.
+- An LLM alone **guesses**. An agent with tools **investigates**. MCP is the connection, and REA provides the specialised capability.
+- Good investigations separate what was **observed**, what was **inferred** and what is **unknown**.
+- Specific requests beat vague ones: goal, target, scope, evidence, constraints.
+- Decompiling is not recovering the original source, and generated code still needs tests.
+- Stay in charge. You own the questions, the legal scope and the final call.
+
+That brings us to the end of the series, and the thread through all five posts is one idea: **do not limit AI to producing answers.** Learn to give it the context, the tools and the environment it needs to solve real problems. The way to put it into practice is to give the agent the tools to investigate, the evidence to reason from, and the tests to check its conclusions.
+
+## The whole series
+
+1. [Prompt engineering, part 1: fundamentals](/blogs/prompt-engineering-fundamentals): say clearly what you want.
+2. [Prompt engineering, part 2: going further](/blogs/prompt-engineering-advanced): structure, context and evaluation.
+3. [Model Context Protocol](/blogs/mcp-model-context-protocol): connect models to tools and data.
+4. [AI harness engineering](/blogs/ai-harness-engineering): build the systems that make agents reliable.
+5. Reverse engineer anything (this post): use agents and tools to understand existing systems.
+
+## Further reading
+
+- [REA on GitHub](https://github.com/morluto/rea)
+- [REA documentation](https://rea.tools/)
+- [REA showcase: Notion's Electron clipboard bridge](https://rea.tools/showcase/notion/)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [Ghidra](https://ghidra-sre.org/), [JADX](https://github.com/skylot/jadx), [Hopper](https://www.hopperapp.com/) and [IDA](https://hex-rays.com/ida-pro/), the analysis tools REA can work with
+
+Tools and their supported capabilities change, so check their own documentation for current requirements and limits.

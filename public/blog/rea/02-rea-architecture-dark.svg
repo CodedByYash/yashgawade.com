@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-labelledby="t d"><title id="t">Where REA sits</title><desc id="d">The developer states a goal for the AI agent, which calls REA over MCP. REA runs analysis providers such as Ghidra, JADX or a browser against the target. Findings, separated into observed, inferred, unknown and limits, return through REA to the agent.</desc><defs>
+<marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#71717a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<marker id="aa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#7aa2ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs><text x="800" y="60" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="700" fill="#fafafa" text-anchor="middle">Where REA sits</text>
+<rect x="30" y="150" width="240" height="150" rx="20" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="150" y="215" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="800" fill="#fafafa" text-anchor="middle">Developer</text>
+<text x="150" y="257" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">states the goal</text>
+<rect x="350" y="150" width="240" height="150" rx="20" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="470" y="215" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="800" fill="#fafafa" text-anchor="middle">AI agent</text>
+<text x="470" y="257" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">plans, calls tools</text>
+<rect x="670" y="150" width="260" height="150" rx="20" fill="#1e2a4a" stroke="#7aa2ff" stroke-width="3.5"/>
+<text x="800" y="215" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="800" fill="#7aa2ff" text-anchor="middle">REA</text>
+<text x="800" y="257" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">MCP server</text>
+<rect x="1050" y="150" width="230" height="150" rx="20" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="1165" y="215" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="800" fill="#fafafa" text-anchor="middle">Providers</text>
+<text x="1165" y="257" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">analysis tools</text>
+<rect x="1360" y="150" width="210" height="150" rx="20" fill="#18181b" stroke="#3f3f46" stroke-width="2"/>
+<text x="1465" y="215" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="800" fill="#fafafa" text-anchor="middle">Target</text>
+<text x="1465" y="257" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="400" fill="#a1a1aa" text-anchor="middle">app · site · binary</text>
+<line x1="274" y1="225" x2="346" y2="225" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<line x1="594" y1="225" x2="666" y2="225" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<line x1="934" y1="225" x2="1046" y2="225" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<line x1="1284" y1="225" x2="1356" y2="225" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<text x="310" y="195" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="400" fill="#a1a1aa" text-anchor="middle">asks</text>
+<text x="630" y="195" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="600" fill="#7aa2ff" text-anchor="middle">MCP</text>
+<text x="990" y="195" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="400" fill="#a1a1aa" text-anchor="middle">runs</text>
+<text x="1320" y="195" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="400" fill="#a1a1aa" text-anchor="middle">opens</text>
+<rect x="1000" y="370" width="400" height="290" rx="18" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+<text x="1030" y="412" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="23" font-weight="700" fill="#fafafa" text-anchor="start">Chosen per target</text>
+<text x="1030" y="458" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" font-weight="400" fill="#fafafa" text-anchor="start">Ghidra · Hopper · IDA · Kuna</text>
+<text x="1030" y="498" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" font-weight="400" fill="#fafafa" text-anchor="start">JADX + JDK (Android)</text>
+<text x="1030" y="538" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" font-weight="400" fill="#fafafa" text-anchor="start">Chrome-family browser</text>
+<text x="1030" y="578" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" font-weight="400" fill="#fafafa" text-anchor="start">JS / Electron analysis</text>
+<text x="1030" y="618" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" font-weight="400" fill="#fafafa" text-anchor="start">HAR · SAZ captures</text>
+<line x1="1165" y1="300" x2="1165" y2="370" stroke="#71717a" stroke-width="2.5" stroke-dasharray="6 6"/>
+<rect x="330" y="370" width="560" height="290" rx="20" fill="#18181b" stroke="#7aa2ff" stroke-width="3"/>
+<text x="610" y="422" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="800" fill="#7aa2ff" text-anchor="middle">Findings returned by REA</text>
+<text x="370" y="478" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="23" font-weight="700" fill="#fafafa" text-anchor="start">observed</text>
+<text x="540" y="478" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="400" fill="#a1a1aa" text-anchor="start">what the tools directly saw</text>
+<text x="370" y="518" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="23" font-weight="700" fill="#fafafa" text-anchor="start">inferred</text>
+<text x="540" y="518" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="400" fill="#a1a1aa" text-anchor="start">what the evidence suggests</text>
+<text x="370" y="558" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="23" font-weight="700" fill="#fafafa" text-anchor="start">unknown</text>
+<text x="540" y="558" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="400" fill="#a1a1aa" text-anchor="start">what is still open</text>
+<text x="370" y="598" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="23" font-weight="700" fill="#fafafa" text-anchor="start">limits</text>
+<text x="540" y="598" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="400" fill="#a1a1aa" text-anchor="start">what the tools could not do</text>
+<line x1="1000" y1="515" x2="894" y2="515" stroke="#71717a" stroke-width="3.5" marker-end="url(#ah)"/>
+<text x="947" y="497" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="400" fill="#a1a1aa" text-anchor="middle">evidence</text>
+<line x1="800" y1="370" x2="800" y2="304" stroke="#7aa2ff" stroke-width="3.5" marker-end="url(#aa)"/>
+<text x="815" y="345" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="400" fill="#a1a1aa" text-anchor="start">to the agent</text>
+<text x="800" y="780" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#a1a1aa" text-anchor="middle">REA does not decide what is true. It returns evidence the agent and you can check.</text></svg>
