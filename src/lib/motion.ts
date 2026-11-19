@@ -8,4 +8,6 @@ export const duration = {
   base: 0.22,
   /** Things entering the page. */
   slow: 0.4,
+  /** Sections folding open and shut. */
+  collapse: 0.55,
 } as const;

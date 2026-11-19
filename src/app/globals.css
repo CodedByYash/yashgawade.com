@@ -135,6 +135,8 @@ body {
     var(--hatch) 6.07px,
     var(--hatch) 7.07px
   );
+  /* 10px tile = exactly two stripe periods, so it can loop without a seam. */
+  background-size: 10px 10px;
 }
 
 /* Keyboard focus ring that matches the dashed language of the design */
@@ -180,7 +182,8 @@ body {
 @keyframes reveal-up {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
+    filter: blur(4px);
   }
 }
 
@@ -316,7 +319,7 @@ body {
   }
 
   [data-reveal="fade"].in {
-    animation: reveal-up 600ms var(--ease-out) backwards;
+    animation: reveal-up 900ms var(--ease-out) backwards;
   }
   [data-reveal="children"].in > * {
     animation: reveal-up 560ms var(--ease-out) backwards;
@@ -494,5 +497,449 @@ figure[data-rehype-pretty-code-figure] code[data-line-numbers] > [data-line]::be
 @media (prefers-color-scheme: dark) {
   :root:not(.light) [data-rehype-pretty-code-figure] span[style*="--shiki-dark"] {
     color: var(--shiki-dark) !important;
+  }
+}
+
+
+/* ------------------------------------------------------------------ */
+/* Animation pack 3                                                    */
+/* One easing, slower hovers, staggered reveals, shine, living rails.  */
+/* ------------------------------------------------------------------ */
+
+/* Every `transition-*` utility without its own duration is now a calm 300ms. */
+@theme {
+  --default-transition-duration: 300ms;
+  --default-transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@property --ang {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+:root {
+  --shine: light-dark(rgb(255 255 255 / 0.95), rgb(255 255 255 / 0.32));
+  --ring: light-dark(#09090b, #ffffff);
+  --pulse: light-dark(rgb(9 9 11 / 0.45), rgb(255 255 255 / 0.7));
+}
+
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--fx, 0px), var(--fy, 0px), 0);
+    filter: blur(var(--fb, 6px));
+    scale: var(--fs, 1);
+  }
+}
+
+@keyframes letter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em) rotate(4deg);
+    filter: blur(6px);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-18deg);
+    filter: blur(6px);
+  }
+}
+
+@keyframes nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    filter: blur(4px);
+  }
+}
+
+@keyframes name-wipe {
+  from {
+    clip-path: inset(-10% 100% -10% 0);
+    filter: blur(10px);
+    opacity: 0.2;
+  }
+  to {
+    clip-path: inset(-10% -4% -10% 0);
+  }
+}
+
+@keyframes name-scan {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes shine-pass {
+  0%,
+  58% {
+    transform: translateX(-130%);
+  }
+  82%,
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+@keyframes ring-spin {
+  to {
+    --ang: 360deg;
+  }
+}
+
+@keyframes rail-run {
+  0% {
+    top: -220px;
+  }
+  62%,
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes rail-run-up {
+  0% {
+    bottom: -220px;
+  }
+  62%,
+  100% {
+    bottom: 100%;
+  }
+}
+
+@keyframes line-sweep {
+  from {
+    background-position: -420px 0;
+  }
+  to {
+    background-position: 100vw 0;
+  }
+}
+
+@keyframes hatch-crawl {
+  to {
+    background-position: 10px 0;
+  }
+}
+
+@keyframes progress-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes tag-in {
+  from {
+    opacity: 0;
+    transform: translateX(-14px) scale(0.96);
+    filter: blur(8px);
+  }
+}
+
+@keyframes tag-out {
+  to {
+    opacity: 0;
+    transform: translateX(8px) scale(0.96);
+    filter: blur(6px);
+  }
+}
+
+/* The typing caret: zero width, so it never moves the text. */
+.type-caret {
+  position: relative;
+  display: inline-block;
+  width: 0;
+  vertical-align: baseline;
+}
+.type-caret::after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 0.2em;
+  width: 2px;
+  height: 0.95em;
+  background: currentColor;
+  border-radius: 1px;
+  transition: opacity 500ms var(--ease-out);
+}
+.type-caret[data-gone="true"]::after {
+  opacity: 0;
+}
+
+/* Header scroll progress */
+.scroll-progress {
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ── Staggered reveals ──────────────────────────────────────────── */
+  [data-reveal="stagger"] {
+    --step: 100ms;
+    --dur: 800ms;
+  }
+  [data-reveal="stagger"][data-speed="slow"] {
+    --step: 90ms;
+    --dur: 1200ms;
+  }
+  [data-reveal="stagger"][data-speed="fast"] {
+    --step: 60ms;
+    --dur: 700ms;
+  }
+  [data-reveal="stagger"][data-dir="up"] {
+    --fy: 14px;
+  }
+  [data-reveal="stagger"][data-dir="down"] {
+    --fy: -14px;
+  }
+  [data-reveal="stagger"][data-dir="right"] {
+    --fx: -20px;
+  }
+  [data-reveal="stagger"][data-dir="left"] {
+    --fx: 20px;
+  }
+  [data-reveal="stagger"][data-dir="blur-right"] {
+    --fx: -12px;
+    --fb: 9px;
+    --fs: 0.96;
+  }
+  [data-reveal="stagger"][data-dir="soft"] {
+    --fy: 14px;
+    --fb: 8px;
+    --fs: 0.94;
+  }
+  .js [data-reveal="stagger"]:not(.in) > * {
+    opacity: 0;
+  }
+  [data-reveal="stagger"].in > * {
+    animation: stagger-in var(--dur) var(--ease-out) backwards;
+    animation-delay: calc((var(--o, 0) + var(--i, 0)) * var(--step));
+  }
+
+  /* Tags that appear when "+N more" is pressed. */
+  [data-reveal="stagger"].in > .tag-extra {
+    animation: tag-in 750ms var(--ease-out) backwards;
+    animation-delay: calc(var(--j, 0) * 70ms);
+  }
+  [data-reveal="stagger"].in > .tag-extra[data-closing="true"] {
+    animation: tag-out 280ms var(--ease-out) forwards;
+    animation-delay: 0ms;
+  }
+
+  /* ── Titles: letters rise and sharpen ───────────────────────────── */
+  .js [data-reveal="title"]:not(.in) .title-letter {
+    opacity: 0;
+  }
+  [data-reveal="title"].in .title-letter {
+    animation: letter-rise 800ms var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * 38ms);
+  }
+  .js [data-reveal="title"]:not(.in) .title-letter {
+    animation: reveal-failsafe 1ms 3s forwards;
+  }
+  .title-word {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .title-letter {
+    display: inline-block;
+  }
+
+  /* ── Pop (icons) ────────────────────────────────────────────────── */
+  .js [data-reveal="pop"]:not(.in) {
+    opacity: 0;
+  }
+  [data-reveal="pop"].in {
+    animation: pop-in 900ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    animation-delay: var(--pop-d, 0ms);
+  }
+
+  /* ── Heading line: a light sweeps along the bottom border ───────── */
+  [data-reveal="sweep"] {
+    position: relative;
+  }
+  [data-reveal="sweep"]::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 -1px 0;
+    height: 1px;
+    pointer-events: none;
+    background-image: linear-gradient(90deg, transparent, var(--pulse) 50%, transparent);
+    background-size: 420px 1px;
+    background-repeat: no-repeat;
+    background-position: -420px 0;
+  }
+  [data-reveal="sweep"].in::after {
+    animation: line-sweep 1500ms cubic-bezier(0.45, 0, 0.2, 1) 200ms;
+  }
+
+  /* ── Navbar ─────────────────────────────────────────────────────── */
+  .nav-in {
+    animation: nav-in 800ms var(--ease-out) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+  @supports (animation-timeline: scroll()) {
+    .scroll-progress {
+      animation: progress-grow linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+
+  /* ── Name ───────────────────────────────────────────────────────── */
+  .name-reveal {
+    animation: name-wipe 1400ms cubic-bezier(0.65, 0, 0.2, 1) 150ms backwards;
+  }
+  .name-scan {
+    position: relative;
+  }
+  .name-scan::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    left: 0;
+    width: 2px;
+    border-radius: 2px;
+    pointer-events: none;
+    background: linear-gradient(transparent, var(--ring), transparent);
+    box-shadow: 0 0 14px 2px var(--pulse);
+    animation: name-scan 1400ms cubic-bezier(0.65, 0, 0.2, 1) 150ms backwards;
+    opacity: 0;
+  }
+  .badge-pop {
+    animation: pop-in 900ms cubic-bezier(0.34, 1.56, 0.64, 1) 1.3s backwards;
+  }
+
+  /* ── Typing caret ───────────────────────────────────────────────── */
+  .type-caret:not([data-gone="true"])::after {
+    animation: caret-blink 900ms steps(1) infinite;
+  }
+  .type-caret[data-typing="true"]::after {
+    animation: none;
+  }
+
+  /* ── Shine: a glint crosses a box every few seconds ─────────────── */
+  .shine {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .shine::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image: linear-gradient(105deg, transparent 25%, var(--shine) 50%, transparent 75%);
+    transform: translateX(-130%);
+    animation: shine-pass 5.2s var(--ease-out) infinite;
+    animation-delay: calc(var(--s, 0) * 0.7s + 1.2s);
+  }
+  li:nth-child(2) > .shine,
+  li:nth-child(2) .shine {
+    --s: 1;
+  }
+  li:nth-child(3) > .shine,
+  li:nth-child(3) .shine {
+    --s: 2;
+  }
+  li:nth-child(4) .shine {
+    --s: 3;
+  }
+  li:nth-child(5) .shine {
+    --s: 4;
+  }
+
+  /* ── Ring: a bright arc travels round the border ────────────────── */
+  .ring {
+    position: relative;
+  }
+  .ring::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: conic-gradient(from var(--ang), transparent 0 72%, var(--ring) 90%, transparent 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    animation: ring-spin 4.5s linear infinite;
+    animation-delay: calc(var(--s, 0) * -1.1s);
+  }
+
+  /* ── Hatch dividers crawl slowly (after their one-off wipe-in) ──── */
+  .hatch {
+    animation: hatch-crawl 3.5s linear infinite;
+  }
+  .hatch[data-reveal="wipe"].in {
+    animation:
+      reveal-wipe 900ms var(--ease-out) backwards,
+      hatch-crawl 3.5s linear infinite;
+  }
+
+  /* ── The dashed rails carry a travelling light ──────────────────── */
+  .rail-pulse {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: clip;
+    pointer-events: none;
+  }
+  .rail-pulse::before,
+  .rail-pulse::after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 220px;
+    background: linear-gradient(transparent, var(--pulse) 55%, transparent);
+    box-shadow: 0 0 5px 0 var(--pulse);
+  }
+  .rail-pulse::before {
+    left: max(0px, calc(50% - 390px));
+    animation: rail-run 11s linear infinite;
+  }
+  .rail-pulse::after {
+    left: min(calc(100% - 1px), calc(50% + 389px));
+    animation: rail-run-up 11s linear 5s infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Search results: each group slides in a beat after the one above. */
+  .search-group {
+    animation: stagger-in 650ms var(--ease-out) backwards;
+    animation-delay: calc(140ms + var(--g, 0) * 70ms);
+    --fy: 10px;
+    --fb: 5px;
   }
 }

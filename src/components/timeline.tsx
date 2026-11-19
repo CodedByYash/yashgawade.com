@@ -8,7 +8,10 @@ import type { IconName } from "@/lib/icons.generated";
 export function TimelineRail({ icon, open = true }: { icon: IconName; open?: boolean }) {
   return (
     <div className="flex w-[30px] shrink-0 flex-col self-stretch" aria-hidden>
-      <span className="flex size-[30px] items-center justify-center rounded-[2px] border border-box-line bg-box">
+      <span
+        data-reveal="pop"
+        className="ring shine flex size-[30px] items-center justify-center rounded-[2px] border border-box-line bg-box"
+      >
         <Icon name={icon} size={20} className="text-icon" />
       </span>
       {/*
@@ -24,7 +27,11 @@ export function TimelineRail({ icon, open = true }: { icon: IconName; open?: boo
 /** "Internship | 01/02/2026 - 01/05/2026 | 3 Months" style meta row. */
 export function MetaRow({ items }: { items: string[] }) {
   return (
-    <p className="flex flex-col gap-0.5 text-sm font-semibold text-muted sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-x-2">
+    <p
+      data-reveal="stagger"
+      data-dir="right"
+      className="flex flex-col gap-0.5 text-sm font-semibold text-muted sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-x-2"
+    >
       {items.map((item, i) => (
         <span key={item} className="flex items-stretch gap-2">
           {i > 0 && <span aria-hidden className="hidden w-px bg-line-strong sm:block" />}
