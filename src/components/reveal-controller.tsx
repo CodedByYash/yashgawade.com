@@ -32,9 +32,10 @@ export function RevealController() {
     const watch = (el: Element) => {
       if (seen.has(el) || el.classList.contains("in")) return;
       seen.add(el);
-      if (el.getAttribute("data-reveal") === "children") {
+      const kind = el.getAttribute("data-reveal");
+      if (kind === "children" || kind === "stagger") {
         Array.from(el.children).forEach((child, i) => {
-          (child as HTMLElement).style.setProperty("--i", String(Math.min(i, 14)));
+          (child as HTMLElement).style.setProperty("--i", String(Math.min(i, kind === "stagger" ? 30 : 14)));
         });
       }
       io.observe(el);

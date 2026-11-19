@@ -149,8 +149,13 @@ function Palette({
             </Autocomplete.Empty>
 
             <Autocomplete.List className="py-2">
-              {(group: SearchGroup) => (
-                <Autocomplete.Group key={group.value} items={group.items} className="not-last:mb-1">
+              {(group: SearchGroup, index: number) => (
+                <Autocomplete.Group
+                  key={group.value}
+                  items={group.items}
+                  className="search-group not-last:mb-1"
+                  style={{ "--g": index } as React.CSSProperties}
+                >
                   <Autocomplete.GroupLabel className="px-4 pb-1.5 pt-3 font-mono text-[11px] font-medium uppercase tracking-wide text-muted select-none">
                     {group.value}
                   </Autocomplete.GroupLabel>
@@ -296,12 +301,12 @@ export default function CommandMenu({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-[70] bg-(--backdrop) backdrop-blur-[2px] transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0" />
+        <Dialog.Backdrop className="fixed inset-0 z-[70] bg-(--backdrop) backdrop-blur-[7px] transition-[opacity,backdrop-filter] duration-500 ease-(--ease-out) data-ending-style:opacity-0 data-ending-style:backdrop-blur-none data-ending-style:duration-300 data-starting-style:opacity-0 data-starting-style:backdrop-blur-none" />
         <Dialog.Viewport className="fixed inset-0 z-[71] flex items-start justify-center overflow-hidden px-4 pb-4 pt-[min(12vh,6rem)] max-sm:pt-4">
           <Dialog.Popup
             aria-label="Search"
             onKeyDown={trapTab}
-            className="relative flex max-h-[min(34rem,calc(100dvh-2rem))] w-full max-w-[640px] flex-col overflow-hidden border border-line bg-background shadow-[0_24px_80px_-12px_var(--popup-shadow)] transition-[translate,scale,opacity] duration-150 data-ending-style:-translate-y-2 data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:-translate-y-2 data-starting-style:scale-[0.98] data-starting-style:opacity-0"
+            className="relative flex max-h-[min(34rem,calc(100dvh-2rem))] w-full max-w-[640px] flex-col overflow-hidden border border-line bg-background shadow-[0_24px_80px_-12px_var(--popup-shadow)] transition-[translate,scale,opacity,filter] duration-500 ease-(--ease-out) data-ending-style:-translate-y-3 data-ending-style:scale-[0.97] data-ending-style:opacity-0 data-ending-style:blur-[4px] data-ending-style:duration-250 data-starting-style:-translate-y-4 data-starting-style:scale-[0.95] data-starting-style:opacity-0 data-starting-style:blur-[8px]"
           >
             <Palette groups={groups} onClose={close} onNavigate={navigateAfterClose} />
           </Dialog.Popup>

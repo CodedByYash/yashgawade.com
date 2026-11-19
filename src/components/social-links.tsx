@@ -2,9 +2,9 @@ import { Icon } from "@/components/icon";
 import type { SocialLink } from "@/data/profile";
 
 const box =
-  "flex size-[43px] items-center justify-center border border-dashed border-social-line bg-social-bg text-social-icon transition-colors";
+  "flex size-[43px] items-center justify-center border border-dashed border-social-line bg-social-bg text-social-icon transition-[color,translate] duration-500";
 
-const marching = "march [--march:var(--foreground)] hover:text-foreground";
+const marching = "march [--march:var(--foreground)] hover:-translate-y-0.5 hover:text-foreground";
 
 /**
  * The solid GitHub / LinkedIn / YouTube marks fill their whole box, while the
@@ -16,7 +16,7 @@ const glyphSize = (name: string) => (name.startsWith("akar-icons:") ? 20 : 24);
 /** Square dashed social buttons. Entries without a URL yet render inert. */
 export function SocialButtons({ items }: { items: SocialLink[] }) {
   return (
-    <ul className="flex flex-wrap gap-4">
+    <ul data-reveal="stagger" data-dir="right" className="flex flex-wrap gap-4">
       {items.map((item) => (
         <li key={item.label}>
           {item.href === "#" ? (
@@ -43,7 +43,7 @@ export function SocialButtons({ items }: { items: SocialLink[] }) {
 /** Compact X | GitHub | LinkedIn row used in the footer. */
 export function SocialInline({ items }: { items: SocialLink[] }) {
   return (
-    <ul className="flex items-center gap-2">
+    <ul data-reveal="stagger" data-dir="right" className="flex items-center gap-2">
       {items.map((item, i) => (
         <li key={item.label} className="flex items-center gap-2">
           {i > 0 && <span aria-hidden className="h-4 w-px bg-line-strong" />}
@@ -52,7 +52,7 @@ export function SocialInline({ items }: { items: SocialLink[] }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={item.label}
-            className="text-foreground transition-colors hover:text-nav-muted"
+            className="block text-foreground transition-[color,translate] duration-500 hover:-translate-y-0.5 hover:text-nav-muted"
           >
             <Icon name={item.icon} size={20} />
           </a>

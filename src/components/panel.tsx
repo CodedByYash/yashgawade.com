@@ -1,3 +1,4 @@
+import { Letters } from "@/components/letters";
 import { cn } from "@/lib/utils";
 
 /**
@@ -53,9 +54,9 @@ export function Divider() {
 export function SectionHeading({ id, children }: { id?: string; children: React.ReactNode }) {
   return (
     // 33px text line + 1px above + the band's bottom line = the design's 35px heading.
-    <Band edge="bottom" columnClassName="flex items-center px-4 pt-px">
-      <h2 id={id} data-reveal="fade" className="text-2xl font-bold leading-[33px]">
-        {children}
+    <Band edge="bottom" data-reveal="sweep" columnClassName="flex items-center px-4 pt-px">
+      <h2 id={id} data-reveal="title" className="text-2xl font-bold leading-[33px]">
+        {typeof children === "string" ? <Letters text={children} /> : children}
       </h2>
     </Band>
   );

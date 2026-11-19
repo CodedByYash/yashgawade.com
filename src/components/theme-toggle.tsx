@@ -11,7 +11,7 @@ const spin =
  * switches to the other one. Which icon shows is decided by CSS from the
  * class on <html>, so server and browser always render the same markup.
  */
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({ className, style }: { className?: string; style?: React.CSSProperties }) {
   const theme = useResolvedTheme();
 
   return (
@@ -27,6 +27,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       aria-label="Toggle theme"
       title="Toggle theme"
       className={className}
+      style={style}
     >
       <span className="relative block size-5">
         <Icon

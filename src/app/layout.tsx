@@ -27,7 +27,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="flex min-h-dvh flex-col bg-background text-foreground">
+      <body className="relative flex min-h-dvh flex-col bg-background text-foreground">
+        {/* A thin light runs down the dashed rails now and then. */}
+        <div aria-hidden className="rail-pulse" />
         <MotionProvider>
           <SiteHeader />
           <div className="flex-1">{children}</div>

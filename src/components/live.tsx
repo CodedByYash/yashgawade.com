@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useReducedMotion } from "motion/react";
 import { IconSwap } from "@/components/icon-swap";
 import { cn } from "@/lib/utils";
 
@@ -18,19 +19,98 @@ function greetingFor(hour: number) {
   return "Hello, Night Owl";
 }
 
-/** Greets the visitor according to *their* local time. */
+const START_DELAY = 700; // caret blinks alone for a moment first
+const TYPE_DELAY = 90; // ms per letter
+const CARET_HOLD = 1500; // how long the caret keeps blinking after the last letter
+const CARET_FADE = 600;
+
+/**
+ * Greets the visitor according to *their* local time. The greeting is typed
+ * out letter by letter (once it scrolls into view) with a blinking caret that
+ * fades away shortly after the last letter. Every letter is in the page from
+ * the start, just hidden, so nothing around it ever shifts.
+ */
 export function Greeting() {
   const hydrated = useHydrated();
+  const reduced = useReducedMotion();
   const text = hydrated ? greetingFor(new Date().getHours()) : "Hello";
+  const letters = Array.from(text);
+  const ref = useRef<HTMLParagraphElement>(null);
+  const [typed, setTyped] = useState(0);
+  const [started, setStarted] = useState(false);
+  const [caret, setCaret] = useState<"on" | "fading" | "gone">("on");
+  const animate = hydrated && !reduced;
+
+  // Wait until the greeting is actually on screen.
+  useEffect(() => {
+    if (!animate || !ref.current) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setStarted(true);
+        io.disconnect();
+      },
+      { threshold: 0.6 },
+    );
+    io.observe(ref.current);
+    return () => io.disconnect();
+  }, [animate]);
+
+  useEffect(() => {
+    if (!animate || !started) return;
+    let count = 0;
+    let tick: number | undefined;
+    const timers: number[] = [];
+    // A short pause with the caret blinking, like someone about to type.
+    timers.push(
+      window.setTimeout(() => {
+        tick = window.setInterval(() => {
+          count += 1;
+          setTyped(count);
+          if (count >= letters.length) {
+            window.clearInterval(tick);
+            timers.push(window.setTimeout(() => setCaret("fading"), CARET_HOLD));
+            timers.push(window.setTimeout(() => setCaret("gone"), CARET_HOLD + CARET_FADE));
+          }
+        }, TYPE_DELAY);
+      }, START_DELAY),
+    );
+    return () => {
+      window.clearInterval(tick);
+      timers.forEach(window.clearTimeout);
+    };
+    // `text` restarts the typing if the visitor's hour changes the greeting.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animate, started, text]);
+
+  const showAll = !animate;
+  const typing = typed < letters.length;
+  const nodes: React.ReactNode[] = [];
+  letters.forEach((char, i) => {
+    if (!showAll && caret !== "gone" && i === typed) {
+      nodes.push(<span key="caret" aria-hidden className="type-caret" data-typing={typing} data-gone={caret === "fading"} />);
+    }
+    nodes.push(
+      <span key={i} style={{ opacity: showAll || i < typed ? 1 : 0 }}>
+        {char}
+      </span>,
+    );
+  });
+  if (!showAll && caret !== "gone" && typed >= letters.length) {
+    nodes.push(<span key="caret" aria-hidden className="type-caret" data-typing="false" data-gone={caret === "fading"} />);
+  }
+
   return (
     <p
+      ref={ref}
       className={cn(
         "font-hand text-2xl font-bold capitalize leading-normal",
-        hydrated ? "write-in" : "greeting-pending",
+        !hydrated && "greeting-pending",
       )}
       suppressHydrationWarning
     >
-      {text}
+      <span className="sr-only">{text}</span>
+      <span aria-hidden>{nodes}</span>
     </p>
   );
 }
