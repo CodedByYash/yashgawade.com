@@ -34,6 +34,7 @@ export function ExperienceSection() {
             {/* The design insets this text 24px from the right and sets it on a 25px line. */}
             <Stagger
               dir="up"
+              speed="list"
               className="list-disc pl-[21px] text-sm font-medium leading-[25px] marker:text-foreground sm:pr-6 sm:text-justify"
             >
               {job.highlights.map((line) => (

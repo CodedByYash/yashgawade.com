@@ -42,6 +42,8 @@ const SPEEDS = {
   normal: { step: 0.1, dur: 0.8 },
   slow: { step: 0.09, dur: 1.2 },
   fast: { step: 0.06, dur: 0.7 },
+  /** Bullet points: a clearly visible one-by-one rhythm. */
+  list: { step: 0.14, dur: 0.85 },
 } as const;
 
 const StaggerContext = createContext<{ dir: Dir; dur: number }>({ dir: "up", dur: 0.8 });

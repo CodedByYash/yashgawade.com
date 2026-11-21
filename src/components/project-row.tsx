@@ -76,7 +76,7 @@ export function ProjectRow({ project }: { project: Project }) {
                 </Reveal>
               )}
               {project.points && (
-                <Stagger dir="up" offset={1} className="list-disc space-y-3 pl-6 leading-6 marker:text-muted">
+                <Stagger dir="up" speed="list" offset={1} className="list-disc space-y-3 pl-6 leading-6 marker:text-muted">
                   {project.points.map((point) => (
                     <Item key={point}>{point}</Item>
                   ))}

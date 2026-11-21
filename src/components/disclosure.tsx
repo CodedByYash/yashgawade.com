@@ -33,7 +33,14 @@ export function UnfoldIcon({ open, className }: { open: boolean; className?: str
   );
 }
 
-/** Height-animated panel. Content stays in the DOM only while open. */
+/**
+ * Height-animated panel. Content stays in the DOM only while open.
+ *
+ * A panel that is already open on first load must not play its own opening
+ * animation, but it also must not use `AnimatePresence initial={false}`: that
+ * setting switches off the first animation of everything inside, which is
+ * what stopped the bullets and tags from staggering in on page load.
+ */
 export function Collapse({
   open,
   id,
@@ -43,13 +50,14 @@ export function Collapse({
   id: string;
   children: React.ReactNode;
 }) {
+  const [startedOpen, setStartedOpen] = useState(open);
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence onExitComplete={() => setStartedOpen(false)}>
       {open && (
         <motion.div
           key="panel"
           id={id}
-          initial={{ height: 0, opacity: 0 }}
+          initial={startedOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: duration.collapse, ease }}
