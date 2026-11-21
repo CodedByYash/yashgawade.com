@@ -1,5 +1,6 @@
 import { IconBox } from "@/components/chips";
 import { CopyPhone, LiveClock } from "@/components/live";
+import { Item, Stagger } from "@/components/motion";
 import { Band } from "@/components/panel";
 import { SocialButtons } from "@/components/social-links";
 import { profile, socials } from "@/data/profile";
@@ -15,36 +16,36 @@ export function ContactDetails() {
       </Band>
 
       <Band edge="none" columnClassName="grid sm:grid-cols-2">
-        <ul data-reveal="stagger" data-dir="down" className="space-y-2 p-4">
-          <li className="flex items-center gap-4">
-            <IconBox icon="hugeicons:code" />
+        <Stagger dir="down" className="space-y-2 p-4">
+          <Item className="flex items-center gap-4">
+            <IconBox icon="hugeicons:code" index={0} />
             <span className={detailText}>{profile.role}</span>
-          </li>
-          <li className="flex items-center gap-4">
-            <IconBox icon="hugeicons:location-01" />
+          </Item>
+          <Item className="flex items-center gap-4">
+            <IconBox icon="hugeicons:location-01" index={1} />
             <span className={detailText}>{profile.location}</span>
-          </li>
-          <li className="flex items-center gap-4">
-            <IconBox icon="hugeicons:at" />
+          </Item>
+          <Item className="flex items-center gap-4">
+            <IconBox icon="hugeicons:at" index={2} />
             <a href={`mailto:${profile.email}`} className={`${detailText} min-w-0 break-all hover:underline`}>
               {profile.email}
             </a>
-          </li>
-        </ul>
-        <ul data-reveal="stagger" data-dir="down" className="space-y-2 border-t border-dashed border-line p-4 sm:border-l sm:border-t-0">
-          <li className="flex items-center gap-4">
-            <IconBox icon="hugeicons:time-04" />
+          </Item>
+        </Stagger>
+        <Stagger dir="down" className="space-y-2 border-t border-dashed border-line p-4 sm:border-l sm:border-t-0">
+          <Item className="flex items-center gap-4">
+            <IconBox icon="hugeicons:time-04" index={3} />
             <span className={detailText}>
               <LiveClock timeZone={profile.timeZone} label={profile.timeZoneLabel} />
             </span>
-          </li>
-          <li className="flex items-center gap-4">
-            <IconBox icon="hugeicons:phone" />
+          </Item>
+          <Item className="flex items-center gap-4">
+            <IconBox icon="hugeicons:phone" index={4} />
             <span className={`${detailText} flex items-center gap-2`}>
               <CopyPhone />
             </span>
-          </li>
-        </ul>
+          </Item>
+        </Stagger>
       </Band>
     </>
   );

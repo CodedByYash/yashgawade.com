@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@/components/icon";
-import { Letters } from "@/components/letters";
+import { Glint, Item, Letters, Reveal, Stagger } from "@/components/motion";
 import { Collapse, UnfoldIcon, useDisclosure } from "@/components/disclosure";
 import { ExpandableTags } from "@/components/tag-list";
 import type { Project } from "@/data/projects";
@@ -12,20 +12,18 @@ export function ProjectRow({ project }: { project: Project }) {
 
   return (
     <div className="relative">
-      <div
-        data-reveal="stagger"
-        data-dir="right"
-        className="flex min-h-[88px] items-center gap-4 px-[17px] py-6"
-      >
-        <span
-          aria-hidden
-          className="ring shine flex size-10 shrink-0 items-center justify-center rounded border border-dashed border-box-line bg-box"
+      <div className="flex min-h-[88px] items-center gap-4 px-[17px] py-6">
+        <Reveal
+          as="span"
+          kind="pop"
+          className="relative flex size-10 shrink-0 items-center justify-center rounded border border-dashed border-box-line bg-box"
         >
           <Icon name="hugeicons:boxes" size={24} className="text-icon" />
-        </span>
+          <Glint />
+        </Reveal>
 
         <div className="min-w-0 flex-1">
-          <h3 data-reveal="title" className="text-lg font-semibold leading-normal">
+          <h3 className="text-lg font-semibold leading-normal">
             <Letters text={project.name} />
           </h3>
           <p className="flex items-center gap-1 text-sm font-medium text-muted">
@@ -73,21 +71,16 @@ export function ProjectRow({ project }: { project: Project }) {
           {hasDetails ? (
             <>
               {project.tagline && (
-                <p data-reveal="fade" className="font-medium capitalize leading-[22px]">
+                <Reveal as="p" kind="fade" className="font-medium capitalize leading-[22px]">
                   {project.tagline}
-                </p>
+                </Reveal>
               )}
               {project.points && (
-                <ul
-                  data-reveal="stagger"
-                  data-dir="up"
-                  style={{ "--o": 1 } as React.CSSProperties}
-                  className="list-disc space-y-3 pl-6 leading-6 marker:text-muted"
-                >
+                <Stagger dir="up" offset={1} className="list-disc space-y-3 pl-6 leading-6 marker:text-muted">
                   {project.points.map((point) => (
-                    <li key={point}>{point}</li>
+                    <Item key={point}>{point}</Item>
                   ))}
-                </ul>
+                </Stagger>
               )}
               {project.tags && (
                 <ExpandableTags items={project.tags} limit={10} offset={(project.points?.length ?? 0) + 1} />

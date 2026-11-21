@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/icon";
+import { Item, Reveal, Stagger } from "@/components/motion";
 import { Band } from "@/components/panel";
 import { Logo } from "@/components/pixel-grid";
 import { SocialInline } from "@/components/social-links";
@@ -13,14 +14,12 @@ const label = "font-mono text-[11px] font-medium uppercase tracking-wide text-la
 const cell =
   "flex flex-col gap-2 border-line px-4 pb-[15px] pt-3.5 max-sm:even:border-l max-sm:nth-[n+3]:border-t sm:[&:not(:first-child)]:border-l";
 
-const keyValue = { "data-reveal": "stagger", "data-dir": "down" } as const;
-
 function Numbered({ children, i }: { children: React.ReactNode; i: number }) {
   return (
-    <li className="flex gap-2 font-mono text-[13px] leading-[19px]">
+    <Item className="flex gap-2 font-mono text-[13px] leading-[19px]">
       <span className="w-[17px] font-semibold text-index">{String(i + 1).padStart(2, "0")}</span>
       <span>{children}</span>
-    </li>
+    </Item>
   );
 }
 
@@ -35,51 +34,67 @@ export function SiteFooter() {
       </Band>
 
       <Band edge="bottom" columnClassName="grid grid-cols-2 sm:grid-cols-4">
-        <div className={cell} {...keyValue} style={{ "--o": 0 } as React.CSSProperties}>
-          <span className={label}>Crafted by</span>
-          <a href={site.craftedByHref} className="text-sm font-medium underline underline-offset-2">
-            {site.craftedBy}
-          </a>
-        </div>
-        <div className={cell} {...keyValue} style={{ "--o": 1 } as React.CSSProperties}>
-          <span className={label}>Date</span>
-          <time className="text-sm font-medium underline underline-offset-2">{site.date}</time>
-        </div>
-        <div className={cell} {...keyValue} style={{ "--o": 2 } as React.CSSProperties}>
-          <span className={label}>Deployed on</span>
-          <Icon name="akar-icons:vercel-fill" size={15} aria-label={site.deployedOn} />
-        </div>
-        <div className={cell} {...keyValue} style={{ "--o": 3 } as React.CSSProperties}>
-          <span className={label}>Source code</span>
-          <a
-            href={site.sourceHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm font-medium underline underline-offset-2"
-          >
-            GitHub
-          </a>
-        </div>
+        <Stagger as="div" dir="down" offset={0} className={cell}>
+          <Item as="span" className={label}>
+            Crafted by
+          </Item>
+          <Item as="span">
+            <a href={site.craftedByHref} className="text-sm font-medium underline underline-offset-2">
+              {site.craftedBy}
+            </a>
+          </Item>
+        </Stagger>
+        <Stagger as="div" dir="down" offset={1} className={cell}>
+          <Item as="span" className={label}>
+            Date
+          </Item>
+          <Item as="span">
+            <time className="text-sm font-medium underline underline-offset-2">{site.date}</time>
+          </Item>
+        </Stagger>
+        <Stagger as="div" dir="down" offset={2} className={cell}>
+          <Item as="span" className={label}>
+            Deployed on
+          </Item>
+          <Item as="span">
+            <Icon name="akar-icons:vercel-fill" size={15} aria-label={site.deployedOn} />
+          </Item>
+        </Stagger>
+        <Stagger as="div" dir="down" offset={3} className={cell}>
+          <Item as="span" className={label}>
+            Source code
+          </Item>
+          <Item as="span">
+            <a
+              href={site.sourceHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium underline underline-offset-2"
+            >
+              GitHub
+            </a>
+          </Item>
+        </Stagger>
       </Band>
 
       <Band edge="none" columnClassName="grid sm:grid-cols-2">
         <div className="p-[17px]">
-          <h2 data-reveal="fade" className={label}>
+          <Reveal as="h2" kind="fade" className={label}>
             Stack
-          </h2>
-          <ol data-reveal="stagger" data-dir="right" className="mt-2.5 space-y-2">
+          </Reveal>
+          <Stagger as="ol" dir="right" className="mt-2.5 space-y-2">
             {site.stack.map((item, i) => (
               <Numbered key={item} i={i}>
                 {item}
               </Numbered>
             ))}
-          </ol>
+          </Stagger>
         </div>
         <div className="border-t border-line p-[17px] sm:border-l sm:border-t-0">
-          <h2 data-reveal="fade" className={label}>
+          <Reveal as="h2" kind="fade" className={label}>
             Inspired by
-          </h2>
-          <ol data-reveal="stagger" data-dir="right" className="mt-2.5 space-y-2">
+          </Reveal>
+          <Stagger as="ol" dir="right" className="mt-2.5 space-y-2">
             {site.inspiredBy.map((item, i) => (
               <Numbered key={item.name} i={i}>
                 <a
@@ -92,7 +107,7 @@ export function SiteFooter() {
                 </a>
               </Numbered>
             ))}
-          </ol>
+          </Stagger>
         </div>
       </Band>
 

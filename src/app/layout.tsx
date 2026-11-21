@@ -5,7 +5,7 @@ import "@fontsource-variable/caveat";
 import "@fontsource-variable/inter";
 import "./globals.css";
 import { MotionProvider } from "@/components/motion-provider";
-import { RevealController } from "@/components/reveal-controller";
+import { RailPulse } from "@/components/motion";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { site } from "@/data/site";
@@ -29,12 +29,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="relative flex min-h-dvh flex-col bg-background text-foreground">
         {/* A thin light runs down the dashed rails now and then. */}
-        <div aria-hidden className="rail-pulse" />
+        <RailPulse />
         <MotionProvider>
           <SiteHeader />
           <div className="flex-1">{children}</div>
           <SiteFooter />
-          <RevealController />
         </MotionProvider>
       </body>
     </html>

@@ -1,9 +1,12 @@
+"use client";
+
+import { motion } from "motion/react";
 import { Icon } from "@/components/icon";
 import type { IconName } from "@/lib/icons.generated";
+import { ease } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
-const swap =
-  "col-start-1 row-start-1 transition-[rotate,scale,opacity] duration-300 ease-(--ease-out)";
+const swap = "col-start-1 row-start-1 flex";
 
 /**
  * Two icons in one spot. When `active` flips, the old one spins out while the
@@ -22,10 +25,16 @@ export function IconSwap({
   size?: number;
   className?: string;
 }) {
+  const hidden = (turn: number) => ({ rotate: turn, scale: 0.5, opacity: 0 });
+  const shown = { rotate: 0, scale: 1, opacity: 1 };
   return (
     <span className={cn("inline-grid shrink-0 place-items-center", className)}>
-      <Icon name={from} size={size} className={cn(swap, active && "rotate-90 scale-50 opacity-0")} />
-      <Icon name={to} size={size} className={cn(swap, !active && "-rotate-90 scale-50 opacity-0")} />
+      <motion.span className={swap} initial={false} animate={active ? hidden(90) : shown} transition={{ duration: 0.3, ease }}>
+        <Icon name={from} size={size} />
+      </motion.span>
+      <motion.span className={swap} initial={false} animate={active ? shown : hidden(-90)} transition={{ duration: 0.3, ease }}>
+        <Icon name={to} size={size} />
+      </motion.span>
     </span>
   );
 }

@@ -11,7 +11,7 @@ const DARK_QUERY = "(prefers-color-scheme: dark)";
 
 /**
  * Runs in <head> before the first paint, so a saved choice never flashes the
- * wrong theme. It also adds the "js" class that scroll reveals key off, so
+ * wrong theme. It also adds the "js" class, so
  * content is only hidden when scripts can bring it back. Keep it in sync with
  * `paint()` below.
  */

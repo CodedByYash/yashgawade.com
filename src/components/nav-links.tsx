@@ -3,9 +3,12 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
+import { Enter } from "@/components/motion";
 import { nav } from "@/data/profile";
 import { duration, ease } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+
+const MotionLink = motion.create(Link);
 
 export function NavLinks() {
   const pathname = usePathname();
@@ -15,29 +18,37 @@ export function NavLinks() {
         {nav.map((item, index) => {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
-            <li key={item.href} className="nav-in" style={{ "--d": `${200 + index * 90}ms` } as React.CSSProperties}>
-              <Link
+            <Enter as="li" key={item.href} kind="drop" delay={0.2 + index * 0.09}>
+              <MotionLink
                 href={item.href}
                 aria-current={active ? "page" : undefined}
+                initial="rest"
+                whileHover="hover"
+                whileFocus="hover"
                 className={cn(
                   // py-3 grows the tap target to ~41px without moving the text.
                   "relative block py-3 transition-colors duration-500 hover:text-nav-active",
-                  active
-                    ? "text-nav-active"
-                    : "text-nav-muted after:absolute after:inset-x-0 after:bottom-2 after:h-px after:origin-left after:scale-x-0 after:bg-nav-active after:transition-transform after:duration-500 after:ease-(--ease-out) hover:after:scale-x-100",
+                  active ? "text-nav-active" : "text-nav-muted",
                 )}
               >
                 {item.label}
-                {active && (
+                {active ? (
                   <motion.span
                     layoutId="nav-underline"
                     aria-hidden
                     className="absolute inset-x-0 bottom-2 h-px bg-nav-active"
                     transition={{ duration: duration.slow, ease }}
                   />
+                ) : (
+                  <motion.span
+                    aria-hidden
+                    className="absolute inset-x-0 bottom-2 h-px origin-left bg-nav-active"
+                    variants={{ rest: { scaleX: 0 }, hover: { scaleX: 1 } }}
+                    transition={{ duration: 0.5, ease }}
+                  />
                 )}
-              </Link>
-            </li>
+              </MotionLink>
+            </Enter>
           );
         })}
       </ul>

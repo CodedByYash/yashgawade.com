@@ -1,7 +1,7 @@
 "use client";
 
 import { Collapse, UnfoldIcon, useDisclosure } from "@/components/disclosure";
-import { Letters } from "@/components/letters";
+import { Letters } from "@/components/motion";
 import { MetaRow, TimelineRail } from "@/components/timeline";
 import type { IconName } from "@/lib/icons.generated";
 
@@ -28,7 +28,7 @@ export function TimelineEntry({
     <div className="flex gap-4 px-[17px] py-4">
       <TimelineRail icon={icon} open={open} />
       <div className="min-w-0 flex-1">
-        <h3 data-reveal="title" className="text-base font-medium leading-[22px]">
+        <h3 className="text-base font-medium leading-[22px]">
           <button
             {...triggerProps}
             className="flex w-full items-center justify-between gap-4 text-left"

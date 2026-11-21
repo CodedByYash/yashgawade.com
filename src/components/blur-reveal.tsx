@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
+import { ease } from "@/lib/motion";
 
-const STAGGER = 30; // ms between letters (keep in sync with globals.css)
+const STAGGER = 30; // ms between letters
 const LETTER = 560; // ms one letter takes to sharpen
 const FIRST_DELAY = 600; // first line waits for the rest of the hero to arrive
 const NEXT_DELAY = 80;
@@ -13,19 +14,21 @@ const LEAVE = 300; // fade-out before the next line starts
 function Line({ text, base }: { text: string; base: number }) {
   let index = 0;
   return (
-    <span style={{ "--base": `${base}ms` } as React.CSSProperties}>
+    <span>
       {text.split(" ").map((word, w) => (
         <span key={w}>
           {w > 0 && " "}
-          <span className="blur-word">
+          <span className="inline-block whitespace-nowrap">
             {Array.from(word).map((char, c) => (
-              <span
+              <motion.span
                 key={c}
-                className="blur-char"
-                style={{ "--i": index++ } as React.CSSProperties}
+                className="inline-block"
+                initial={{ opacity: 0, filter: "blur(8px)", y: 3 }}
+                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                transition={{ duration: LETTER / 1000, ease, delay: (base + index++ * STAGGER) / 1000 }}
               >
                 {char}
-              </span>
+              </motion.span>
             ))}
           </span>
         </span>
@@ -67,13 +70,15 @@ export function BlurReveal({ lines }: { lines: readonly string[] }) {
       <span className="sr-only">{lines[0]}</span>
       <span aria-hidden className="grid">
         {lines.map((text, i) => (
-          <span
+          <motion.span
             key={text}
-            data-leaving={i === current && leaving}
-            className={`blur-line col-start-1 row-start-1 ${i === current ? "" : "invisible"}`}
+            className={`col-start-1 row-start-1 ${i === current ? "" : "invisible"}`}
+            initial={false}
+            animate={i === current && leaving ? { opacity: 0, filter: "blur(6px)" } : { opacity: 1, filter: "blur(0px)" }}
+            transition={{ duration: LEAVE / 1000, ease }}
           >
             {i === current ? <Line text={text} base={step === 0 ? FIRST_DELAY : NEXT_DELAY} /> : text}
-          </span>
+          </motion.span>
         ))}
       </span>
     </>
