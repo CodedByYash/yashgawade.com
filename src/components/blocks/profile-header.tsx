@@ -10,8 +10,8 @@ export function ProfileHeader({ headingAs: Heading = "h1" }: { headingAs?: "h1" 
   return (
     <Band edge="none" columnClassName="flex min-h-[100px]">
       {/* A dashed rail separates the avatar from the name, as in the design. */}
-      <div className="shrink-0 border-r border-dashed border-line">
-        <div className="relative size-[100px] rounded-full">
+      <div className="relative z-10 -mt-[50px] shrink-0">
+        <div className="relative size-[100px] rounded-full ring-4 ring-background">
           <Enter as="div" kind="rise" duration={0.6} className="size-[100px] rounded-full">
           <Image
             src={profile.avatar}
@@ -25,7 +25,7 @@ export function ProfileHeader({ headingAs: Heading = "h1" }: { headingAs?: "h1" 
           <Glint />
         </div>
       </div>
-      <div className="flex min-w-0 flex-1 flex-col pt-[33px]">
+      <div className="flex min-w-0 flex-1 flex-col border-l border-dashed border-line pt-[33px]">
         <div className="flex h-[35px] items-center gap-2.5 border-y border-line px-4">
           <NameReveal as={Heading} className="text-2xl font-semibold leading-[33px]">
             {profile.name}

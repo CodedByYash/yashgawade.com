@@ -26,6 +26,18 @@ export const profile = {
   ],
 } as const;
 
+/**
+ * Photo strip in the banner. These are placeholder artwork: drop your own
+ * photos into public/photos (portrait, roughly 4:5) and list them here.
+ */
+export const photos = [
+  { src: "/photos/p1.svg", alt: "Hills at sunrise (placeholder)" },
+  { src: "/photos/p2.svg", alt: "Curly braces (placeholder)" },
+  { src: "/photos/p3.svg", alt: "Pixel grid (placeholder)" },
+  { src: "/photos/p4.svg", alt: "Concentric rings (placeholder)" },
+  { src: "/photos/p5.svg", alt: "A winding path (placeholder)" },
+] as const;
+
 export type SocialLink = { label: string; href: string; icon: IconName };
 
 // Discord and YouTube are in the design but no URL was provided yet.

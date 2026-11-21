@@ -2,6 +2,7 @@ import { ContactDetails } from "@/components/blocks/contact-details";
 import { EducationSection } from "@/components/blocks/education-section";
 import { ExperienceSection } from "@/components/blocks/experience-section";
 import { Intro } from "@/components/blocks/intro";
+import { ProfileBanner } from "@/components/blocks/profile-banner";
 import { ProfileHeader } from "@/components/blocks/profile-header";
 import { ProjectsSection } from "@/components/blocks/projects-section";
 import { StackSection } from "@/components/blocks/stack-section";
@@ -10,6 +11,7 @@ import { Divider } from "@/components/panel";
 export default function Home() {
   return (
     <main>
+      <ProfileBanner />
       <ProfileHeader />
       <Divider />
       <ContactDetails />

@@ -2,6 +2,7 @@ import { ContactDetails } from "@/components/blocks/contact-details";
 import { EducationSection } from "@/components/blocks/education-section";
 import { ExperienceSection } from "@/components/blocks/experience-section";
 import { Intro } from "@/components/blocks/intro";
+import { ProfileBanner } from "@/components/blocks/profile-banner";
 import { ProfileHeader } from "@/components/blocks/profile-header";
 import { ProjectsSection } from "@/components/blocks/projects-section";
 import { StackSection } from "@/components/blocks/stack-section";
@@ -10,6 +11,13 @@ import type { RegistryItem } from "@/registry/types";
 
 /** Whole page sections, composed from the components. */
 export const blockItems: RegistryItem[] = [
+  {
+    slug: "profile-banner",
+    name: "Profile banner",
+    description: "Cursor-lit dot field with a drifting strip of photos; the avatar below overlaps its edge.",
+    files: ["src/components/blocks/profile-banner.tsx", "src/data/profile.ts"],
+    preview: <ProfileBanner />,
+  },
   {
     slug: "profile-header",
     name: "Profile header",
