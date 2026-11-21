@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Icon } from "@/components/icon";
+import { March } from "@/components/motion";
 import type { IconName } from "@/lib/icons.generated";
 import { cn } from "@/lib/utils";
 
@@ -142,7 +143,7 @@ export function RepoCard({
       href={`https://github.com/${repo}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="march [--march:var(--foreground)] mt-4 flex items-center gap-3 border border-dashed border-chip-line bg-chip px-4 py-3 no-underline"
+      className="relative mt-4 flex items-center gap-3 border border-dashed border-chip-line bg-chip px-4 py-3 no-underline"
     >
       <Icon name="hugeicons:github-01" size={24} className="shrink-0 text-icon" />
       <span className="min-w-0 flex-1">
@@ -150,6 +151,7 @@ export function RepoCard({
         {description && <span className="mt-0.5 block text-[13px] leading-5 text-muted">{description}</span>}
       </span>
       <Icon name="hugeicons:arrow-up-right-01" size={18} className="shrink-0 text-muted" />
+      <March />
     </a>
   );
 }

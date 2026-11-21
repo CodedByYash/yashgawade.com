@@ -1,4 +1,5 @@
 import { IconChip } from "@/components/chips";
+import { Reveal, Stagger } from "@/components/motion";
 import { Band, SectionHeading } from "@/components/panel";
 import { stack } from "@/data/stack";
 
@@ -17,19 +18,19 @@ export function StackSection() {
             i < stack.length - 1 ? "sm:min-h-[66px]" : "sm:min-h-[67px]"
           }`}
         >
-          <h3 data-reveal="stagger" data-dir="right" className="flex items-center px-[25px] pt-4 font-mono text-sm font-medium uppercase sm:py-4">
+          <Reveal as="h3" kind="fade" className="flex items-center px-[25px] pt-4 font-mono text-sm font-medium uppercase sm:py-4">
             <span className="text-index">{String(i + 1).padStart(2, "0")}</span>
             <span>&nbsp;{group.title}</span>
-          </h3>
+          </Reveal>
           <div className="flex items-center border-dashed border-line px-6 py-4 sm:border-l sm:pl-[31px]">
             {/* Slower and softer than the other lists: each chip rises, sharpens and grows in. */}
-            <ul data-reveal="stagger" data-dir="soft" data-speed="slow" className="flex flex-wrap gap-2.5">
+            <Stagger dir="soft" speed="slow" className="flex flex-wrap gap-2.5">
               {group.items.map((item) => (
                 <IconChip key={item.name} icon={item.icon} href={item.href} monochrome={item.monochrome}>
                   {item.name}
                 </IconChip>
               ))}
-            </ul>
+            </Stagger>
           </div>
         </Band>
       ))}

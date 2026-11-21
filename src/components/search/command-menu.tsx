@@ -3,9 +3,11 @@
 import { Autocomplete } from "@base-ui/react/autocomplete";
 import { Dialog } from "@base-ui/react/dialog";
 import { ScrollArea } from "@base-ui/react/scroll-area";
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Icon } from "@/components/icon";
+import { ease } from "@/lib/motion";
 import { setThemePreference } from "@/lib/theme";
 import { rankGroups, splitMatches } from "./rank";
 import type { SearchGroup, SearchItem } from "./types";
@@ -153,8 +155,18 @@ function Palette({
                 <Autocomplete.Group
                   key={group.value}
                   items={group.items}
-                  className="search-group not-last:mb-1"
-                  style={{ "--g": index } as React.CSSProperties}
+                  className="not-last:mb-1"
+                  render={
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        filter: "blur(0px)",
+                        transition: { duration: 0.65, ease, delay: 0.14 + index * 0.07 },
+                      }}
+                    />
+                  }
                 >
                   <Autocomplete.GroupLabel className="px-4 pb-1.5 pt-3 font-mono text-[11px] font-medium uppercase tracking-wide text-muted select-none">
                     {group.value}
@@ -289,9 +301,14 @@ export default function CommandMenu({
     [onOpenChange],
   );
 
+  // Base UI stays open until the exit animation has played, so Motion can
+  // run the closing animation before the dialog leaves the page.
+  const [present, setPresent] = useState(open);
+  if (open && !present) setPresent(true);
+
   return (
     <Dialog.Root
-      open={open}
+      open={present}
       onOpenChange={onOpenChange}
       onOpenChangeComplete={(isOpen) => {
         if (isOpen) return;
@@ -301,12 +318,34 @@ export default function CommandMenu({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-[70] bg-(--backdrop) backdrop-blur-[7px] transition-[opacity,backdrop-filter] duration-500 ease-(--ease-out) data-ending-style:opacity-0 data-ending-style:backdrop-blur-none data-ending-style:duration-300 data-starting-style:opacity-0 data-starting-style:backdrop-blur-none" />
+        <Dialog.Backdrop
+          className="fixed inset-0 z-[70] bg-(--backdrop)"
+          render={
+            <motion.div
+              initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+              animate={open ? { opacity: 1, backdropFilter: "blur(7px)" } : { opacity: 0, backdropFilter: "blur(0px)" }}
+              transition={{ duration: open ? 0.5 : 0.3, ease }}
+            />
+          }
+        />
         <Dialog.Viewport className="fixed inset-0 z-[71] flex items-start justify-center overflow-hidden px-4 pb-4 pt-[min(12vh,6rem)] max-sm:pt-4">
           <Dialog.Popup
             aria-label="Search"
             onKeyDown={trapTab}
-            className="relative flex max-h-[min(34rem,calc(100dvh-2rem))] w-full max-w-[640px] flex-col overflow-hidden border border-line bg-background shadow-[0_24px_80px_-12px_var(--popup-shadow)] transition-[translate,scale,opacity,filter] duration-500 ease-(--ease-out) data-ending-style:-translate-y-3 data-ending-style:scale-[0.97] data-ending-style:opacity-0 data-ending-style:blur-[4px] data-ending-style:duration-250 data-starting-style:-translate-y-4 data-starting-style:scale-[0.95] data-starting-style:opacity-0 data-starting-style:blur-[8px]"
+            className="relative flex max-h-[min(34rem,calc(100dvh-2rem))] w-full max-w-[640px] flex-col overflow-hidden border border-line bg-background shadow-[0_24px_80px_-12px_var(--popup-shadow)]"
+            render={
+              <motion.div
+                initial={{ opacity: 0, y: -16, scale: 0.95, filter: "blur(8px)" }}
+                animate={
+                  open
+                    ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transition: { duration: 0.5, ease } }
+                    : { opacity: 0, y: -12, scale: 0.97, filter: "blur(4px)", transition: { duration: 0.25, ease } }
+                }
+                onAnimationComplete={() => {
+                  if (!open) setPresent(false);
+                }}
+              />
+            }
           >
             <Palette groups={groups} onClose={close} onNavigate={navigateAfterClose} />
           </Dialog.Popup>

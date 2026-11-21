@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { IconSwap } from "@/components/icon-swap";
-import { cn } from "@/lib/utils";
 
 const noopSubscribe = () => () => {};
 
@@ -23,6 +22,20 @@ const START_DELAY = 700; // caret blinks alone for a moment first
 const TYPE_DELAY = 90; // ms per letter
 const CARET_HOLD = 1500; // how long the caret keeps blinking after the last letter
 const CARET_FADE = 600;
+
+/** The typing caret: zero width, so it never moves the text. It blinks while idle and fades away at the end. */
+function Caret({ typing, fading }: { typing: boolean; fading: boolean }) {
+  const animation = fading
+    ? { opacity: 0, transition: { duration: 0.5 } }
+    : typing
+      ? { opacity: 1, transition: { duration: 0.05 } }
+      : { opacity: [1, 1, 0, 0], transition: { duration: 0.9, times: [0, 0.5, 0.5, 1], ease: "linear" as const, repeat: Infinity } };
+  return (
+    <span aria-hidden className="relative inline-block w-0 align-baseline">
+      <motion.span className="absolute left-px top-[0.2em] block h-[0.95em] w-0.5 rounded-[1px] bg-current" animate={animation} />
+    </span>
+  );
+}
 
 /**
  * Greets the visitor according to *their* local time. The greeting is typed
@@ -88,30 +101,31 @@ export function Greeting() {
   const nodes: React.ReactNode[] = [];
   letters.forEach((char, i) => {
     if (!showAll && caret !== "gone" && i === typed) {
-      nodes.push(<span key="caret" aria-hidden className="type-caret" data-typing={typing} data-gone={caret === "fading"} />);
+      nodes.push(<Caret key="caret" typing={typing} fading={caret === "fading"} />);
     }
     nodes.push(
-      <span key={i} style={{ opacity: showAll || i < typed ? 1 : 0 }}>
+      <motion.span key={i} initial={false} animate={{ opacity: showAll || i < typed ? 1 : 0 }} transition={{ duration: 0.12 }}>
         {char}
-      </span>,
+      </motion.span>,
     );
   });
   if (!showAll && caret !== "gone" && typed >= letters.length) {
-    nodes.push(<span key="caret" aria-hidden className="type-caret" data-typing="false" data-gone={caret === "fading"} />);
+    nodes.push(<Caret key="caret" typing={false} fading={caret === "fading"} />);
   }
 
   return (
-    <p
+    // Hidden until the greeting knows the visitor's local time.
+    <motion.p
       ref={ref}
-      className={cn(
-        "font-hand text-2xl font-bold capitalize leading-normal",
-        !hydrated && "greeting-pending",
-      )}
+      className="font-hand text-2xl font-bold capitalize leading-normal"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: hydrated ? 1 : 0 }}
+      transition={{ duration: 0.4 }}
       suppressHydrationWarning
     >
       <span className="sr-only">{text}</span>
       <span aria-hidden>{nodes}</span>
-    </p>
+    </motion.p>
   );
 }
 

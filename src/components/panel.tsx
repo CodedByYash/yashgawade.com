@@ -1,4 +1,4 @@
-import { Letters } from "@/components/letters";
+import { Hatch, Letters, Sweep } from "@/components/motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -41,23 +41,18 @@ export function Band({
 
 /** 40px hatched divider between major sections. */
 export function Divider() {
-  return (
-    <div
-      aria-hidden
-      data-reveal="wipe"
-      className="hatch h-10 w-full border-y border-line"
-    />
-  );
+  return <Hatch />;
 }
 
 /** Section heading band ("Stack", "Experience", …). */
 export function SectionHeading({ id, children }: { id?: string; children: React.ReactNode }) {
   return (
     // 33px text line + 1px above + the band's bottom line = the design's 35px heading.
-    <Band edge="bottom" data-reveal="sweep" columnClassName="flex items-center px-4 pt-px">
-      <h2 id={id} data-reveal="title" className="text-2xl font-bold leading-[33px]">
+    <Band edge="bottom" className="relative" columnClassName="flex items-center px-4 pt-px">
+      <h2 id={id} className="text-2xl font-bold leading-[33px]">
         {typeof children === "string" ? <Letters text={children} /> : children}
       </h2>
+      <Sweep />
     </Band>
   );
 }

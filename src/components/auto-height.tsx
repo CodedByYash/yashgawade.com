@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
+import { ease } from "@/lib/motion";
 
 /**
  * Animates its own height whenever its content changes size, so lists that
@@ -22,14 +24,16 @@ export function AutoHeight({ children, className }: { children: React.ReactNode;
   }, []);
 
   return (
-    <div
-      className={`-m-1 overflow-hidden p-1 transition-[height] duration-[650ms] ease-(--ease-out) ${className ?? ""}`}
+    <motion.div
+      className={`-m-1 overflow-hidden p-1 ${className ?? ""}`}
+      initial={false}
       // `auto` until measured, so the server markup and the first paint match.
-      style={{ height: height === null ? undefined : height + 8 }}
+      animate={{ height: height === null ? "auto" : height + 8 }}
+      transition={{ duration: 0.65, ease }}
     >
       <div ref={inner} className="flow-root">
         {children}
       </div>
-    </div>
+    </motion.div>
   );
 }

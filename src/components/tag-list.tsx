@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { AutoHeight } from "@/components/auto-height";
-import { Tag } from "@/components/chips";
+import { tagClass } from "@/components/chips";
+import { Item, Stagger } from "@/components/motion";
+import { ease } from "@/lib/motion";
 import { cn } from "@/lib/utils";
-
-const CLOSE_MS = 300;
 
 /**
  * Tag list that shows the first `limit` items and folds the rest behind "+N more".
  * Tags arrive left to right, blurred then sharp. Pressing "+N more" brings the
  * hidden tags in one by one while the list grows smoothly; "Show less" fades
- * them out first and then closes the gap.
+ * them out and then closes the gap.
  */
 export function ExpandableTags({
   items,
@@ -26,64 +27,47 @@ export function ExpandableTags({
   offset?: number;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [closing, setClosing] = useState(false);
-  const closeTimer = useRef<number | undefined>(undefined);
   const id = useId();
   const hidden = items.length - limit;
-  const showAll = expanded || closing || hidden <= 0;
-  const visible = showAll ? items : items.slice(0, limit);
-
-  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
-
-  function toggle() {
-    window.clearTimeout(closeTimer.current);
-    if (expanded) {
-      setClosing(true);
-      setExpanded(false);
-      closeTimer.current = window.setTimeout(() => setClosing(false), CLOSE_MS);
-    } else {
-      setClosing(false);
-      setExpanded(true);
-    }
-  }
+  const alwaysShown = hidden <= 0 ? items : items.slice(0, limit);
+  const extras = hidden > 0 ? items.slice(limit) : [];
 
   return (
     <AutoHeight>
-      <ul
-        id={id}
-        data-reveal="stagger"
-        data-dir="blur-right"
-        data-speed="fast"
-        style={{ "--o": offset } as React.CSSProperties}
-        className={cn("flex flex-wrap gap-2.5 py-[3px]", className)}
-      >
-        {visible.map((item, i) => {
-          const extra = i >= limit;
-          return (
-            <Tag
-              key={item}
-              className={extra ? "tag-extra" : undefined}
-              data-closing={extra && closing ? "true" : undefined}
-              style={extra ? ({ "--j": i - limit } as React.CSSProperties) : undefined}
-            >
-              {item}
-            </Tag>
-          );
-        })}
+      <Stagger id={id} dir="blur-right" speed="fast" offset={offset} className={cn("flex flex-wrap gap-2.5 py-[3px]", className)}>
+        {alwaysShown.map((item) => (
+          <Item key={item} className={tagClass}>
+            {item}
+          </Item>
+        ))}
+        <AnimatePresence initial={false}>
+          {expanded &&
+            extras.map((item, j) => (
+              <motion.li
+                key={item}
+                className={tagClass}
+                initial={{ opacity: 0, x: -14, scale: 0.96, filter: "blur(8px)" }}
+                animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)", transition: { duration: 0.75, ease, delay: j * 0.07 } }}
+                exit={{ opacity: 0, x: 8, scale: 0.96, filter: "blur(6px)", transition: { duration: 0.28, ease, delay: 0 } }}
+              >
+                {item}
+              </motion.li>
+            ))}
+        </AnimatePresence>
         {hidden > 0 && (
-          <li className="flex">
+          <Item className="flex">
             <button
               type="button"
               aria-expanded={expanded}
               aria-controls={id}
-              onClick={toggle}
+              onClick={() => setExpanded((value) => !value)}
               className="border border-dashed border-tag-line-first bg-tag px-2 py-0.5 text-xs font-semibold leading-[1.8] text-muted transition-[color,background-color] duration-500 hover:bg-chip hover:text-foreground"
             >
               {expanded ? "Show less" : `+${hidden} more`}
             </button>
-          </li>
+          </Item>
         )}
-      </ul>
+      </Stagger>
     </AutoHeight>
   );
 }

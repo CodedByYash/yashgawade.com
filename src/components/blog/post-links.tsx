@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/icon";
+import { March } from "@/components/motion";
 import { Tag } from "@/components/chips";
 import { formatDate, tagSlug, type Post } from "@/lib/blogs";
 import { cn } from "@/lib/utils";
@@ -55,7 +56,7 @@ function Neighbour({ post, direction }: { post: Post; direction: "previous" | "n
     <Link
       href={`/blogs/${post.slug}`}
       className={cn(
-        "march [--march:var(--foreground)] flex flex-1 flex-col gap-1 border border-dashed border-chip-line px-4 py-3",
+        "relative flex flex-1 flex-col gap-1 border border-dashed border-chip-line px-4 py-3",
         next && "sm:items-end sm:text-right",
       )}
     >
@@ -68,6 +69,7 @@ function Neighbour({ post, direction }: { post: Post; direction: "previous" | "n
       <time dateTime={post.meta.date} className="font-mono text-xs text-muted">
         {formatDate(post.meta.date)}
       </time>
+      <March />
     </Link>
   );
 }
