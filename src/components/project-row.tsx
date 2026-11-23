@@ -44,6 +44,17 @@ export function ProjectRow({ project }: { project: Project }) {
               <Icon name="hugeicons:github-01" size={20} />
             </a>
           )}
+          {project.api && (
+            <a
+              href={project.api}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${project.name} backend API`}
+              className="relative z-10 text-nav-muted transition-colors hover:text-foreground"
+            >
+              <Icon name="hugeicons:code-xml" size={20} />
+            </a>
+          )}
           {project.href && (
             <a
               href={project.href}

@@ -2,9 +2,9 @@ import versions from "./versions.generated.json";
 
 export const site = {
   /** Public address, used for feeds, the sitemap and share links. */
-  url: "https://yashgawade.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://yashgawade-com.vercel.app",
   craftedBy: "yashgawade.com",
-  craftedByHref: "https://yashgawade.com",
+  craftedByHref: "https://yashgawade-com.vercel.app",
   date: "03-10-2026",
   deployedOn: "Vercel",
   sourceHref: "https://github.com/CodedByYash/yashgawade.com",

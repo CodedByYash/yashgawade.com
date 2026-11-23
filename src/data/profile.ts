@@ -28,13 +28,13 @@ export const profile = {
 
 export type SocialLink = { label: string; href: string; icon: IconName };
 
-// Discord and YouTube are in the design but no URL was provided yet.
+// Discord is in the design but no URL was provided yet.
 export const socials: SocialLink[] = [
   { label: "X (Twitter)", href: "https://x.com/Y_ash_tweets", icon: "hugeicons:new-twitter" },
   { label: "GitHub", href: "https://github.com/yash83085", icon: "akar-icons:github-fill" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/yash-gawade-1b4560250", icon: "akar-icons:linkedin-box-fill" },
   { label: "Discord", href: "#", icon: "hugeicons:discord" },
-  { label: "YouTube", href: "#", icon: "akar-icons:youtube-fill" },
+  { label: "YouTube", href: "https://www.youtube.com/@Y_ash_yt", icon: "akar-icons:youtube-fill" },
 ];
 
 export const nav = [

@@ -32,7 +32,7 @@ function Caret({ typing, fading }: { typing: boolean; fading: boolean }) {
       : { opacity: [1, 1, 0, 0], transition: { duration: 0.9, times: [0, 0.5, 0.5, 1], ease: "linear" as const, repeat: Infinity } };
   return (
     <span aria-hidden className="relative inline-block w-0 align-baseline">
-      <motion.span className="absolute left-px top-[0.2em] block h-[0.95em] w-0.5 rounded-[1px] bg-current" animate={animation} />
+      <motion.span className="absolute -bottom-[0.18em] left-px block h-[0.95em] w-0.5 rounded-[1px] bg-current" animate={animation} />
     </span>
   );
 }

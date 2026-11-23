@@ -3,6 +3,8 @@ export type Project = {
   start: string; // dd/mm/yyyy — shown with an ∞ because they are ongoing
   /** Live site. */
   href?: string;
+  /** Deployed backend / API, when the project has one. */
+  api?: string;
   /** Source repository. */
   github?: string;
   tagline?: string;
@@ -15,6 +17,8 @@ export const projects: Project[] = [
   {
     name: "Inventory Management",
     start: "01/09/2026",
+    href: "https://stock-pilot-uyly.vercel.app/dashboard",
+    api: "https://stock-pilot-two-alpha.vercel.app/",
     defaultOpen: true,
     tagline:
       "Fast, Clean, Real-Time Inventory Tracking With Velocity-Based Reorder Intelligence Without Enterprise Complexity Or Pricing.",
@@ -38,6 +42,8 @@ export const projects: Project[] = [
   {
     name: "Inventory MCP Server",
     start: "01/10/2026",
+    href: "https://stockpilot-mcp-server.vercel.app/",
+    github: "https://github.com/CodedByYash/Inventory-management-mcp",
     tagline: "Talk To Your Inventory In Plain English Through Claude",
     points: [
       "Built a Model Context Protocol server that exposes the inventory API as 8 tools (5 read-only, 3 write) so an AI assistant can check stock, forecast reorders, and create or receive purchase orders by calling the real API.",

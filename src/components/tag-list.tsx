@@ -48,7 +48,13 @@ export function ExpandableTags({
                 className={tagClass}
                 initial={{ opacity: 0, x: -14, scale: 0.96, filter: "blur(8px)" }}
                 animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)", transition: { duration: 0.75, ease, delay: j * 0.07 } }}
-                exit={{ opacity: 0, x: 8, scale: 0.96, filter: "blur(6px)", transition: { duration: 0.28, ease, delay: 0 } }}
+                exit={{
+                  opacity: 0,
+                  x: 16,
+                  scale: 0.94,
+                  filter: "blur(8px)",
+                  transition: { duration: 0.5, ease, delay: (extras.length - 1 - j) * 0.06 },
+                }}
               >
                 {item}
               </motion.li>
